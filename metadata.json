@@ -1,0 +1,6 @@
+{
+  "name": "SeamLadies",
+  "description": "SeamLadies E-commerce and Foundation Page",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
