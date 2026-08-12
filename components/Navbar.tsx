@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { Menu, Search, ShoppingBag, User, ChevronDown } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { label: 'Womenswear', href: '#' },
+  { label: 'Womenswear', href: '/clothing' },
   { 
     label: 'Fit & Development', 
     href: '#',
@@ -73,9 +74,12 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
 }
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showLinks, setShowLinks] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  const isWhiteNavbar = isScrolled || pathname === '/clothing';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,7 +104,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        isScrolled ? 'bg-white text-black border-b border-gray-200' : 'bg-transparent text-white'
+        isWhiteNavbar ? 'bg-white text-black border-b border-gray-200' : 'bg-transparent text-white'
       }`}
     >
       <div className="flex justify-between items-center px-6 py-4">
@@ -116,7 +120,9 @@ export default function Navbar() {
               alt="SeamLadies Logo" 
               width={160} 
               height={40} 
-              className="object-contain h-8 w-auto" 
+              className={`object-contain h-8 w-auto transition-all duration-300 ${
+                !isWhiteNavbar ? 'brightness-0 invert' : ''
+              }`} 
               priority
             />
           </Link>
@@ -134,12 +140,12 @@ export default function Navbar() {
         </div>
       </div>
       <div
-        className={`flex justify-center gap-12 lg:gap-16 text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 ${
+        className={`hidden md:flex justify-center gap-12 lg:gap-16 text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 ${
           showLinks ? 'h-10 opacity-100 pointer-events-auto' : 'h-0 opacity-0 pointer-events-none overflow-hidden'
         }`}
       >
         {NAV_ITEMS.map((item) => (
-          <NavItem key={item.label} item={item} isScrolled={isScrolled} />
+          <NavItem key={item.label} item={item} isScrolled={isWhiteNavbar} />
         ))}
       </div>
     </header>
