@@ -424,12 +424,17 @@ export default function ProductPage() {
                 )}
               </div>
             ))}
+
+            {/* Floating Overlay Counter "1|5" at bottom-left of image scroll side */}
+            <div className="sticky bottom-6 left-6 self-start ml-6 mb-6 -mt-12 z-20 font-semibold text-xs tracking-widest text-gray-900 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-sm shadow-sm pointer-events-none">
+              {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
+            </div>
           </div>
 
-          {/* Right Column: Sticky 350px Details Panel (5 Cols) */}
-          <div className="col-span-5 sticky top-24 self-start py-4 pr-8 pl-2">
+          {/* Right Column: Sticky 350px Details Panel (5 Cols) Centered in its area */}
+          <div className="col-span-5 sticky top-24 self-start py-4 px-6 flex justify-center">
             {/* Inner Details Container constrained to 350px max-width */}
-            <div className="max-w-[350px] space-y-3">
+            <div className="w-full max-w-[350px] space-y-3">
               <div>
                 <h1 className="text-base font-semibold tracking-wider uppercase text-gray-900 leading-tight mb-1">
                   SILK-FRONT WOOL TOP
@@ -568,11 +573,6 @@ export default function ProductPage() {
                 <Link href="/clothing" className="underline hover:no-underline text-gray-800">
                   Sweaters
                 </Link>
-              </div>
-
-              {/* Progressive Indicator Counter "1 | 5" */}
-              <div className="pt-2 text-[11px] font-semibold tracking-widest text-gray-500">
-                {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
               </div>
 
             </div>
