@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Search, Plus, Minus, Globe } from 'lucide-react';
+import { useShop } from '@/context/ShopContext';
 
 const FOOTER_SECTIONS = [
   {
@@ -41,6 +42,7 @@ const FOOTER_SECTIONS = [
 
 export default function Footer() {
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const { openSubscription } = useShop();
 
   const toggleSection = (title: string) => {
     setOpenSection(openSection === title ? null : title);
@@ -57,7 +59,10 @@ export default function Footer() {
           <p className="text-xs md:text-sm text-gray-600 mb-6 md:mb-8 leading-relaxed font-normal">
             Your first Tory Burch purchase of £200 or more, online or in boutiques, when you sign up for emails. Exclusions apply.
           </p>
-          <button className="px-12 md:px-16 py-3.5 md:py-4 bg-[#1a1a1a] text-white text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-black transition-colors cursor-pointer">
+          <button
+            onClick={openSubscription}
+            className="px-12 md:px-16 py-3.5 md:py-4 bg-[#1a1a1a] text-white text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-black transition-colors cursor-pointer"
+          >
             Sign Up
           </button>
         </div>

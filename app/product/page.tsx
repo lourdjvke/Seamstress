@@ -13,6 +13,7 @@ import {
   Search
 } from 'lucide-react';
 import ProductCard, { Product } from '@/components/ProductCard';
+import { useShop } from '@/context/ShopContext';
 
 const PRODUCT_IMAGES = [
   'https://picsum.photos/seed/silk_wool_top_main/800/1000',
@@ -133,6 +134,7 @@ const YOU_MAY_ALSO_LIKE_PRODUCTS: Product[] = [
 ];
 
 export default function ProductPage() {
+  const { addToCart, openSelectSize } = useShop();
   // Desktop pinned image scroll index
   const [activeImageIdx, setActiveImageIdx] = useState<number>(0);
   const heroSectionRef = useRef<HTMLDivElement>(null);
@@ -146,6 +148,28 @@ export default function ProductPage() {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [showSizeDropdown, setShowSizeDropdown] = useState<boolean>(false);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+
+  const handleProductPageAddToBag = () => {
+    if (!selectedSize) {
+      openSelectSize({
+        id: 'silk-wool-top',
+        title: 'Silk-Front Wool Top',
+        price: '£395',
+        color: 'Dark Roast',
+        image: PRODUCT_IMAGES[0],
+      });
+    } else {
+      addToCart({
+        id: `silk-wool-top-${selectedSize}`,
+        title: 'Silk-Front Wool Top',
+        price: '£395',
+        color: 'Dark Roast',
+        size: selectedSize,
+        image: PRODUCT_IMAGES[0],
+        quantity: 1,
+      });
+    }
+  };
 
   // Mobile Carousel index
   const [mobileSlideIdx, setMobileSlideIdx] = useState<number>(0);
@@ -313,8 +337,11 @@ export default function ProductPage() {
             </div>
           </div>
 
-          {/* ADD TO BAG Button */}
-          <button className="w-full bg-[#2d3238] text-white py-4 text-xs font-semibold tracking-widest uppercase hover:bg-black transition-colors cursor-pointer shadow-sm">
+          {/* ADD TO BAG Button (Mobile) */}
+          <button 
+            onClick={handleProductPageAddToBag}
+            className="w-full bg-[#2d3238] text-white py-4 text-xs font-semibold tracking-widest uppercase hover:bg-black transition-colors cursor-pointer shadow-sm"
+          >
             ADD TO BAG
           </button>
 
@@ -498,8 +525,11 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              {/* ADD TO BAG Button */}
-              <button className="w-full bg-[#2d3238] text-white py-3.5 text-xs font-semibold tracking-widest uppercase hover:bg-black transition-colors cursor-pointer shadow-sm my-2">
+              {/* ADD TO BAG Button (Desktop) */}
+              <button 
+                onClick={handleProductPageAddToBag}
+                className="w-full bg-[#2d3238] text-white py-3.5 text-xs font-semibold tracking-widest uppercase hover:bg-black transition-colors cursor-pointer shadow-sm my-2"
+              >
                 ADD TO BAG
               </button>
 

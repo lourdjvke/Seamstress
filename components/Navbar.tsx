@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, Search, ShoppingBag, User, ChevronDown } from 'lucide-react';
 import MenuSidebar from '@/components/MenuSidebar';
+import { useShop } from '@/context/ShopContext';
 
 const NAV_ITEMS = [
   { label: 'Womenswear', href: '/clothing' },
@@ -76,6 +77,7 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { openCart, cartCount, openSubscription } = useShop();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showLinks, setShowLinks] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -135,14 +137,30 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="flex-1 flex items-center justify-end gap-4">
+            <button
+              onClick={openSubscription}
+              aria-label="Subscribe"
+              className="hidden lg:block text-[11px] font-semibold uppercase tracking-wider hover:opacity-70 transition-opacity"
+            >
+              Subscribe
+            </button>
             <button aria-label="Search" className="p-2 cursor-pointer">
               <Search className="w-5 h-5" />
             </button>
             <button aria-label="User Account" className="p-2 hidden sm:block cursor-pointer">
               <User className="w-5 h-5" />
             </button>
-            <button aria-label="Shopping Bag" className="p-2 cursor-pointer">
+            <button
+              onClick={openCart}
+              aria-label="Shopping Bag"
+              className="p-2 cursor-pointer relative hover:opacity-70 transition-opacity"
+            >
               <ShoppingBag className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>

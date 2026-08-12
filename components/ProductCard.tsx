@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useShop } from '@/context/ShopContext';
 
 export interface ColorOption {
   colorHex: string;
@@ -19,12 +20,16 @@ export interface Product {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
+  const { openSelectSize } = useShop();
   const [activeColorIdx, setActiveColorIdx] = useState<number>(0);
   const [currentImgSrc, setCurrentImgSrc] = useState<string>(product.images[0]);
   const [altImgSrc] = useState<string>(product.images[1] || product.images[0]);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [showingAlt, setShowingAlt] = useState<boolean>(false);
+
+  // Quick Shop button state: 'initial' | 'loading' | 'selectSize'
+  const [quickShopState, setQuickShopState] = useState<'initial' | 'loading' | 'selectSize'>('initial');
 
   const handleColorClick = (idx: number, imgSrc: string) => {
     setActiveColorIdx(idx);
@@ -36,6 +41,38 @@ export default function ProductCard({ product }: { product: Product }) {
     e.preventDefault();
     e.stopPropagation();
     setShowingAlt(!showingAlt);
+  };
+
+  const handleQuickShopClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (quickShopState === 'initial') {
+      setQuickShopState('loading');
+      setTimeout(() => {
+        setQuickShopState('selectSize');
+      }, 600);
+    } else if (quickShopState === 'selectSize') {
+      openSelectSize({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: currentImgSrc,
+        color: 'Dark Roast',
+      });
+    }
+  };
+
+  const handleAddToBagClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openSelectSize({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: currentImgSrc,
+      color: 'Dark Roast',
+    });
   };
 
   return (
@@ -95,11 +132,24 @@ export default function ProductCard({ product }: { product: Product }) {
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Quick Shop Button (Desktop) */}
+        {/* Quick Shop Button (Desktop & Touch) */}
         <button 
-          className="hidden md:block absolute bottom-2.5 left-2.5 right-2.5 bg-white/90 hover:bg-white text-gray-900 py-3 text-[11px] font-medium uppercase tracking-wider text-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-10 border border-black/5 cursor-pointer"
+          onClick={handleQuickShopClick}
+          className={`hidden md:flex items-center justify-center absolute bottom-2.5 left-2.5 right-2.5 bg-white/90 hover:bg-white text-gray-900 py-3 text-[11px] font-medium uppercase tracking-wider text-center transition-all duration-300 z-10 border border-black/5 cursor-pointer ${
+            quickShopState === 'selectSize'
+              ? 'opacity-100 translate-y-0 font-bold bg-black text-white hover:bg-gray-900'
+              : 'opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'
+          }`}
         >
-          Quick Shop
+          {quickShopState === 'initial' && 'Quick Shop'}
+          {quickShopState === 'loading' && (
+            <div className="flex items-center justify-center gap-1.5 py-0.5">
+              <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce [animation-delay:-0.3s]" />
+              <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce [animation-delay:-0.15s]" />
+              <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce" />
+            </div>
+          )}
+          {quickShopState === 'selectSize' && 'Select Size'}
         </button>
       </div>
 
@@ -138,7 +188,10 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         <div className="mt-2">
-          <button className="text-[11px] font-medium tracking-wider uppercase underline hover:no-underline cursor-pointer text-gray-900">
+          <button 
+            onClick={handleAddToBagClick}
+            className="text-[11px] font-medium tracking-wider uppercase underline hover:no-underline cursor-pointer text-gray-900"
+          >
             ADD TO BAG
           </button>
         </div>
@@ -146,3 +199,4 @@ export default function ProductCard({ product }: { product: Product }) {
     </div>
   );
 }
+
