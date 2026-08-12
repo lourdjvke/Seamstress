@@ -79,7 +79,7 @@ export default function Navbar() {
   const [showLinks, setShowLinks] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const isWhiteNavbar = isScrolled || pathname === '/clothing';
+  const isWhiteNavbar = isScrolled || pathname === '/clothing' || pathname === '/product';
 
   useEffect(() => {
     const handleScroll = () => {
