@@ -28,11 +28,11 @@ const NAV_ITEMS = [
   },
   { 
     label: 'Programmes', 
-    href: '#',
+    href: '/programmes',
     subLinks: [
-      { label: 'Fellowship Programs', href: '#' },
-      { label: 'Grants & Funding', href: '#' },
-      { label: 'Mentorship', href: '#' },
+      { label: 'Fellowship Programs', href: '/programmes' },
+      { label: 'Grants & Funding', href: '/programmes' },
+      { label: 'Mentorship', href: '/programmes' },
     ]
   },
   { label: 'About', href: '#' },
@@ -79,7 +79,7 @@ export default function Navbar() {
   const [showLinks, setShowLinks] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const isWhiteNavbar = isScrolled || pathname === '/clothing' || pathname === '/product';
+  const isWhiteNavbar = isScrolled || pathname === '/clothing' || pathname === '/product' || pathname === '/programmes';
 
   useEffect(() => {
     const handleScroll = () => {
