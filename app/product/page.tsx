@@ -201,7 +201,7 @@ export default function ProductPage() {
   const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">
+    <div className="min-h-screen bg-white text-gray-900 font-sans pt-[0.8em]">
       {/* Mobile Top Breadcrumb */}
       <div className="md:hidden pt-28 px-4 pb-2 text-xs text-gray-500 font-normal">
         <Link href="/clothing" className="underline hover:no-underline text-gray-600">

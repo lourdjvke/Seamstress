@@ -10,7 +10,6 @@ import ShoeCarousel from '@/components/ShoeCarousel';
 import TorySport from '@/components/TorySport';
 import SaleBanner from '@/components/SaleBanner';
 import FullWidthImage from '@/components/FullWidthImage';
-import Newsletter from '@/components/Newsletter';
 
 export default function Home() {
   return (
@@ -27,7 +26,6 @@ export default function Home() {
       <TorySport />
       <SaleBanner />
       <FullWidthImage />
-      <Newsletter />
     </main>
   );
 }

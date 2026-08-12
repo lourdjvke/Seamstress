@@ -48,18 +48,23 @@ export default function Footer() {
 
   return (
     <footer className="w-full text-sm font-sans bg-white text-gray-900">
-      {/* Mobile Search Bar & Accordion Navigation */}
-      <div className="md:hidden px-5 pt-6 pb-4">
-        {/* Search Bar */}
-        <div className="relative flex items-center bg-[#f4f4f4] rounded-full px-4 py-2.5 mb-6 text-sm">
-          <Search className="w-4 h-4 text-gray-700 mr-2 shrink-0" />
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-600 text-sm"
-          />
+      {/* Take 10% Off First Order Promo Section */}
+      <section className="w-full py-14 md:py-20 px-6 bg-[#f7f7f7] text-center border-b border-gray-200">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-lg md:text-2xl font-semibold tracking-widest uppercase mb-3 text-gray-900">
+            Take 10% Off Your First Order of £200+
+          </h2>
+          <p className="text-xs md:text-sm text-gray-600 mb-6 md:mb-8 leading-relaxed font-normal">
+            Your first Tory Burch purchase of £200 or more, online or in boutiques, when you sign up for emails. Exclusions apply.
+          </p>
+          <button className="px-12 md:px-16 py-3.5 md:py-4 bg-[#1a1a1a] text-white text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-black transition-colors cursor-pointer">
+            Sign Up
+          </button>
         </div>
+      </section>
 
+      {/* Mobile Accordion Navigation (Search removed as requested) */}
+      <div className="md:hidden px-5 pt-4 pb-4">
         {/* Accordion Menu */}
         <div className="border-t border-gray-200">
           {FOOTER_SECTIONS.map((section) => {
@@ -194,7 +199,8 @@ export default function Footer() {
       </div>
 
       {/* Footer Legal & Copyright */}
-      <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col items-center text-center text-[12px] text-gray-500 leading-relaxed gap-2">
+      {/* Mobile Layout */}
+      <div className="md:hidden max-w-7xl mx-auto px-6 py-8 flex flex-col items-center text-center text-[12px] text-gray-500 leading-relaxed gap-2 border-t border-gray-100">
         <div>
           <Link href="#" className="hover:underline">Privacy Policy</Link>
         </div>
@@ -208,6 +214,21 @@ export default function Footer() {
         </div>
         <div className="mt-2 text-gray-400">
           © 2004 - 2026 River Light V, L.P.
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:flex max-w-7xl mx-auto px-6 py-8 justify-between items-center text-[12px] text-gray-500 border-t border-gray-100">
+        <div className="text-gray-500 font-normal">
+          © 2004 - 2026 River Light V, L.P.
+        </div>
+        <div className="flex flex-wrap items-center gap-6 text-gray-500 font-normal">
+          <Link href="#" className="hover:underline">Privacy Policy</Link>
+          <Link href="#" className="hover:underline">UK Modern Slavery Act Statement</Link>
+          <Link href="#" className="hover:underline">Terms of Use</Link>
+          <Link href="#" className="hover:underline">Cookies Settings</Link>
+          <Link href="#" className="hover:underline">Company Imprint</Link>
+          <Link href="#" className="hover:underline">Site Map</Link>
         </div>
       </div>
     </footer>
