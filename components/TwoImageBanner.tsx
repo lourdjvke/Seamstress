@@ -15,12 +15,12 @@ export default function TwoImageBanner() {
             referrerPolicy="no-referrer"
           />
         </div>
-        <div className="py-12 px-6 text-center">
-          <h2 className="text-2xl font-serif mb-4">ROMY</h2>
-          <p className="text-sm text-gray-600 mb-6">Chic, casual and easy on the go</p>
+        <div className="py-4 md:py-6 px-4 text-center">
+          <h2 className="text-lg md:text-xl font-serif mb-1 leading-tight uppercase tracking-wider">ROMY</h2>
+          <p className="text-xs md:text-sm leading-tight text-gray-600 mb-3">Chic, casual and easy on the go</p>
           <Link 
             href="#" 
-            className="text-[10px] font-semibold tracking-widest uppercase border-b border-gray-300 pb-1 hover:border-transparent transition-colors"
+            className="text-[10px] font-semibold tracking-widest uppercase border-b border-gray-300 pb-0.5 hover:border-transparent transition-colors"
           >
             Shop
           </Link>
@@ -38,12 +38,12 @@ export default function TwoImageBanner() {
             referrerPolicy="no-referrer"
           />
         </div>
-        <div className="py-12 px-6 text-center">
-          <h2 className="text-2xl font-serif mb-4 uppercase tracking-wider">Tory&apos;s Favorites</h2>
-          <p className="text-sm text-gray-600 mb-6">&quot;I want to create collections that inspire women to experiment with their individuality and style&quot;</p>
+        <div className="py-4 md:py-6 px-4 text-center">
+          <h2 className="text-lg md:text-xl font-serif mb-1 leading-tight uppercase tracking-wider">Tory&apos;s Favorites</h2>
+          <p className="text-xs md:text-sm leading-tight text-gray-600 mb-3 max-w-md mx-auto">&quot;I want to create collections that inspire women to experiment with their individuality and style&quot;</p>
           <Link 
             href="#" 
-            className="text-[10px] font-semibold tracking-widest uppercase border-b border-gray-300 pb-1 hover:border-transparent transition-colors"
+            className="text-[10px] font-semibold tracking-widest uppercase border-b border-gray-300 pb-0.5 hover:border-transparent transition-colors"
           >
             Shop The Edit
           </Link>

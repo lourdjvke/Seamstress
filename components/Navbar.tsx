@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, Search, ShoppingBag, User, ChevronDown } from 'lucide-react';
+import { Menu, Search, ShoppingBag, User, ChevronDown, X } from 'lucide-react';
 import MenuSidebar from '@/components/MenuSidebar';
 import { useShop } from '@/context/ShopContext';
 
@@ -82,6 +82,7 @@ export default function Navbar() {
   const [showLinks, setShowLinks] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const isWhiteNavbar = isScrolled || pathname === '/clothing' || pathname === '/product' || pathname === '/programmes' || pathname === '/resource' || pathname === '/history';
 
@@ -136,36 +137,63 @@ export default function Navbar() {
               />
             </Link>
           </div>
-          <div className="flex-1 flex items-center justify-end gap-4">
-            <button
-              onClick={openSubscription}
-              aria-label="Subscribe"
-              className="hidden lg:block text-[11px] font-semibold uppercase tracking-wider hover:opacity-70 transition-opacity"
+          <div className="flex-1 flex items-center justify-end gap-4 relative">
+            <div 
+              className={`absolute right-0 top-1/2 -translate-y-1/2 flex items-center transition-all duration-500 ease-in-out z-10 ${
+                isSearchOpen 
+                  ? 'w-[280px] md:w-[320px] opacity-100 pointer-events-auto' 
+                  : 'w-0 opacity-0 pointer-events-none'
+              }`}
             >
-              Subscribe
-            </button>
-            <button aria-label="Search" className="p-2 cursor-pointer">
-              <Search className="w-5 h-5" />
-            </button>
-            <button aria-label="User Account" className="p-2 hidden sm:block cursor-pointer">
-              <User className="w-5 h-5" />
-            </button>
-            <button
-              onClick={openCart}
-              aria-label="Shopping Bag"
-              className="p-2 cursor-pointer relative hover:opacity-70 transition-opacity"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
+              <div className={`w-full flex items-center px-4 py-2 rounded-md transition-colors duration-300 ${
+                isWhiteNavbar 
+                  ? 'bg-white border border-gray-300 text-gray-900' 
+                  : 'bg-white/20 backdrop-blur-md border border-transparent text-white'
+              }`}>
+                <input 
+                  type="text" 
+                  placeholder="Search for resources" 
+                  className="w-full bg-transparent outline-none text-sm placeholder:text-current placeholder:opacity-70"
+                  autoFocus={isSearchOpen}
+                />
+                <button 
+                  onClick={() => setIsSearchOpen(false)}
+                  className="ml-2 p-1 hover:opacity-70 cursor-pointer"
+                  aria-label="Close search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className={`flex items-center gap-4 transition-opacity duration-300 ${isSearchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                aria-label="Search" 
+                className="p-2 cursor-pointer hover:opacity-70 transition-opacity"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+              <button aria-label="User Account" className="p-2 hidden sm:block cursor-pointer hover:opacity-70 transition-opacity">
+                <User className="w-5 h-5" />
+              </button>
+              <button
+                onClick={openCart}
+                aria-label="Shopping Bag"
+                className="p-2 cursor-pointer relative hover:opacity-70 transition-opacity"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
         <div
-          className={`hidden md:flex justify-center gap-12 lg:gap-16 text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 ${
+          className={`hidden md:flex justify-center gap-[4em] lg:gap-[5em] text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 ${
             showLinks ? 'h-10 opacity-100 pointer-events-auto' : 'h-0 opacity-0 pointer-events-none overflow-hidden'
           }`}
         >

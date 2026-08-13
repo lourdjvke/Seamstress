@@ -425,36 +425,40 @@ export default function ProductPage() {
           
           {/* Left Column: Stacked Cover Images (7 Cols) - Touching left screen edge */}
           <div className="col-span-7 flex flex-col gap-0 w-full relative">
-            {PRODUCT_IMAGES.map((imgSrc, idx) => (
-              <div 
-                key={idx} 
-                className="desktop-product-img relative w-full aspect-[3/4] bg-[#f6f6f6] overflow-hidden"
-              >
-                <Image 
-                  src={imgSrc}
-                  alt={`Silk-Front Wool Top View ${idx + 1}`}
-                  fill
-                  className="object-cover w-full h-full"
-                  referrerPolicy="no-referrer"
-                  priority={idx === 0}
-                />
-
-                {/* Wishlist Heart Icon on first image */}
-                {idx === 0 && (
-                  <button 
-                    onClick={() => setIsFavorite(!isFavorite)}
-                    className="absolute top-6 right-6 z-10 text-gray-900 cursor-pointer hover:scale-110 transition-transform"
-                    aria-label="Wishlist"
-                  >
-                    <Heart className={`w-5 h-5 ${isFavorite ? 'fill-black text-black' : 'text-gray-900'}`} />
-                  </button>
-                )}
-              </div>
-            ))}
-
             {/* Floating Overlay Counter "1|5" at bottom-left of image scroll side */}
-            <div className="sticky bottom-6 left-6 self-start ml-6 mb-6 -mt-12 z-20 font-semibold text-xs tracking-widest text-gray-900 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-sm shadow-sm pointer-events-none">
-              {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
+            <div className="h-0 overflow-visible z-20">
+              <div className="sticky top-[calc(100vh-4rem)] left-6 w-max ml-6 font-semibold text-xs tracking-widest text-gray-900 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-sm shadow-sm pointer-events-none">
+                {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-0 w-full">
+              {PRODUCT_IMAGES.map((imgSrc, idx) => (
+                <div 
+                  key={idx} 
+                  className="desktop-product-img relative w-full aspect-[3/4] bg-[#f6f6f6] overflow-hidden"
+                >
+                  <Image 
+                    src={imgSrc}
+                    alt={`Silk-Front Wool Top View ${idx + 1}`}
+                    fill
+                    className="object-cover w-full h-full"
+                    referrerPolicy="no-referrer"
+                    priority={idx === 0}
+                  />
+
+                  {/* Wishlist Heart Icon on first image */}
+                  {idx === 0 && (
+                    <button 
+                      onClick={() => setIsFavorite(!isFavorite)}
+                      className="absolute top-6 right-6 z-10 text-gray-900 cursor-pointer hover:scale-110 transition-transform pointer-events-auto"
+                      aria-label="Wishlist"
+                    >
+                      <Heart className={`w-5 h-5 ${isFavorite ? 'fill-black text-black' : 'text-gray-900'}`} />
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 

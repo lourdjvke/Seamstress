@@ -42,9 +42,9 @@ export default function ShoeCarousel() {
   };
 
   return (
-    <section className="w-full py-16 bg-white overflow-hidden border-t border-gray-100">
-      <div className="text-center mb-10 px-4">
-        <p className="text-sm text-gray-700 mb-6">The ultimate destination for warm-weather shoes</p>
+    <section className="w-full py-12 bg-white overflow-hidden border-t border-gray-100">
+      <div className="text-center mb-8 px-4">
+        <p className="text-sm text-gray-700 mb-4">The ultimate destination for warm-weather shoes</p>
         <div className="flex justify-center gap-8 text-[11px] font-semibold tracking-widest uppercase">
           <Link href="#" className="border-b border-black pb-1">Shop Sandals</Link>
           <Link href="#" className="border-b border-gray-300 pb-1 hover:border-transparent transition-colors text-gray-500">Shop New Arrivals</Link>
@@ -54,11 +54,11 @@ export default function ShoeCarousel() {
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex w-full overflow-x-auto snap-x snap-mandatory"
+        className="flex w-full overflow-x-auto snap-x snap-mandatory gap-[2px] px-0 no-scrollbar"
       >
         {shoes.map((shoe, idx) => (
-          <div key={idx} className="flex-none w-4/5 md:w-1/3 lg:w-1/5 snap-center px-1">
-            <div className="relative aspect-[4/5] bg-[#f7f7f7] mb-4 group overflow-hidden cursor-pointer">
+          <div key={idx} className="flex-none w-[70vw] sm:w-[40vw] md:w-[30vw] lg:w-[20vw] snap-center px-0">
+            <div className="relative aspect-[4/5] bg-[#f7f7f7] mb-2 group overflow-hidden cursor-pointer">
               <Image 
                 src={shoe.src} 
                 alt={shoe.name} 
@@ -66,12 +66,12 @@ export default function ShoeCarousel() {
                 className="object-cover group-hover:scale-105 transition-transform duration-700 mix-blend-multiply"
                 referrerPolicy="no-referrer"
               />
-              <button className="absolute top-4 right-4 text-gray-500 hover:text-black opacity-0 group-hover:opacity-100 transition-opacity">
-                <Heart className="w-5 h-5" />
+              <button className="absolute top-3 right-3 text-gray-500 hover:text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                <Heart className="w-4 h-4" />
               </button>
             </div>
-            <div className="text-center px-2">
-              <p className="text-xs text-gray-700">{shoe.name}</p>
+            <div className="text-center py-1 px-1">
+              <p className="text-xs text-gray-700 font-medium truncate">{shoe.name}</p>
             </div>
           </div>
         ))}

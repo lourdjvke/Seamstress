@@ -10,18 +10,18 @@ export default function IconsGrid() {
   ];
 
   return (
-    <section className="w-full py-16 px-4 md:px-8 bg-white">
-      <div className="text-center mb-12">
-        <h2 className="text-xl md:text-2xl tracking-[0.2em] font-semibold uppercase mb-4">
+    <section className="w-full py-12 bg-white">
+      <div className="text-center mb-8 px-4">
+        <h2 className="text-xl md:text-2xl tracking-[0.2em] font-semibold uppercase mb-2">
           Our Icons
         </h2>
-        <p className="text-sm text-gray-600">Discover our signature collections</p>
+        <p className="text-xs text-gray-600">Discover our signature collections</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[3px] w-full">
         {items.map((item, idx) => (
           <div key={idx} className="flex flex-col items-center group">
-            <div className="w-full aspect-square relative bg-[#f7f7f7] mb-6 overflow-hidden">
+            <div className="w-full aspect-square relative bg-[#f7f7f7] mb-3 overflow-hidden">
               <Image 
                 src={item.src} 
                 alt={item.title} 
@@ -32,7 +32,7 @@ export default function IconsGrid() {
             </div>
             <Link 
               href="#" 
-              className="text-xs font-semibold tracking-widest uppercase border-b border-black pb-1 hover:border-transparent hover:opacity-70 transition-all"
+              className="text-xs font-semibold tracking-widest uppercase border-b border-black pb-0.5 hover:border-transparent hover:opacity-70 transition-all mb-4"
             >
               {item.title}
             </Link>
