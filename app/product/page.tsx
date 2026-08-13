@@ -133,16 +133,74 @@ const YOU_MAY_ALSO_LIKE_PRODUCTS: Product[] = [
   },
 ];
 
+const STYLE_WITH_PRODUCT: Product = {
+  id: 'style-with-1',
+  title: 'Wide-Leg Cotton Pant',
+  price: '£345',
+  images: [
+    'https://picsum.photos/seed/clothing4/400/533',
+    'https://picsum.photos/seed/clothing4_alt/400/533',
+  ],
+  colors: [
+    { colorHex: '#e5e0d8', imgSrc: 'https://picsum.photos/seed/clothing4/400/533' },
+    { colorHex: '#111111', imgSrc: 'https://picsum.photos/seed/clothing12_brown/400/533' },
+  ],
+};
+
+const RECENTLY_VIEWED_PRODUCTS: Product[] = [
+  {
+    id: 'rv-1',
+    title: 'Printed Viscose Dress',
+    price: '£595',
+    images: [
+      'https://picsum.photos/seed/clothing1/400/533',
+      'https://picsum.photos/seed/clothing1_alt/400/533',
+    ],
+  },
+  {
+    id: 'rv-2',
+    title: 'Wool Cardigan',
+    price: '£550',
+    images: [
+      'https://picsum.photos/seed/clothing2/400/533',
+      'https://picsum.photos/seed/clothing2_alt/400/533',
+    ],
+  },
+  {
+    id: 'rv-3',
+    title: 'Printed Tory Tunic',
+    price: '£325',
+    images: [
+      'https://picsum.photos/seed/clothing9_white/400/533',
+      'https://picsum.photos/seed/clothing9_alt/400/533',
+    ],
+  },
+  {
+    id: 'rv-4',
+    title: 'Tie-Back Crepe Dress',
+    price: '£595',
+    images: [
+      'https://picsum.photos/seed/feat_dress/400/533',
+      'https://picsum.photos/seed/feat_dress_alt/400/533',
+    ],
+  },
+];
+
 export default function ProductPage() {
   const { addToCart, openSelectSize } = useShop();
   // Desktop pinned image scroll index
   const [activeImageIdx, setActiveImageIdx] = useState<number>(0);
   const heroSectionRef = useRef<HTMLDivElement>(null);
 
-  // Accordion states
-  const [isDescOpen, setIsDescOpen] = useState<boolean>(true);
-  const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
-  const [isShippingOpen, setIsShippingOpen] = useState<boolean>(false);
+  // Exclusive Accordion state: only one open at a time
+  const [openAccordion, setOpenAccordion] = useState<'desc' | 'details' | 'shipping' | null>('desc');
+
+  const toggleAccordion = (id: 'desc' | 'details' | 'shipping') => {
+    setOpenAccordion((prev) => (prev === id ? null : id));
+  };
+
+  // Recommendation Tab state
+  const [recTab, setRecTab] = useState<'youMayAlsoLike' | 'styleWith'>('youMayAlsoLike');
 
   // Size state
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -350,14 +408,14 @@ export default function ProductPage() {
             {/* Description */}
             <div className="py-4">
               <button 
-                onClick={() => setIsDescOpen(!isDescOpen)}
+                onClick={() => toggleAccordion('desc')}
                 className="w-full flex justify-between items-center text-xs font-semibold tracking-wider uppercase text-gray-900 cursor-pointer"
               >
                 <span>DESCRIPTION</span>
-                {isDescOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                {openAccordion === 'desc' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               </button>
 
-              {isDescOpen && (
+              {openAccordion === 'desc' && (
                 <div className="mt-3 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
                   Our silk-front wool top, reissued in an original scarf print. Crafted in a mix of printed silk twill and wool, it&apos;s a versatile piece that adds a touch of signature style.{' '}
                   <button className="text-gray-900 underline hover:no-underline cursor-pointer font-medium">
@@ -370,14 +428,14 @@ export default function ProductPage() {
             {/* Details */}
             <div className="py-4">
               <button 
-                onClick={() => setIsDetailsOpen(!isDetailsOpen)}
+                onClick={() => toggleAccordion('details')}
                 className="w-full flex justify-between items-center text-xs font-semibold tracking-wider uppercase text-gray-900 cursor-pointer"
               >
                 <span>DETAILS</span>
-                {isDetailsOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                {openAccordion === 'details' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               </button>
 
-              {isDetailsOpen && (
+              {openAccordion === 'details' && (
                 <div className="mt-3 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200 space-y-2">
                   <p>• Body: 70% Wool, 30% Silk twill front panel</p>
                   <p>• Dry clean only</p>
@@ -390,14 +448,14 @@ export default function ProductPage() {
             {/* Free Shipping & Returns */}
             <div className="py-4">
               <button 
-                onClick={() => setIsShippingOpen(!isShippingOpen)}
+                onClick={() => toggleAccordion('shipping')}
                 className="w-full flex justify-between items-center text-xs font-semibold tracking-wider uppercase text-gray-900 cursor-pointer"
               >
                 <span>FREE SHIPPING & RETURNS</span>
-                {isShippingOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                {openAccordion === 'shipping' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               </button>
 
-              {isShippingOpen && (
+              {openAccordion === 'shipping' && (
                 <div className="mt-3 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
                   Enjoy complimentary standard shipping on all orders. Free returns within 14 days of receipt.
                 </div>
@@ -419,17 +477,15 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* DESKTOP HERO SECTION (Natural Stacked Image Scroll + Sticky 350px Info Right) */}
+      {/* DESKTOP HERO SECTION (50% Stacked Image Scroll + 50% Sticky Details Panel) */}
       <div className="hidden md:block pt-20">
         <div className="w-full grid grid-cols-12 gap-8 items-start">
           
-          {/* Left Column: Stacked Cover Images (7 Cols) - Touching left screen edge */}
-          <div className="col-span-7 flex flex-col gap-0 w-full relative">
-            {/* Floating Overlay Counter "1|5" at bottom-left of image scroll side */}
-            <div className="h-0 overflow-visible z-20">
-              <div className="sticky top-[calc(100vh-4rem)] left-6 w-max ml-6 font-semibold text-xs tracking-widest text-gray-900 pointer-events-none mix-blend-difference text-white">
-                {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
-              </div>
+          {/* Left Column: 50% Width Stacked Cover Images */}
+          <div className="col-span-6 flex flex-col gap-0 w-full relative">
+            {/* Pinned Sticky Counter "1 | 5" at bottom-left */}
+            <div className="fixed bottom-6 left-6 z-30 font-semibold text-xs tracking-widest text-white bg-black/70 px-3 py-1.5 rounded-sm pointer-events-none backdrop-blur-sm shadow-md">
+              {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
             </div>
             
             <div className="flex flex-col gap-0 w-full">
@@ -462,10 +518,10 @@ export default function ProductPage() {
             </div>
           </div>
 
-          {/* Right Column: Sticky 350px Details Panel (5 Cols) Centered in its area */}
-          <div className="col-span-5 sticky top-24 self-start py-4 px-6 flex justify-center">
-            {/* Inner Details Container constrained to 350px max-width */}
-            <div className="w-full max-w-[350px] space-y-3">
+          {/* Right Column: 50% Width Details Panel Centered */}
+          <div className="col-span-6 sticky top-24 self-start py-4 px-6 flex justify-center">
+            {/* Inner Details Container: increased inner width to 400px and 1em top padding */}
+            <div className="w-full max-w-[400px] pt-[1em] space-y-3.5">
               <div>
                 <h1 className="text-base font-semibold tracking-wider uppercase text-gray-900 leading-tight mb-1">
                   SILK-FRONT WOOL TOP
@@ -537,19 +593,19 @@ export default function ProductPage() {
                 ADD TO BAG
               </button>
 
-              {/* Accordion List */}
+              {/* Accordion List (Exclusive single opening) */}
               <div className="border-t border-gray-200 divide-y divide-gray-200 text-xs">
                 {/* Description */}
                 <div className="py-3">
                   <button 
-                    onClick={() => setIsDescOpen(!isDescOpen)}
+                    onClick={() => toggleAccordion('desc')}
                     className="w-full flex justify-between items-center text-xs font-semibold tracking-widest uppercase text-gray-900 cursor-pointer hover:opacity-70 transition-opacity"
                   >
                     <span>DESCRIPTION</span>
-                    {isDescOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {openAccordion === 'desc' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </button>
 
-                  {isDescOpen && (
+                  {openAccordion === 'desc' && (
                     <div className="mt-2.5 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
                       Our silk-front wool top, reissued in an original scarf print. Crafted in a mix of printed silk twill and wool, it&apos;s a versatile piece that adds a touch...{' '}
                       <button className="text-gray-900 underline hover:no-underline cursor-pointer font-medium">
@@ -562,14 +618,14 @@ export default function ProductPage() {
                 {/* Details */}
                 <div className="py-3">
                   <button 
-                    onClick={() => setIsDetailsOpen(!isDetailsOpen)}
+                    onClick={() => toggleAccordion('details')}
                     className="w-full flex justify-between items-center text-xs font-semibold tracking-widest uppercase text-gray-900 cursor-pointer hover:opacity-70 transition-opacity"
                   >
                     <span>DETAILS</span>
-                    {isDetailsOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {openAccordion === 'details' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </button>
 
-                  {isDetailsOpen && (
+                  {openAccordion === 'details' && (
                     <div className="mt-2.5 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200 space-y-1.5">
                       <p>• Body: 70% Wool, 30% Silk twill front panel</p>
                       <p>• Dry clean only</p>
@@ -582,14 +638,14 @@ export default function ProductPage() {
                 {/* Free Shipping & Returns */}
                 <div className="py-3">
                   <button 
-                    onClick={() => setIsShippingOpen(!isShippingOpen)}
+                    onClick={() => toggleAccordion('shipping')}
                     className="w-full flex justify-between items-center text-xs font-semibold tracking-widest uppercase text-gray-900 cursor-pointer hover:opacity-70 transition-opacity"
                   >
                     <span>FREE SHIPPING & RETURNS</span>
-                    {isShippingOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {openAccordion === 'shipping' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </button>
 
-                  {isShippingOpen && (
+                  {openAccordion === 'shipping' && (
                     <div className="mt-2.5 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
                       Enjoy complimentary standard shipping on all orders. Free returns within 14 days of receipt.
                     </div>
@@ -615,49 +671,102 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* LOWER CONTENT SECTION (Carousel, Reviews, Search Bar) */}
+      {/* LOWER CONTENT SECTION (Carousel with Style With, Recently Viewed, Reviews, Search Bar) */}
       <div className="bg-white pt-16 pb-24 border-t border-gray-100">
         
-        {/* YOU MAY ALSO LIKE CAROUSEL */}
-        <section className="mb-20 max-w-[1600px] mx-auto px-4 md:px-8 relative">
-          <h2 className="text-center text-sm md:text-base font-semibold tracking-widest uppercase text-gray-900 mb-8">
-            YOU MAY ALSO LIKE
-          </h2>
-
-          <div className="relative group/carousel">
-            {/* Left Chevron Button */}
-            {canScrollLeft && (
-              <button 
-                onClick={() => handleScrollCarousel('left')}
-                className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full items-center justify-center cursor-pointer text-gray-800 hover:scale-110 transition-transform"
-                aria-label="Scroll left"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-            )}
-
-            {/* Carousel Container */}
-            <div 
-              ref={carouselRef}
-              className="flex space-x-3 md:space-x-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
+        {/* YOU MAY ALSO LIKE & STYLE WITH TABS CAROUSEL */}
+        <section className="mb-20 max-w-[1600px] mx-auto px-[0.8em] relative">
+          <div className="flex items-center justify-center gap-[1.5em] mb-8">
+            <button
+              onClick={() => setRecTab('youMayAlsoLike')}
+              className={`text-xs md:text-sm tracking-widest uppercase transition-all cursor-pointer ${
+                recTab === 'youMayAlsoLike'
+                  ? 'font-bold text-gray-900 underline underline-offset-8 decoration-2'
+                  : 'text-gray-500 hover:text-gray-900 font-normal'
+              }`}
             >
-              {YOU_MAY_ALSO_LIKE_PRODUCTS.map((prod) => (
-                <div key={prod.id} className="min-w-[200px] w-[220px] md:min-w-[280px] md:w-[300px] shrink-0">
-                  <ProductCard product={prod} />
-                </div>
-              ))}
-            </div>
+              YOU MAY ALSO LIKE
+            </button>
+            <button
+              onClick={() => setRecTab('styleWith')}
+              className={`text-xs md:text-sm tracking-widest uppercase transition-all cursor-pointer ${
+                recTab === 'styleWith'
+                  ? 'font-bold text-gray-900 underline underline-offset-8 decoration-2'
+                  : 'text-gray-500 hover:text-gray-900 font-normal'
+              }`}
+            >
+              STYLE WITH
+            </button>
+          </div>
 
-            {/* Right Chevron Button */}
-            {canScrollRight && (
-              <button 
-                onClick={() => handleScrollCarousel('right')}
-                className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full items-center justify-center cursor-pointer text-gray-800 hover:scale-110 transition-transform"
-                aria-label="Scroll right"
+          {recTab === 'youMayAlsoLike' ? (
+            <div className="relative group/carousel">
+              {/* Left Chevron Button */}
+              {canScrollLeft && (
+                <button 
+                  onClick={() => handleScrollCarousel('left')}
+                  className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full items-center justify-center cursor-pointer text-gray-800 hover:scale-110 transition-transform"
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              )}
+
+              {/* Carousel Container */}
+              <div 
+                ref={carouselRef}
+                className="flex space-x-3 md:space-x-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
               >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            )}
+                {YOU_MAY_ALSO_LIKE_PRODUCTS.map((prod) => (
+                  <div key={prod.id} className="min-w-[200px] w-[220px] md:min-w-[280px] md:w-[300px] shrink-0">
+                    <ProductCard product={prod} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Right Chevron Button */}
+              {canScrollRight && (
+                <button 
+                  onClick={() => handleScrollCarousel('right')}
+                  className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 shadow-md rounded-full items-center justify-center cursor-pointer text-gray-800 hover:scale-110 transition-transform"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+          ) : (
+            /* Style With: Shows 1 product centered */
+            <div className="flex justify-center items-center py-4">
+              <div className="w-[240px] md:w-[280px]">
+                <ProductCard product={STYLE_WITH_PRODUCT} />
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* RECENTLY VIEWED SECTION */}
+        <section className="mb-20 max-w-[1600px] mx-auto px-[0.8em] relative">
+          <h2 className="text-center text-xs md:text-sm font-semibold tracking-widest uppercase text-gray-900 mb-8">
+            RECENTLY VIEWED
+          </h2>
+          
+          {/* Desktop 4-column grid with 2px gap, centered */}
+          <div className="hidden md:grid grid-cols-4 gap-[2px] justify-center max-w-6xl mx-auto">
+            {RECENTLY_VIEWED_PRODUCTS.map((prod) => (
+              <div key={prod.id} className="w-full">
+                <ProductCard product={prod} />
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile horizontal carousel */}
+          <div className="md:hidden flex space-x-2 overflow-x-auto no-scrollbar scroll-smooth py-2">
+            {RECENTLY_VIEWED_PRODUCTS.map((prod) => (
+              <div key={prod.id} className="min-w-[200px] w-[220px] shrink-0">
+                <ProductCard product={prod} />
+              </div>
+            ))}
           </div>
         </section>
 

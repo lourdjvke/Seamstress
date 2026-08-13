@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, Check } from 'lucide-react';
 import { useShop } from '@/context/ShopContext';
@@ -15,6 +15,18 @@ export default function SubscriptionSidebar() {
   const [submitted, setSubmitted] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
 
+  // Lock body scroll when subscription sidebar is open
+  useEffect(() => {
+    if (isSubscriptionOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSubscriptionOpen]);
+
   const showExpanded = isFocused || email.length > 0;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,10 +37,6 @@ export default function SubscriptionSidebar() {
         setIsLoading(false);
         setSubmitted(true);
         setSubmittedEmail(email);
-        
-        // Auto-close logic can be omitted so the user sees the confirmation screen,
-        // or we can keep it for the desktop sidebar specifically, but mobile needs a button.
-        // Let's rely on the "Continue Shopping" button to close.
       }, 1400);
     }
   };
@@ -55,9 +63,9 @@ export default function SubscriptionSidebar() {
         }`}
       />
 
-      {/* --- DESKTOP SIDEBAR (hidden on mobile) --- */}
+      {/* --- DESKTOP SIDEBAR (width increased by 30px to 380px) --- */}
       <div
-        className={`hidden md:flex fixed top-0 right-0 h-full w-[350px] bg-white z-[90] shadow-2xl flex-col overflow-y-auto transition-transform duration-300 ease-in-out ${
+        className={`hidden md:flex fixed top-0 right-0 h-full w-[380px] bg-white z-[90] shadow-2xl flex-col overflow-y-auto transition-transform duration-300 ease-in-out ${
           isSubscriptionOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -82,13 +90,14 @@ export default function SubscriptionSidebar() {
           />
         </div>
 
-        <div className="p-8 flex-1 flex flex-col justify-center text-center">
+        {/* Content placed directly below the image */}
+        <div className="p-6 md:p-8 flex-1 flex flex-col justify-start text-center pt-6">
           {submitted ? (
-            <div className="flex flex-col items-center justify-center">
-              <h2 className="text-[16px] font-semibold tracking-[1.8px] uppercase text-[#111] mb-4">
+            <div className="flex flex-col items-center justify-center pt-4">
+              <h2 className="text-[16px] font-semibold tracking-[1.8px] uppercase text-[#111] mb-3">
                 Confirmed - Thank You
               </h2>
-              <p className="text-[12.5px] text-[#333] leading-[1.5] mb-7 max-w-[290px]">
+              <p className="text-[12px] text-[#333] leading-snug mb-6 max-w-[290px]">
                 You&apos;ve been added to our email list as<br />
                 <span className="font-normal text-[#111] block mt-1 break-all">{submittedEmail}</span>
               </p>
@@ -101,10 +110,10 @@ export default function SubscriptionSidebar() {
             </div>
           ) : (
             <>
-              <h2 className="text-xl font-bold tracking-[0.1em] text-gray-900 uppercase mb-4 leading-tight">
+              <h2 className="text-lg font-bold tracking-[0.08em] text-gray-900 uppercase mb-3 leading-snug">
                 TAKE 10% OFF YOUR FIRST ORDER OF £200+
               </h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-8">
+              <p className="text-[13px] text-gray-600 leading-snug mb-6">
                 Your first Tory Burch purchase of £200 or more, online or in boutiques, when you sign up for emails. Exclusions apply.
               </p>
 

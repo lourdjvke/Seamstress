@@ -47,25 +47,6 @@ export default function ProductCard({ product }: { product: Product }) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (quickShopState === 'initial') {
-      setQuickShopState('loading');
-      setTimeout(() => {
-        setQuickShopState('selectSize');
-      }, 600);
-    } else if (quickShopState === 'selectSize') {
-      openSelectSize({
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        image: currentImgSrc,
-        color: 'Dark Roast',
-      });
-    }
-  };
-
-  const handleAddToBagClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
     openSelectSize({
       id: product.id,
       title: product.title,
@@ -135,26 +116,14 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* Quick Shop Button (Desktop & Touch) */}
         <button 
           onClick={handleQuickShopClick}
-          className={`hidden md:flex items-center justify-center absolute bottom-2.5 left-2.5 right-2.5 bg-white/90 hover:bg-white text-gray-900 py-3 text-[11px] font-medium uppercase tracking-wider text-center transition-all duration-300 z-10 border border-black/5 cursor-pointer ${
-            quickShopState === 'selectSize'
-              ? 'opacity-100 translate-y-0 font-bold bg-black text-white hover:bg-gray-900'
-              : 'opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'
-          }`}
+          className="hidden md:flex items-center justify-center absolute bottom-2.5 left-2.5 right-2.5 bg-white/95 hover:bg-black hover:text-white text-gray-900 py-3 text-[11px] font-semibold uppercase tracking-wider text-center transition-all duration-300 z-10 border border-black/10 cursor-pointer opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 shadow-sm"
         >
-          {quickShopState === 'initial' && 'Quick Shop'}
-          {quickShopState === 'loading' && (
-            <div className="flex items-center justify-center gap-1.5 py-0.5">
-              <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce [animation-delay:-0.3s]" />
-              <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce [animation-delay:-0.15s]" />
-              <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce" />
-            </div>
-          )}
-          {quickShopState === 'selectSize' && 'Select Size'}
+          Quick Shop
         </button>
       </div>
 
       {/* Product Information */}
-      <div className="p-3 md:p-4 flex-1 flex flex-col justify-between">
+      <div className="p-3 md:p-4 flex-1 flex flex-col justify-start">
         <div>
           <h3 className="text-[12px] md:text-[13px] text-gray-900 leading-tight mb-1 font-normal">
             {product.title}
@@ -185,15 +154,6 @@ export default function ProductCard({ product }: { product: Product }) {
               ))}
             </div>
           )}
-        </div>
-
-        <div className="mt-2">
-          <button 
-            onClick={handleAddToBagClick}
-            className="text-[11px] font-medium tracking-wider uppercase underline hover:no-underline cursor-pointer text-gray-900"
-          >
-            ADD TO BAG
-          </button>
         </div>
       </div>
     </div>

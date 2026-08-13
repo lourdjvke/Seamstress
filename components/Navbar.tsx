@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, Search, ShoppingBag, User, ChevronDown, X } from 'lucide-react';
 import MenuSidebar from '@/components/MenuSidebar';
+import SearchSidebar from '@/components/SearchSidebar';
 import { useShop } from '@/context/ShopContext';
 
 const NAV_ITEMS = [
@@ -47,7 +48,7 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
         <div className={`
           absolute -top-4 left-1/2 -translate-x-1/2 min-w-[240px] pt-4 pb-6 px-6 rounded-md
           transition-all duration-300 pointer-events-none group-hover:pointer-events-auto
-          opacity-0 group-hover:opacity-100 flex flex-col items-center text-center
+          opacity-0 group-hover:opacity-100 flex flex-col items-start text-left
           ${isScrolled 
             ? 'bg-white border border-gray-200 shadow-lg text-black' 
             : 'bg-white/20 backdrop-blur-md text-white'
@@ -55,9 +56,9 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
         `}>
            {/* Spacer to push dropdown items below title, matching title height + spacing */}
            <div className="h-6 mb-4"></div> 
-           <div className="flex flex-col gap-4 w-full">
+           <div className="flex flex-col gap-3.5 w-full items-start text-left">
              {item.subLinks.map(sub => (
-               <Link key={sub.label} href={sub.href} className="text-[13px] font-medium tracking-normal normal-case hover:opacity-70 transition-opacity">
+               <Link key={sub.label} href={sub.href} className="text-[13px] font-medium tracking-normal normal-case hover:underline transition-all text-left block w-full">
                  {sub.label}
                </Link>
              ))}
@@ -77,7 +78,7 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { openCart, cartCount, openSubscription } = useShop();
+  const { openCart, cartCount } = useShop();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showLinks, setShowLinks] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -137,15 +138,16 @@ export default function Navbar() {
               />
             </Link>
           </div>
-          <div className="flex-1 flex items-center justify-end gap-4 relative">
+          <div className="flex-1 flex items-center justify-end gap-3 md:gap-4 relative">
+            {/* Desktop search bar starting from search icon */}
             <div 
-              className={`absolute right-0 top-1/2 -translate-y-1/2 flex items-center transition-all duration-500 ease-in-out z-10 ${
+              className={`hidden md:flex items-center transition-all duration-300 ease-in-out ${
                 isSearchOpen 
-                  ? 'w-[280px] md:w-[320px] opacity-100 pointer-events-auto' 
-                  : 'w-0 opacity-0 pointer-events-none'
+                  ? 'w-[260px] opacity-100 pointer-events-auto mr-1' 
+                  : 'w-0 opacity-0 pointer-events-none overflow-hidden'
               }`}
             >
-              <div className={`w-full flex items-center px-4 py-2 rounded-md transition-colors duration-300 ${
+              <div className={`w-full flex items-center px-3 py-1.5 rounded-md transition-colors duration-300 ${
                 isWhiteNavbar 
                   ? 'bg-white border border-gray-300 text-gray-900' 
                   : 'bg-white/20 backdrop-blur-md border border-transparent text-white'
@@ -153,7 +155,7 @@ export default function Navbar() {
                 <input 
                   type="text" 
                   placeholder="Search for resources" 
-                  className="w-full bg-transparent outline-none text-sm placeholder:text-current placeholder:opacity-70"
+                  className="w-full bg-transparent outline-none text-xs placeholder:text-current placeholder:opacity-70"
                   autoFocus={isSearchOpen}
                 />
                 <button 
@@ -161,35 +163,46 @@ export default function Navbar() {
                   className="ml-2 p-1 hover:opacity-70 cursor-pointer"
                   aria-label="Close search"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
 
-            <div className={`flex items-center gap-4 transition-opacity duration-300 ${isSearchOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            {/* Desktop Search Icon - only disappears when search is open */}
+            {!isSearchOpen && (
               <button 
                 onClick={() => setIsSearchOpen(true)}
                 aria-label="Search" 
-                className="p-2 cursor-pointer hover:opacity-70 transition-opacity"
+                className="p-2 hidden md:block cursor-pointer hover:opacity-70 transition-opacity"
               >
                 <Search className="w-5 h-5" />
               </button>
-              <button aria-label="User Account" className="p-2 hidden sm:block cursor-pointer hover:opacity-70 transition-opacity">
-                <User className="w-5 h-5" />
-              </button>
-              <button
-                onClick={openCart}
-                aria-label="Shopping Bag"
-                className="p-2 cursor-pointer relative hover:opacity-70 transition-opacity"
-              >
-                <ShoppingBag className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </div>
+            )}
+
+            {/* Mobile Search Button */}
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              aria-label="Search" 
+              className="p-2 md:hidden cursor-pointer hover:opacity-70 transition-opacity"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+
+            <button aria-label="User Account" className="p-2 hidden sm:block cursor-pointer hover:opacity-70 transition-opacity">
+              <User className="w-5 h-5" />
+            </button>
+            <button
+              onClick={openCart}
+              aria-label="Shopping Bag"
+              className="p-2 cursor-pointer relative hover:opacity-70 transition-opacity"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </button>
           </div>
         </div>
         <div
@@ -205,6 +218,9 @@ export default function Navbar() {
 
       {/* Menu Sidebar Component */}
       <MenuSidebar isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      
+      {/* Mobile Search Sidebar Component */}
+      <SearchSidebar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }

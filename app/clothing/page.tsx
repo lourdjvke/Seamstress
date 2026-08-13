@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
@@ -313,6 +313,18 @@ export default function ClothingPage() {
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
   const [selectedLengths, setSelectedLengths] = useState<string[]>([]);
 
+  // Prevent background scroll when filter is open
+  useEffect(() => {
+    if (isFilterOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFilterOpen]);
+
   const toggleStyle = (style: string) => {
     setSelectedStyles(prev => 
       prev.includes(style) ? prev.filter(s => s !== style) : [...prev, style]
@@ -600,7 +612,7 @@ export default function ClothingPage() {
       <div 
         className={`fixed top-0 right-0 bottom-0 z-50 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
           isFilterOpen ? 'translate-x-0' : 'translate-x-full'
-        } w-full md:w-[400px]`}
+        } w-full md:w-[450px]`}
       >
         {/* Drawer Header */}
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
@@ -755,7 +767,7 @@ export default function ClothingPage() {
           </p>
           <button 
             onClick={() => setIsFilterOpen(false)}
-            className="w-full bg-[#111111] text-white py-3.5 text-xs font-semibold tracking-widest uppercase hover:bg-gray-800 transition-colors cursor-pointer"
+            className="w-full bg-[#111111] text-white py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-gray-800 transition-colors cursor-pointer"
           >
             APPLY (81)
           </button>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { X, ChevronRight, ChevronLeft, Globe } from 'lucide-react';
 
@@ -175,6 +175,18 @@ const MAIN_NAV_ITEMS = [
 export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
   const [activeSubmenuId, setActiveSubmenuId] = useState<string | null>(null);
 
+  // Prevent main page scroll when menu sidebar is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const handleCloseAll = () => {
     setActiveSubmenuId(null);
     onClose();
@@ -204,9 +216,9 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
         }`}
       />
 
-      {/* Main Sidebar */}
+      {/* Main Sidebar (Desktop width increased by 60px to 440px) */}
       <div
-        className={`fixed top-0 left-0 h-full w-full md:w-[380px] bg-white flex flex-col z-[70] border-r border-gray-200 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-full md:w-[440px] bg-white flex flex-col z-[70] border-r border-gray-200 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -223,7 +235,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
         {/* Main Navigation List */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
-          <ul className="space-y-6 text-[13px] font-bold tracking-widest uppercase mb-10">
+          <ul className="space-y-4 md:space-y-5 text-[16px] font-bold tracking-widest uppercase mb-10">
             {MAIN_NAV_ITEMS.map((item) => {
               const isActive = activeSubmenuId === item.id;
               const hasSubmenuActive = activeSubmenuId !== null;
@@ -232,7 +244,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <li key={item.id}>
                   <button
                     onClick={() => handleSubmenuToggle(item.id)}
-                    className={`w-full flex items-center justify-between group transition-colors cursor-pointer text-left ${
+                    className={`w-full py-1 flex items-center justify-between group transition-colors cursor-pointer text-left ${
                       hasSubmenuActive
                         ? isActive
                           ? 'text-black'
@@ -251,7 +263,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
           <hr className="border-gray-200 mb-8" />
 
           {/* Secondary Footer Links */}
-          <ul className="space-y-6 text-[14px] text-gray-800 font-medium">
+          <ul className="space-y-5 text-[14px] text-gray-800 font-medium">
             <li>
               <button className="flex items-center gap-2 hover:text-black cursor-pointer">
                 <Globe className="w-4 h-4" />
@@ -284,14 +296,12 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
       {/* Submenu Panel Container
           On Desktop (md:):
-            Placed adjacent at md:left-[380px] w-[380px] z-[65], slides out from behind the main sidebar (translate-x-full when closed, translate-x-0 when open).
-          On Mobile (max-md:):
-            Placed at left-0 w-full z-[80], slides in smoothly from the LEFT (-translate-x-full when closed, translate-x-0 when open) and exits smoothly back to the left!
+            Placed adjacent at md:left-[440px] w-[440px] z-[65], slides out from behind the main sidebar
       */}
       <div
         className={`fixed top-0 h-full bg-white flex flex-col transition-transform duration-300 ease-in-out
           left-0 w-full z-[80] 
-          md:left-[380px] md:w-[380px] md:z-[65] md:border-l md:border-gray-200
+          md:left-[440px] md:w-[440px] md:z-[65] md:border-l md:border-gray-200
           ${
             activeSubmenuId && isOpen
               ? 'translate-x-0 pointer-events-auto visible'
@@ -328,7 +338,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <Link
                   href={activeSubmenuData.viewAllHref}
                   onClick={handleCloseAll}
-                  className="block text-[14px] text-black font-semibold mb-6 hover:underline"
+                  className="block text-[14px] text-black font-semibold mb-6 hover:text-gray-600"
                 >
                   View All
                 </Link>
@@ -337,13 +347,13 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
             )}
 
             {/* Categories */}
-            <ul className="space-y-6 text-[14px] text-gray-800 mb-10">
+            <ul className="space-y-5 text-[14px] text-gray-800 mb-10">
               {activeSubmenuData.categories.map((cat, idx) => (
                 <li key={idx}>
                   <Link
                     href={cat.href}
                     onClick={handleCloseAll}
-                    className="hover:text-black transition-colors block"
+                    className="hover:text-black transition-colors block py-0.5"
                   >
                     {cat.label}
                   </Link>
@@ -358,13 +368,13 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <h3 className="text-[11px] font-bold text-gray-500 tracking-widest uppercase mb-6">
                   Collections
                 </h3>
-                <ul className="space-y-6 text-[14px] text-gray-800 pb-8">
+                <ul className="space-y-5 text-[14px] text-gray-800 pb-8">
                   {activeSubmenuData.collections.map((col, idx) => (
                     <li key={idx}>
                       <Link
                         href={col.href}
                         onClick={handleCloseAll}
-                        className="hover:text-black transition-colors block"
+                        className="hover:text-black transition-colors block py-0.5"
                       >
                         {col.label}
                       </Link>

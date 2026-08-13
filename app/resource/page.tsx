@@ -44,7 +44,7 @@ export default function ResourcePage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative w-full h-[65vh] min-h-[400px] md:h-[60vh] md:min-h-[450px] overflow-hidden flex items-center justify-center bg-gray-200">
+      <section className="relative w-full h-[calc(65vh+2em)] min-h-[calc(400px+2em)] md:h-[calc(60vh+2em)] md:min-h-[calc(450px+2em)] overflow-hidden flex items-center justify-center bg-gray-200">
         {/* Background Image Container with gentle scale motion when playing */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Desktop Image */}

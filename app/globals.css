@@ -2,49 +2,49 @@
 
 @font-face {
   font-family: 'Sweet Sans Pro';
-  src: url('/fonts/SweetSansPro-Hairline.ttf') format('truetype');
+  src: url('/fonts-v2/SweetSansPro-Hairline.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sweet Sans Pro';
-  src: url('/fonts/SweetSansPro-ExLight.ttf') format('truetype');
+  src: url('/fonts-v2/SweetSansPro-ExLight.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sweet Sans Pro';
-  src: url('/fonts/SweetSansPro-Light.ttf') format('truetype');
+  src: url('/fonts-v2/SweetSansPro-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sweet Sans Pro';
-  src: url('/fonts/SweetSansPro-Regular.ttf') format('truetype');
+  src: url('/fonts-v2/SweetSansPro-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sweet Sans Pro';
-  src: url('/fonts/SweetSansPro-Medium.ttf') format('truetype');
+  src: url('/fonts-v2/SweetSansPro-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sweet Sans Pro';
-  src: url('/fonts/SweetSansPro-Bold.ttf') format('truetype');
+  src: url('/fonts-v2/SweetSansPro-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sweet Sans Pro';
-  src: url('/fonts/SweetSansPro-Heavy.ttf') format('truetype');
+  src: url('/fonts-v2/SweetSansPro-Heavy.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }

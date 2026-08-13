@@ -10,6 +10,7 @@ export default function CookieBanner() {
     // Check if the user has already consented
     const hasConsented = localStorage.getItem('cookieConsent');
     if (!hasConsented) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowCookieBanner(true);
     }
   }, []);

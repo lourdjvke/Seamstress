@@ -1,33 +1,53 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, ChevronDown } from 'lucide-react';
-import { useShop } from '@/context/ShopContext';
+import { useShop, ProductForSize } from '@/context/ShopContext';
 
 const DEFAULT_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 
 export default function SelectSizeSidebar() {
   const { isSelectSizeOpen, closeSelectSize, selectedProductForSize, addToCart } = useShop();
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [cachedProduct, setCachedProduct] = useState<ProductForSize | null>(null);
 
-  if (!selectedProductForSize) return null;
+  useEffect(() => {
+    if (selectedProductForSize) {
+      setCachedProduct(selectedProductForSize);
+    }
+  }, [selectedProductForSize]);
+
+  // Lock body scroll when size sidebar is open
+  useEffect(() => {
+    if (isSelectSizeOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSelectSizeOpen]);
+
+  const activeProduct = selectedProductForSize || cachedProduct;
+  if (!activeProduct) return null;
 
   const handleAddToBag = () => {
     const sizeToUse = selectedSize || 'M';
     addToCart({
-      id: `${selectedProductForSize.id}-${sizeToUse}`,
-      title: selectedProductForSize.title,
-      price: selectedProductForSize.price,
-      color: selectedProductForSize.color || 'Dark Roast',
+      id: `${activeProduct.id}-${sizeToUse}`,
+      title: activeProduct.title,
+      price: activeProduct.price,
+      color: activeProduct.color || 'Dark Roast',
       size: sizeToUse,
-      image: selectedProductForSize.image,
+      image: activeProduct.image,
       quantity: 1,
     });
     closeSelectSize();
   };
 
-  const sizesToRender = selectedProductForSize.sizes || DEFAULT_SIZES;
+  const sizesToRender = activeProduct.sizes || DEFAULT_SIZES;
 
   return (
     <>
@@ -41,7 +61,7 @@ export default function SelectSizeSidebar() {
 
       {/* Select Size Sidebar Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-full md:w-[300px] bg-white z-[90] shadow-2xl flex flex-col p-6 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full md:w-[320px] bg-white z-[90] shadow-2xl flex flex-col p-6 transition-transform duration-300 ease-in-out ${
           isSelectSizeOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -63,8 +83,8 @@ export default function SelectSizeSidebar() {
         <div className="flex gap-4 py-4 mb-2">
           <div className="relative w-24 h-28 bg-[#f6f6f6] overflow-hidden shrink-0">
             <Image
-              src={selectedProductForSize.image}
-              alt={selectedProductForSize.title}
+              src={activeProduct.image}
+              alt={activeProduct.title}
               fill
               className="object-cover"
               referrerPolicy="no-referrer"
@@ -73,12 +93,12 @@ export default function SelectSizeSidebar() {
 
           <div className="flex-1 text-xs text-gray-800 space-y-1 pt-1">
             <h3 className="font-normal text-gray-900 text-[13px] leading-tight">
-              {selectedProductForSize.title}
+              {activeProduct.title}
             </h3>
-            <p className="font-semibold text-gray-900 pt-0.5">{selectedProductForSize.price}</p>
-            {selectedProductForSize.color && (
+            <p className="font-semibold text-gray-900 pt-0.5">{activeProduct.price}</p>
+            {activeProduct.color && (
               <p className="text-gray-500 text-[11px] pt-1">
-                Color <span className="text-gray-900 font-normal">{selectedProductForSize.color}</span>
+                Color <span className="text-gray-900 font-normal">{activeProduct.color}</span>
               </p>
             )}
           </div>

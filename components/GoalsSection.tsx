@@ -67,7 +67,6 @@ export default function GoalsSection() {
   const handleTabClick = (index: number) => {
     const totalDuration = TABS.length * DURATION_PER_TAB;
     const targetElapsed = (index / TABS.length) * totalDuration;
-    // eslint-disable-next-line react-hooks/purity
     startTimeRef.current = performance.now() - targetElapsed;
     setActiveTab(index);
     // Setting progress immediately to avoid visual jump delay
@@ -121,7 +120,6 @@ export default function GoalsSection() {
           // Adjust start time so it doesn't jump forward when unpausing
           const totalDuration = TABS.length * DURATION_PER_TAB;
           const currentElapsed = (progress / 100) * totalDuration;
-          // eslint-disable-next-line react-hooks/purity
           startTimeRef.current = performance.now() - currentElapsed;
           isPausedRef.current = false;
         }}

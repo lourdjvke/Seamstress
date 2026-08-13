@@ -115,46 +115,46 @@ export default function Footer() {
       </div>
 
       {/* Desktop Navigation */}
-      <div className="hidden md:grid max-w-7xl mx-auto px-6 py-16 grid-cols-4 gap-8">
+      <div className="hidden md:grid w-full px-[1.5em] py-14 grid-cols-4 gap-6">
         <div>
-          <h3 className="font-semibold tracking-wider text-xs mb-4 uppercase">Help</h3>
-          <ul className="space-y-3 text-gray-600">
-            <li><Link href="#" className="hover:underline">Client Services</Link></li>
-            <li><Link href="#" className="hover:underline">Contact Us</Link></li>
-            <li><Link href="#" className="hover:underline">Returns & Exchanges</Link></li>
-            <li><Link href="#" className="hover:underline">Track Your Order</Link></li>
-            <li><Link href="#" className="hover:underline">Shipping & Delivery</Link></li>
-            <li><Link href="#" className="hover:underline">Counterfeit FAQs</Link></li>
+          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">Help</h3>
+          <ul className="space-y-2.5 text-[11px] text-gray-600">
+            <li><Link href="#" className="hover:text-black transition-colors">Client Services</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Contact Us</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Returns & Exchanges</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Track Your Order</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Shipping & Delivery</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Counterfeit FAQs</Link></li>
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-xs mb-4 uppercase">Shop</h3>
-          <ul className="space-y-3 text-gray-600">
-            <li><Link href="#" className="hover:underline">Ship To: United Kingdom £</Link></li>
-            <li><Link href="#" className="hover:underline">Find a Store</Link></li>
-            <li><Link href="#" className="hover:underline">Gift Services</Link></li>
-            <li><Link href="#" className="hover:underline">Gift Cards</Link></li>
+          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">Shop</h3>
+          <ul className="space-y-2.5 text-[11px] text-gray-600">
+            <li><Link href="#" className="hover:text-black transition-colors">Ship To: United Kingdom £</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Find a Store</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Gift Services</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Gift Cards</Link></li>
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-xs mb-4 uppercase">About Tory Burch</h3>
-          <ul className="space-y-3 text-gray-600">
-            <li><Link href="#" className="hover:underline">Our Impact</Link></li>
-            <li><Link href="#" className="hover:underline">Careers</Link></li>
-            <li><Link href="#" className="hover:underline">Tory Burch Foundation</Link></li>
-            <li><Link href="#" className="hover:underline">Tory Daily</Link></li>
+          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">About Tory Burch</h3>
+          <ul className="space-y-2.5 text-[11px] text-gray-600">
+            <li><Link href="/resource" className="hover:text-black transition-colors">Our Impact</Link></li>
+            <li><Link href="/resource" className="hover:text-black transition-colors">Careers</Link></li>
+            <li><Link href="/programmes" className="hover:text-black transition-colors">Tory Burch Foundation</Link></li>
+            <li><Link href="/history" className="hover:text-black transition-colors">Tory Daily</Link></li>
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-xs mb-4 uppercase">Follow Us</h3>
-          <ul className="space-y-3 text-gray-600">
-            <li><Link href="#" className="hover:underline">Instagram</Link></li>
-            <li><Link href="#" className="hover:underline">Facebook</Link></li>
-            <li><Link href="#" className="hover:underline">Twitter</Link></li>
-            <li><Link href="#" className="hover:underline">Pinterest</Link></li>
-            <li><Link href="#" className="hover:underline">Tumblr</Link></li>
-            <li><Link href="#" className="hover:underline">YouTube</Link></li>
-            <li><Link href="#" className="hover:underline">LinkedIn</Link></li>
+          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">Follow Us</h3>
+          <ul className="space-y-2.5 text-[11px] text-gray-600">
+            <li><Link href="#" className="hover:text-black transition-colors">Instagram</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Facebook</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Twitter</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Pinterest</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">Tumblr</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">YouTube</Link></li>
+            <li><Link href="#" className="hover:text-black transition-colors">LinkedIn</Link></li>
           </ul>
         </div>
       </div>

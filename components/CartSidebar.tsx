@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { useShop, CartItem } from '@/context/ShopContext';
@@ -61,6 +61,18 @@ const RECOMMENDATIONS = [
 export default function CartSidebar() {
   const { isCartOpen, closeCart, cartItems, removeFromCart, formattedSubtotal, addToCart } = useShop();
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  // Lock body scroll when cart sidebar is open
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isCartOpen]);
 
   const scrollCarousel = (direction: 'left' | 'right') => {
     if (carouselRef.current) {

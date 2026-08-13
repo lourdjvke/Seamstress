@@ -88,13 +88,13 @@ export default function ProgrammesPage() {
         </p>
       </section>
 
-      {/* 2-Column Grid Cards Section */}
-      <section className="px-4 md:px-8 max-w-7xl mx-auto pb-12 md:pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-8">
+      {/* 2-Column Grid Cards Section (Increased width by 4em each, no gap between columns, reduced text padding) */}
+      <section className="w-full max-w-[calc(100%+8em)] px-0 mx-auto pb-12 md:pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
           
           {/* Card 1: Women in Supply Chain */}
-          <div className="flex flex-col text-center">
-            <div className="mb-6 md:mb-8 relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden bg-gray-100">
+          <div className="flex flex-col text-center w-full bg-white">
+            <div className="relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden bg-gray-100">
               <Image
                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80"
                 alt="Women collaborating in a garment workspace"
@@ -103,19 +103,19 @@ export default function ProgrammesPage() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <div className="px-2 md:px-12">
-              <h3 className="text-lg md:text-xl tracking-[0.15em] uppercase mb-4 text-gray-900 font-normal">
+            <div className="px-4 md:px-10 py-4 md:py-6">
+              <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-2 text-gray-900 font-normal">
                 Women in the Supply Chain
               </h3>
-              <p className="text-sm md:text-base text-gray-700 leading-relaxed font-normal">
+              <p className="text-xs md:text-sm text-gray-700 leading-relaxed font-normal max-w-xl mx-auto">
                 We&apos;ve reached tens-of-thousands of workers through our partnership with RISE: Reimagining Industry to Support Equality. This industry collaboration advances gender equality in global supply chains by strengthening workers&apos; knowledge and capability and embedding gender equality in business practice.
               </p>
             </div>
           </div>
 
           {/* Card 2: Economic Opportunity Through Craft */}
-          <div className="flex flex-col text-center mt-6 md:mt-0">
-            <div className="mb-6 md:mb-8 relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden bg-gray-100">
+          <div className="flex flex-col text-center w-full bg-white">
+            <div className="relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden bg-gray-100">
               <Image
                 src="https://images.unsplash.com/photo-1596783935261-2679dc8db7f3?auto=format&fit=crop&w=1200&q=80"
                 alt="Hands weaving natural fibers with artisan technique"
@@ -124,11 +124,11 @@ export default function ProgrammesPage() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <div className="px-2 md:px-12">
-              <h3 className="text-lg md:text-xl tracking-[0.15em] uppercase mb-4 text-gray-900 font-normal">
+            <div className="px-4 md:px-10 py-4 md:py-6">
+              <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-2 text-gray-900 font-normal">
                 Economic Opportunity Through Craft
               </h3>
-              <p className="text-sm md:text-base text-gray-700 leading-relaxed font-normal">
+              <p className="text-xs md:text-sm text-gray-700 leading-relaxed font-normal max-w-xl mx-auto">
                 We work with skilled weavers and craftswomen around the world who use natural fibers and traditional techniques to create economic opportunity. In 2024, we began a partnership with the nonprofit Nest and other leading brands to establish industry definitions and standards around craft that help preserve and celebrate traditional techniques while bringing greater visibility and legitimacy to global crafts and craftspeople.
               </p>
             </div>
