@@ -1,8 +1,64 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Sweet Sans Pro';
+  src: url('/fonts/SweetSansPro-Hairline.woff2') format('woff2'),
+       url('/fonts/SweetSansPro-Hairline.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sweet Sans Pro';
+  src: url('/fonts/SweetSansPro-ExLight.woff2') format('woff2'),
+       url('/fonts/SweetSansPro-ExLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sweet Sans Pro';
+  src: url('/fonts/SweetSansPro-Light.woff2') format('woff2'),
+       url('/fonts/SweetSansPro-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sweet Sans Pro';
+  src: url('/fonts/SweetSansPro-Regular.woff2') format('woff2'),
+       url('/fonts/SweetSansPro-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sweet Sans Pro';
+  src: url('/fonts/SweetSansPro-Medium.woff2') format('woff2'),
+       url('/fonts/SweetSansPro-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sweet Sans Pro';
+  src: url('/fonts/SweetSansPro-Bold.woff2') format('woff2'),
+       url('/fonts/SweetSansPro-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sweet Sans Pro';
+  src: url('/fonts/SweetSansPro-Heavy.woff2') format('woff2'),
+       url('/fonts/SweetSansPro-Heavy.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+
 @theme {
-  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: "Sweet Sans Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Sweet Sans Pro", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 /* Hide scrollbar site-wide */

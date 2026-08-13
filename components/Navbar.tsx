@@ -193,7 +193,7 @@ export default function Navbar() {
           </div>
         </div>
         <div
-          className={`hidden md:flex justify-center gap-[4em] lg:gap-[5em] text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 ${
+          className={`hidden md:flex justify-center gap-[6em] lg:gap-[8em] text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 ${
             showLinks ? 'h-10 opacity-100 pointer-events-auto' : 'h-0 opacity-0 pointer-events-none overflow-hidden'
           }`}
         >

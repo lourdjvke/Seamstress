@@ -1,0 +1,216 @@
+@font-face {
+    font-family: 'Sweet Sans Pro Hairline';
+    src: url('SweetSansPro-Hairline.eot');
+    src: local('Sweet Sans Pro Hairline'), local('SweetSansPro-Hairline'),
+        url('SweetSansPro-Hairline.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Hairline.woff2') format('woff2'),
+        url('SweetSansPro-Hairline.woff') format('woff'),
+        url('SweetSansPro-Hairline.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-Light.eot');
+    src: local('Sweet Sans Pro Light'), local('SweetSansPro-Light'),
+        url('SweetSansPro-Light.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Light.woff2') format('woff2'),
+        url('SweetSansPro-Light.woff') format('woff'),
+        url('SweetSansPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-Italic.eot');
+    src: local('Sweet Sans Pro Italic'), local('SweetSansPro-Italic'),
+        url('SweetSansPro-Italic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Italic.woff2') format('woff2'),
+        url('SweetSansPro-Italic.woff') format('woff'),
+        url('SweetSansPro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-Thin.eot');
+    src: local('Sweet Sans Pro Thin'), local('SweetSansPro-Thin'),
+        url('SweetSansPro-Thin.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Thin.woff2') format('woff2'),
+        url('SweetSansPro-Thin.woff') format('woff'),
+        url('SweetSansPro-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-Medium.eot');
+    src: local('Sweet Sans Pro Medium'), local('SweetSansPro-Medium'),
+        url('SweetSansPro-Medium.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Medium.woff2') format('woff2'),
+        url('SweetSansPro-Medium.woff') format('woff'),
+        url('SweetSansPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-HeavyItalic.eot');
+    src: local('Sweet Sans Pro Heavy Italic'), local('SweetSansPro-HeavyItalic'),
+        url('SweetSansPro-HeavyItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-HeavyItalic.woff2') format('woff2'),
+        url('SweetSansPro-HeavyItalic.woff') format('woff'),
+        url('SweetSansPro-HeavyItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-Regular.eot');
+    src: local('Sweet Sans Pro'), local('SweetSansPro-Regular'),
+        url('SweetSansPro-Regular.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Regular.woff2') format('woff2'),
+        url('SweetSansPro-Regular.woff') format('woff'),
+        url('SweetSansPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-MediumItalic.eot');
+    src: local('Sweet Sans Pro Medium Italic'), local('SweetSansPro-MediumItalic'),
+        url('SweetSansPro-MediumItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-MediumItalic.woff2') format('woff2'),
+        url('SweetSansPro-MediumItalic.woff') format('woff'),
+        url('SweetSansPro-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro ExThin';
+    src: url('SweetSansPro-ExThin.eot');
+    src: local('Sweet Sans Pro Extra Thin'), local('SweetSansPro-ExThin'),
+        url('SweetSansPro-ExThin.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-ExThin.woff2') format('woff2'),
+        url('SweetSansPro-ExThin.woff') format('woff'),
+        url('SweetSansPro-ExThin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro ExLight';
+    src: url('SweetSansPro-ExLightItalic.eot');
+    src: local('Sweet Sans Pro Extra Light Italic'), local('SweetSansPro-ExLightItalic'),
+        url('SweetSansPro-ExLightItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-ExLightItalic.woff2') format('woff2'),
+        url('SweetSansPro-ExLightItalic.woff') format('woff'),
+        url('SweetSansPro-ExLightItalic.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-ThinItalic.eot');
+    src: local('Sweet Sans Pro Thin Italic'), local('SweetSansPro-ThinItalic'),
+        url('SweetSansPro-ThinItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-ThinItalic.woff2') format('woff2'),
+        url('SweetSansPro-ThinItalic.woff') format('woff'),
+        url('SweetSansPro-ThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro ExThin';
+    src: url('SweetSansPro-ExThinItalic.eot');
+    src: local('Sweet Sans Pro Extra Thin Italic'), local('SweetSansPro-ExThinItalic'),
+        url('SweetSansPro-ExThinItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-ExThinItalic.woff2') format('woff2'),
+        url('SweetSansPro-ExThinItalic.woff') format('woff'),
+        url('SweetSansPro-ExThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-LightItalic.eot');
+    src: local('Sweet Sans Pro Light Italic'), local('SweetSansPro-LightItalic'),
+        url('SweetSansPro-LightItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-LightItalic.woff2') format('woff2'),
+        url('SweetSansPro-LightItalic.woff') format('woff'),
+        url('SweetSansPro-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-Heavy.eot');
+    src: local('Sweet Sans Pro Heavy'), local('SweetSansPro-Heavy'),
+        url('SweetSansPro-Heavy.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Heavy.woff2') format('woff2'),
+        url('SweetSansPro-Heavy.woff') format('woff'),
+        url('SweetSansPro-Heavy.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro ExLight';
+    src: url('SweetSansPro-ExLight.eot');
+    src: local('Sweet Sans Pro Extra Light'), local('SweetSansPro-ExLight'),
+        url('SweetSansPro-ExLight.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-ExLight.woff2') format('woff2'),
+        url('SweetSansPro-ExLight.woff') format('woff'),
+        url('SweetSansPro-ExLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro Hairline';
+    src: url('SweetSansPro-HairlineItalic.eot');
+    src: local('Sweet Sans Pro Hairline Italic'), local('SweetSansPro-HairlineItalic'),
+        url('SweetSansPro-HairlineItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-HairlineItalic.woff2') format('woff2'),
+        url('SweetSansPro-HairlineItalic.woff') format('woff'),
+        url('SweetSansPro-HairlineItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-Bold.eot');
+    src: local('Sweet Sans Pro Bold'), local('SweetSansPro-Bold'),
+        url('SweetSansPro-Bold.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-Bold.woff2') format('woff2'),
+        url('SweetSansPro-Bold.woff') format('woff'),
+        url('SweetSansPro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sweet Sans Pro';
+    src: url('SweetSansPro-BoldItalic.eot');
+    src: local('Sweet Sans Pro Bold Italic'), local('SweetSansPro-BoldItalic'),
+        url('SweetSansPro-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('SweetSansPro-BoldItalic.woff2') format('woff2'),
+        url('SweetSansPro-BoldItalic.woff') format('woff'),
+        url('SweetSansPro-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+

@@ -427,7 +427,7 @@ export default function ProductPage() {
           <div className="col-span-7 flex flex-col gap-0 w-full relative">
             {/* Floating Overlay Counter "1|5" at bottom-left of image scroll side */}
             <div className="h-0 overflow-visible z-20">
-              <div className="sticky top-[calc(100vh-4rem)] left-6 w-max ml-6 font-semibold text-xs tracking-widest text-gray-900 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-sm shadow-sm pointer-events-none">
+              <div className="sticky top-[calc(100vh-4rem)] left-6 w-max ml-6 font-semibold text-xs tracking-widest text-gray-900 pointer-events-none mix-blend-difference text-white">
                 {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
               </div>
             </div>
