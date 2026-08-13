@@ -6,6 +6,7 @@ import { ShopProvider } from '@/context/ShopContext';
 import CartSidebar from '@/components/CartSidebar';
 import SubscriptionSidebar from '@/components/SubscriptionSidebar';
 import SelectSizeSidebar from '@/components/SelectSizeSidebar';
+import CookieBanner from '@/components/CookieBanner';
 
 export const metadata: Metadata = {
   title: 'SeamLadies',
@@ -23,6 +24,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           <CartSidebar />
           <SubscriptionSidebar />
           <SelectSizeSidebar />
+          <CookieBanner />
         </ShopProvider>
       </body>
     </html>
