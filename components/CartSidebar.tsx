@@ -189,7 +189,7 @@ export default function CartSidebar() {
               onClick={() => {
                 alert('Proceeding to Tory Burch Checkout...');
               }}
-              className="w-full bg-[#1a1a1a] hover:bg-black text-white py-3.5 text-xs font-bold uppercase tracking-[0.2em] transition-colors cursor-pointer"
+              className="w-full bg-[#1a1a1a] hover:bg-black text-white py-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors cursor-pointer"
             >
               REVIEW & CHECKOUT
             </button>

@@ -62,7 +62,7 @@ export default function Footer() {
           </p>
           <button
             onClick={openSubscription}
-            className="px-12 md:px-16 py-3.5 md:py-4 bg-[#1a1a1a] text-white text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-black transition-colors cursor-pointer"
+            className="px-12 md:px-16 py-3 md:py-3.5 bg-[#1a1a1a] text-white text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-black transition-colors cursor-pointer"
           >
             Sign Up
           </button>

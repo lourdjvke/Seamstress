@@ -124,7 +124,7 @@ export default function SelectSizeSidebar() {
         {/* ADD TO BAG Button */}
         <button
           onClick={handleAddToBag}
-          className="w-full bg-[#1a1a1a] hover:bg-black text-white py-3.5 text-xs font-bold uppercase tracking-[0.2em] transition-colors cursor-pointer mt-2"
+          className="w-full bg-[#1a1a1a] hover:bg-black text-white py-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors cursor-pointer mt-2"
         >
           ADD TO BAG
         </button>
