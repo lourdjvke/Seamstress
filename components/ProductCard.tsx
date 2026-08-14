@@ -20,7 +20,7 @@ export interface Product {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { openSelectSize, addToCart, openCart } = useShop();
+  const { openSelectSize } = useShop();
   const [activeColorIdx, setActiveColorIdx] = useState<number>(0);
   const [currentImgSrc, setCurrentImgSrc] = useState<string>(product.images[0]);
   const [altImgSrc] = useState<string>(product.images[1] || product.images[0]);
@@ -48,27 +48,18 @@ export default function ProductCard({ product }: { product: Product }) {
     setQuickShopState('selectSize');
   };
 
-  const handleSizeSelect = (size: string, e: React.MouseEvent) => {
+  const handleSelectSizeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    // Add to cart directly
-    addToCart({
-      id: `${product.id}-${size}`,
+    openSelectSize({
+      id: product.id,
       title: product.title,
       price: product.price,
-      color: product.colors?.[activeColorIdx]?.colorHex || 'Default',
-      size: size,
       image: currentImgSrc,
-      quantity: 1,
+      color: product.colors?.[activeColorIdx]?.colorHex || 'Default',
     });
-    
-    // Reset state
     setQuickShopState('initial');
-    openCart();
   };
-
-  const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
   return (
     <div 
@@ -142,20 +133,12 @@ export default function ProductCard({ product }: { product: Product }) {
               Quick Shop
             </button>
           ) : (
-            <div className="w-full bg-white/95 border border-black/10 shadow-sm p-3">
-              <div className="text-[10px] font-bold text-center uppercase tracking-widest text-gray-900 mb-2">Select a Size</div>
-              <div className="flex justify-between items-center gap-1">
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={(e) => handleSizeSelect(size, e)}
-                    className="flex-1 py-1.5 text-[10px] font-medium border border-gray-200 hover:border-black hover:bg-black hover:text-white transition-colors cursor-pointer text-center"
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <button 
+              onClick={handleSelectSizeClick}
+              className="w-full bg-white hover:bg-black hover:text-white text-black py-3 text-[11px] font-semibold uppercase tracking-wider text-center border border-black/10 cursor-pointer shadow-sm transition-colors"
+            >
+              Select Size
+            </button>
           )}
         </div>
       </div>
