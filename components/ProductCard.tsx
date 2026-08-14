@@ -20,7 +20,7 @@ export interface Product {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { openSelectSize } = useShop();
+  const { openSelectSize, addToCart, openCart } = useShop();
   const [activeColorIdx, setActiveColorIdx] = useState<number>(0);
   const [currentImgSrc, setCurrentImgSrc] = useState<string>(product.images[0]);
   const [altImgSrc] = useState<string>(product.images[1] || product.images[0]);
@@ -28,8 +28,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [showingAlt, setShowingAlt] = useState<boolean>(false);
 
-  // Quick Shop button state: 'initial' | 'loading' | 'selectSize'
-  const [quickShopState, setQuickShopState] = useState<'initial' | 'loading' | 'selectSize'>('initial');
+  const [quickShopState, setQuickShopState] = useState<'initial' | 'selectSize'>('initial');
 
   const handleColorClick = (idx: number, imgSrc: string) => {
     setActiveColorIdx(idx);
@@ -46,26 +45,44 @@ export default function ProductCard({ product }: { product: Product }) {
   const handleQuickShopClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    setQuickShopState('selectSize');
+  };
 
-    openSelectSize({
-      id: product.id,
+  const handleSizeSelect = (size: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Add to cart directly
+    addToCart({
+      id: `${product.id}-${size}`,
       title: product.title,
       price: product.price,
+      color: product.colors?.[activeColorIdx]?.colorHex || 'Default',
+      size: size,
       image: currentImgSrc,
-      color: 'Dark Roast',
+      quantity: 1,
     });
+    
+    // Reset state
+    setQuickShopState('initial');
+    openCart();
   };
+
+  const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
   return (
     <div 
       className="product-card bg-white relative group flex flex-col h-full"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setQuickShopState('initial');
+      }}
     >
       <div className="relative aspect-[3/4] bg-[#f6f6f6] overflow-hidden flex items-center justify-center">
         {/* Favorite Button */}
         <button 
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsFavorite(!isFavorite); }}
           className="absolute top-3.5 right-3.5 z-10 bg-transparent border-none cursor-pointer text-gray-900 opacity-70 hover:opacity-100 transition-opacity"
           aria-label="Add to wishlist"
         >
@@ -113,13 +130,34 @@ export default function ProductCard({ product }: { product: Product }) {
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Quick Shop Button (Desktop & Touch) */}
-        <button 
-          onClick={handleQuickShopClick}
-          className="hidden md:flex items-center justify-center absolute bottom-2.5 left-2.5 right-2.5 bg-white/95 hover:bg-black hover:text-white text-gray-900 py-3 text-[11px] font-semibold uppercase tracking-wider text-center transition-all duration-300 z-10 border border-black/10 cursor-pointer opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 shadow-sm"
-        >
-          Quick Shop
-        </button>
+        {/* Quick Shop or Select Size Panel */}
+        <div className={`hidden md:flex absolute bottom-2.5 left-2.5 right-2.5 transition-all duration-300 z-10 ${
+          isHovered ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'
+        }`}>
+          {quickShopState === 'initial' ? (
+            <button 
+              onClick={handleQuickShopClick}
+              className="w-full bg-white/95 hover:bg-black hover:text-white text-gray-900 py-3 text-[11px] font-semibold uppercase tracking-wider text-center border border-black/10 cursor-pointer shadow-sm transition-colors"
+            >
+              Quick Shop
+            </button>
+          ) : (
+            <div className="w-full bg-white/95 border border-black/10 shadow-sm p-3">
+              <div className="text-[10px] font-bold text-center uppercase tracking-widest text-gray-900 mb-2">Select a Size</div>
+              <div className="flex justify-between items-center gap-1">
+                {sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={(e) => handleSizeSelect(size, e)}
+                    className="flex-1 py-1.5 text-[10px] font-medium border border-gray-200 hover:border-black hover:bg-black hover:text-white transition-colors cursor-pointer text-center"
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Product Information */}

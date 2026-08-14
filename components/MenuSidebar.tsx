@@ -216,9 +216,9 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
         }`}
       />
 
-      {/* Main Sidebar (Desktop width increased by 60px to 440px) */}
+      {/* Main Sidebar (Desktop width increased by 60px to 500px) */}
       <div
-        className={`fixed top-0 left-0 h-full w-full md:w-[440px] bg-white flex flex-col z-[70] border-r border-gray-200 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-full md:w-[500px] bg-white flex flex-col z-[70] border-r border-gray-200 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -235,7 +235,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
         {/* Main Navigation List */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
-          <ul className="space-y-4 md:space-y-5 text-[16px] font-bold tracking-widest uppercase mb-10">
+          <ul className="space-y-4 md:space-y-5 text-[19px] font-bold tracking-widest uppercase mb-10">
             {MAIN_NAV_ITEMS.map((item) => {
               const isActive = activeSubmenuId === item.id;
               const hasSubmenuActive = activeSubmenuId !== null;
@@ -244,7 +244,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <li key={item.id}>
                   <button
                     onClick={() => handleSubmenuToggle(item.id)}
-                    className={`w-full py-1 flex items-center justify-between group transition-colors cursor-pointer text-left ${
+                    className={`w-full py-3 flex items-center justify-between group transition-colors cursor-pointer text-left ${
                       hasSubmenuActive
                         ? isActive
                           ? 'text-black'
@@ -263,30 +263,30 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
           <hr className="border-gray-200 mb-8" />
 
           {/* Secondary Footer Links */}
-          <ul className="space-y-5 text-[14px] text-gray-800 font-medium">
+          <ul className="space-y-5 text-[17px] text-gray-800 font-medium">
             <li>
-              <button className="flex items-center gap-2 hover:text-black cursor-pointer">
+              <button className="flex items-center gap-2 hover:text-black py-2 cursor-pointer transition-colors">
                 <Globe className="w-4 h-4" />
                 <span>GB</span>
               </button>
             </li>
             <li>
-              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black block">
+              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black block py-2 transition-colors">
                 Sign In / Create An Account
               </Link>
             </li>
             <li>
-              <Link href="/clothing" onClick={handleCloseAll} className="hover:text-black block">
+              <Link href="/clothing" onClick={handleCloseAll} className="hover:text-black block py-2 transition-colors">
                 My Favorites
               </Link>
             </li>
             <li>
-              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black block">
+              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black block py-2 transition-colors">
                 Find A Store
               </Link>
             </li>
             <li>
-              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black pb-8 block">
+              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black pb-8 block py-2 transition-colors">
                 Gift Cards
               </Link>
             </li>
@@ -296,12 +296,12 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
       {/* Submenu Panel Container
           On Desktop (md:):
-            Placed adjacent at md:left-[440px] w-[440px] z-[65], slides out from behind the main sidebar
+            Placed adjacent at md:left-[500px] w-[500px] z-[65], slides out from behind the main sidebar
       */}
       <div
         className={`fixed top-0 h-full bg-white flex flex-col transition-transform duration-300 ease-in-out
           left-0 w-full z-[80] 
-          md:left-[440px] md:w-[440px] md:z-[65] md:border-l md:border-gray-200
+          md:left-[500px] md:w-[500px] md:z-[65] md:border-l md:border-gray-200
           ${
             activeSubmenuId && isOpen
               ? 'translate-x-0 pointer-events-auto visible'

@@ -63,9 +63,9 @@ export default function SubscriptionSidebar() {
         }`}
       />
 
-      {/* --- DESKTOP SIDEBAR (width increased by 30px to 380px) --- */}
+      {/* --- DESKTOP SIDEBAR (width increased by 30px to 410px) --- */}
       <div
-        className={`hidden md:flex fixed top-0 right-0 h-full w-[380px] bg-white z-[90] shadow-2xl flex-col overflow-y-auto transition-transform duration-300 ease-in-out ${
+        className={`hidden md:flex fixed top-0 right-0 h-full w-[410px] bg-white z-[90] shadow-2xl flex-col overflow-y-auto transition-transform duration-300 ease-in-out ${
           isSubscriptionOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -91,9 +91,9 @@ export default function SubscriptionSidebar() {
         </div>
 
         {/* Content placed directly below the image */}
-        <div className="p-6 md:p-8 flex-1 flex flex-col justify-start text-center pt-6">
+        <div className="p-6 md:px-8 flex-none flex flex-col justify-start text-center pt-6">
           {submitted ? (
-            <div className="flex flex-col items-center justify-center pt-4">
+            <div className="flex flex-col items-center justify-start pt-4">
               <h2 className="text-[16px] font-semibold tracking-[1.8px] uppercase text-[#111] mb-3">
                 Confirmed - Thank You
               </h2>
@@ -110,10 +110,10 @@ export default function SubscriptionSidebar() {
             </div>
           ) : (
             <>
-              <h2 className="text-lg font-bold tracking-[0.08em] text-gray-900 uppercase mb-3 leading-snug">
+              <h2 className="text-lg font-bold tracking-[0.08em] text-gray-900 uppercase mb-2.5 leading-tight">
                 TAKE 10% OFF YOUR FIRST ORDER OF £200+
               </h2>
-              <p className="text-[13px] text-gray-600 leading-snug mb-6">
+              <p className="text-[13px] text-gray-600 leading-tight mb-5">
                 Your first Tory Burch purchase of £200 or more, online or in boutiques, when you sign up for emails. Exclusions apply.
               </p>
 

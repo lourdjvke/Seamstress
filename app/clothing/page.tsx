@@ -574,7 +574,7 @@ export default function ClothingPage() {
             onClick={() => setShowCollectionDetails(!showCollectionDetails)}
             className="text-sm font-medium flex items-center space-x-2.5 cursor-pointer text-gray-900 hover:text-black group"
           >
-            <span className="group-hover:underline">Collection Details</span>
+            <span>Collection Details</span>
             {showCollectionDetails ? (
               <Minus className="w-3.5 h-3.5 text-gray-800" />
             ) : (
@@ -590,7 +590,7 @@ export default function ClothingPage() {
           )}
 
           <div className="mt-8 text-xs text-gray-500">
-            <Link href="/clothing" className="underline hover:text-black">
+            <Link href="/clothing" className="hover:text-black">
               Clothing
             </Link>
             {' / '}

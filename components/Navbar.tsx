@@ -58,7 +58,7 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
            <div className="h-6 mb-4"></div> 
            <div className="flex flex-col gap-3.5 w-full items-start text-left">
              {item.subLinks.map(sub => (
-               <Link key={sub.label} href={sub.href} className="text-[13px] font-medium tracking-normal normal-case hover:underline transition-all text-left block w-full">
+               <Link key={sub.label} href={sub.href} className="text-[13px] font-medium tracking-normal normal-case hover:underline hover:text-current transition-all text-left block w-full">
                  {sub.label}
                </Link>
              ))}
@@ -139,12 +139,12 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="flex-1 flex items-center justify-end gap-3 md:gap-4 relative">
-            {/* Desktop search bar starting from search icon */}
+            {/* Desktop search bar absolute positioned so it doesn't push other icons */}
             <div 
-              className={`hidden md:flex items-center transition-all duration-300 ease-in-out ${
+              className={`hidden md:flex items-center absolute right-24 transition-all duration-300 ease-in-out ${
                 isSearchOpen 
-                  ? 'w-[260px] opacity-100 pointer-events-auto mr-1' 
-                  : 'w-0 opacity-0 pointer-events-none overflow-hidden'
+                  ? 'w-[260px] opacity-100 pointer-events-auto' 
+                  : 'w-0 opacity-0 pointer-events-none'
               }`}
             >
               <div className={`w-full flex items-center px-3 py-1.5 rounded-md transition-colors duration-300 ${
@@ -169,15 +169,13 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Search Icon - only disappears when search is open */}
-            {!isSearchOpen && (
-              <button 
-                onClick={() => setIsSearchOpen(true)}
-                aria-label="Search" 
-                className="p-2 hidden md:block cursor-pointer hover:opacity-70 transition-opacity"
-              >
-                <Search className="w-5 h-5" />
-              </button>
-            )}
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              aria-label="Search" 
+              className={`p-2 hidden md:block cursor-pointer hover:opacity-70 transition-all duration-300 ${isSearchOpen ? 'opacity-0 pointer-events-none w-0 p-0 overflow-hidden' : 'opacity-100'}`}
+            >
+              <Search className="w-5 h-5" />
+            </button>
 
             {/* Mobile Search Button */}
             <button 

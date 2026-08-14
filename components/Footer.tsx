@@ -95,7 +95,7 @@ export default function Footer() {
                   <ul className="space-y-3 text-sm text-gray-600 pl-1">
                     {section.links.map((link) => (
                       <li key={link.label}>
-                        <Link href={link.href} className="hover:underline">
+                        <Link href={link.href} className="hover:text-black transition-colors">
                           {link.label}
                         </Link>
                       </li>
@@ -117,8 +117,8 @@ export default function Footer() {
       {/* Desktop Navigation */}
       <div className="hidden md:grid w-full px-[1.5em] py-14 grid-cols-4 gap-6">
         <div>
-          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">Help</h3>
-          <ul className="space-y-2.5 text-[11px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">Help</h3>
+          <ul className="space-y-2.5 text-[9px] text-gray-600">
             <li><Link href="#" className="hover:text-black transition-colors">Client Services</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Contact Us</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Returns & Exchanges</Link></li>
@@ -128,8 +128,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">Shop</h3>
-          <ul className="space-y-2.5 text-[11px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">Shop</h3>
+          <ul className="space-y-2.5 text-[9px] text-gray-600">
             <li><Link href="#" className="hover:text-black transition-colors">Ship To: United Kingdom £</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Find a Store</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Gift Services</Link></li>
@@ -137,8 +137,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">About Tory Burch</h3>
-          <ul className="space-y-2.5 text-[11px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">About Tory Burch</h3>
+          <ul className="space-y-2.5 text-[9px] text-gray-600">
             <li><Link href="/resource" className="hover:text-black transition-colors">Our Impact</Link></li>
             <li><Link href="/resource" className="hover:text-black transition-colors">Careers</Link></li>
             <li><Link href="/programmes" className="hover:text-black transition-colors">Tory Burch Foundation</Link></li>
@@ -146,8 +146,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-[11px] mb-4 uppercase text-gray-900">Follow Us</h3>
-          <ul className="space-y-2.5 text-[11px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">Follow Us</h3>
+          <ul className="space-y-2.5 text-[9px] text-gray-600">
             <li><Link href="#" className="hover:text-black transition-colors">Instagram</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Facebook</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Twitter</Link></li>
@@ -207,15 +207,15 @@ export default function Footer() {
       {/* Mobile Layout */}
       <div className="md:hidden max-w-7xl mx-auto px-6 py-8 flex flex-col items-center text-center text-[12px] text-gray-500 leading-relaxed gap-2 border-t border-gray-100">
         <div>
-          <Link href="#" className="hover:underline">Privacy Policy</Link>
+          <Link href="#" className="hover:text-black transition-colors">Privacy Policy</Link>
         </div>
         <div>
-          <Link href="#" className="hover:underline">Do Not Sell or Share My Personal Information</Link>
+          <Link href="#" className="hover:text-black transition-colors">Do Not Sell or Share My Personal Information</Link>
         </div>
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-          <Link href="#" className="hover:underline">Supply Chain Disclosure</Link>
-          <Link href="#" className="hover:underline">Terms of Use</Link>
-          <Link href="#" className="hover:underline">Site Map</Link>
+          <Link href="#" className="hover:text-black transition-colors">Supply Chain Disclosure</Link>
+          <Link href="#" className="hover:text-black transition-colors">Terms of Use</Link>
+          <Link href="#" className="hover:text-black transition-colors">Site Map</Link>
         </div>
         <div className="mt-2 text-gray-400">
           © 2004 - 2026 River Light V, L.P.
@@ -228,12 +228,12 @@ export default function Footer() {
           © 2004 - 2026 River Light V, L.P.
         </div>
         <div className="flex flex-wrap items-center gap-6 text-gray-500 font-normal">
-          <Link href="#" className="hover:underline">Privacy Policy</Link>
-          <Link href="#" className="hover:underline">UK Modern Slavery Act Statement</Link>
-          <Link href="#" className="hover:underline">Terms of Use</Link>
-          <Link href="#" className="hover:underline">Cookies Settings</Link>
-          <Link href="#" className="hover:underline">Company Imprint</Link>
-          <Link href="#" className="hover:underline">Site Map</Link>
+          <Link href="#" className="hover:text-black transition-colors">Privacy Policy</Link>
+          <Link href="#" className="hover:text-black transition-colors">UK Modern Slavery Act Statement</Link>
+          <Link href="#" className="hover:text-black transition-colors">Terms of Use</Link>
+          <Link href="#" className="hover:text-black transition-colors">Cookies Settings</Link>
+          <Link href="#" className="hover:text-black transition-colors">Company Imprint</Link>
+          <Link href="#" className="hover:text-black transition-colors">Site Map</Link>
         </div>
       </div>
     </footer>

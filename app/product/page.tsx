@@ -9,8 +9,7 @@ import {
   ChevronRight, 
   ChevronDown, 
   Plus, 
-  Minus,
-  Search
+  Minus
 } from 'lucide-react';
 import ProductCard, { Product } from '@/components/ProductCard';
 import { useShop } from '@/context/ShopContext';
@@ -466,11 +465,11 @@ export default function ProductPage() {
           {/* Breadcrumb Links */}
           <div className="pt-2 text-xs text-gray-500">
             <span>View More </span>
-            <Link href="/clothing" className="underline hover:no-underline text-gray-800">
+            <Link href="/clothing" className="hover:text-black transition-colors text-gray-800">
               Ready-To-Wear
             </Link>
             {' | '}
-            <Link href="/clothing" className="underline hover:no-underline text-gray-800">
+            <Link href="/clothing" className="hover:text-black transition-colors text-gray-800">
               Sweaters
             </Link>
           </div>
@@ -483,9 +482,10 @@ export default function ProductPage() {
           
           {/* Left Column: 50% Width Stacked Cover Images */}
           <div className="col-span-6 flex flex-col gap-0 w-full relative">
-            {/* Pinned Sticky Counter "1 | 5" at bottom-left */}
-            <div className="fixed bottom-6 left-6 z-30 font-semibold text-xs tracking-widest text-white bg-black/70 px-3 py-1.5 rounded-sm pointer-events-none backdrop-blur-sm shadow-md">
-              {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
+            <div className="sticky top-0 z-30 w-full h-0 pointer-events-none">
+              <div className="absolute top-[calc(100vh-4rem)] left-6 font-semibold text-xs tracking-widest text-white bg-black/70 px-3 py-1.5 rounded-sm shadow-md">
+                {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
+              </div>
             </div>
             
             <div className="flex flex-col gap-0 w-full">
@@ -579,7 +579,7 @@ export default function ProductPage() {
                 </div>
 
                 <div>
-                  <button className="text-xs text-gray-500 underline hover:no-underline cursor-pointer">
+                  <button className="text-xs text-gray-500 hover:text-black transition-colors cursor-pointer">
                     Size Guide
                   </button>
                 </div>
@@ -656,11 +656,11 @@ export default function ProductPage() {
               {/* Breadcrumb Links */}
               <div className="pt-1 text-xs text-gray-500">
                 <span>View More </span>
-                <Link href="/clothing" className="underline hover:no-underline text-gray-800">
+                <Link href="/clothing" className="hover:text-black transition-colors text-gray-800">
                   Ready-To-Wear
                 </Link>
                 {' | '}
-                <Link href="/clothing" className="underline hover:no-underline text-gray-800">
+                <Link href="/clothing" className="hover:text-black transition-colors text-gray-800">
                   Sweaters
                 </Link>
               </div>
@@ -771,7 +771,7 @@ export default function ProductPage() {
         </section>
 
         {/* REVIEWS SECTION */}
-        <section className="mb-20 text-center space-y-3 max-w-md mx-auto px-4">
+        <section className="text-center space-y-3 max-w-md mx-auto px-4">
           <h2 className="text-sm font-semibold tracking-widest uppercase text-gray-900">
             REVIEWS
           </h2>
@@ -781,21 +781,6 @@ export default function ProductPage() {
               Write the first review
             </button>
           </p>
-        </section>
-
-        {/* LOOKING FOR SOMETHING ELSE? SEARCH BAR */}
-        <section className="text-center space-y-4 max-w-md mx-auto px-4">
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-gray-900">
-            LOOKING FOR SOMETHING ELSE?
-          </h2>
-          <div className="relative">
-            <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-            <input 
-              type="text" 
-              placeholder="Search" 
-              className="w-full bg-gray-100 hover:bg-gray-200/70 focus:bg-white border border-transparent focus:border-gray-300 rounded-full py-3 pl-10 pr-4 text-xs text-gray-900 placeholder-gray-500 outline-none transition-all"
-            />
-          </div>
         </section>
 
       </div>
