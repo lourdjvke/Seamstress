@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, Plus, Minus, Globe } from 'lucide-react';
 import { useShop } from '@/context/ShopContext';
 
@@ -49,7 +50,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full text-sm font-sans bg-white text-gray-900">
+    <footer className="w-full text-sm font-sans bg-white text-[#191919]">
       {/* Take 10% Off First Order Promo Section */}
       <section className="w-full py-14 md:py-20 px-6 bg-[#f7f7f7] text-center border-b border-gray-200">
         <div className="max-w-2xl mx-auto">
@@ -117,8 +118,8 @@ export default function Footer() {
       {/* Desktop Navigation */}
       <div className="hidden md:grid w-full px-[1.5em] py-14 grid-cols-4 gap-6">
         <div>
-          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">Help</h3>
-          <ul className="space-y-2.5 text-[9px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[10px] mb-4 uppercase text-[#6c717a]">Help</h3>
+          <ul className="space-y-2.5 text-[13px] text-[#191919]">
             <li><Link href="#" className="hover:text-black transition-colors">Client Services</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Contact Us</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Returns & Exchanges</Link></li>
@@ -128,8 +129,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">Shop</h3>
-          <ul className="space-y-2.5 text-[9px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[10px] mb-4 uppercase text-[#6c717a]">Shop</h3>
+          <ul className="space-y-2.5 text-[13px] text-[#191919]">
             <li><Link href="#" className="hover:text-black transition-colors">Ship To: United Kingdom £</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Find a Store</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Gift Services</Link></li>
@@ -137,8 +138,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">About Tory Burch</h3>
-          <ul className="space-y-2.5 text-[9px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[10px] mb-4 uppercase text-[#6c717a]">About Tory Burch</h3>
+          <ul className="space-y-2.5 text-[13px] text-[#191919]">
             <li><Link href="/resource" className="hover:text-black transition-colors">Our Impact</Link></li>
             <li><Link href="/resource" className="hover:text-black transition-colors">Careers</Link></li>
             <li><Link href="/programmes" className="hover:text-black transition-colors">Tory Burch Foundation</Link></li>
@@ -146,8 +147,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold tracking-wider text-[9px] mb-4 uppercase text-gray-900">Follow Us</h3>
-          <ul className="space-y-2.5 text-[9px] text-gray-600">
+          <h3 className="font-semibold tracking-wider text-[10px] mb-4 uppercase text-[#6c717a]">Follow Us</h3>
+          <ul className="space-y-2.5 text-[13px] text-[#191919]">
             <li><Link href="#" className="hover:text-black transition-colors">Instagram</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Facebook</Link></li>
             <li><Link href="#" className="hover:text-black transition-colors">Twitter</Link></li>
@@ -168,36 +169,17 @@ export default function Footer() {
         }}
         className="text-white flex flex-col items-center justify-center text-center px-6"
       >
-        {/* Circular Flower Emblem */}
-        <div className="w-16 h-16 mb-5 relative flex items-center justify-center">
-          <svg className="w-16 h-16 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-            <circle cx="50" cy="50" r="44" strokeWidth="2" />
-            <circle cx="50" cy="50" r="16" strokeWidth="2" fill="white" fillOpacity="0.1" />
-            <circle cx="50" cy="50" r="10" strokeWidth="2" />
-            {Array.from({ length: 16 }).map((_, i) => {
-              const angle = (i * 22.5 * Math.PI) / 180;
-              const x1 = 50 + 16 * Math.cos(angle);
-              const y1 = 50 + 16 * Math.sin(angle);
-              const x2 = 50 + 42 * Math.cos(angle);
-              const y2 = 50 + 42 * Math.sin(angle);
-              return (
-                <line
-                  key={i}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </svg>
+        {/* Brand Logo (matching top nav) */}
+        <div className="mb-6 flex items-center justify-center">
+          <Image 
+            src="https://user23004.na.imgto.link/public/20260811/seamladies-logo.avif" 
+            alt="Logo" 
+            width={200} 
+            height={50} 
+            className="object-contain h-10 md:h-12 w-auto brightness-0 invert" 
+          />
         </div>
 
-        <h2 className="text-base md:text-lg tracking-[0.2em] font-medium uppercase mb-4">
-          Tory Burch Foundation
-        </h2>
         <p className="max-w-lg text-sm md:text-base leading-relaxed text-white/95 font-normal px-2">
           The Tory Burch Foundation increases women&apos;s economic power by supporting entrepreneurs to build businesses that last
         </p>
@@ -205,7 +187,7 @@ export default function Footer() {
 
       {/* Footer Legal & Copyright */}
       {/* Mobile Layout */}
-      <div className="md:hidden max-w-7xl mx-auto px-6 py-8 flex flex-col items-center text-center text-[12px] text-gray-500 leading-relaxed gap-2 border-t border-gray-100">
+      <div className="md:hidden w-full px-6 py-8 flex flex-col items-center text-center text-[12px] text-gray-500 leading-relaxed gap-2 border-t border-gray-100">
         <div>
           <Link href="#" className="hover:text-black transition-colors">Privacy Policy</Link>
         </div>
@@ -223,7 +205,7 @@ export default function Footer() {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:flex max-w-7xl mx-auto px-6 py-8 justify-between items-center text-[12px] text-gray-500 border-t border-gray-100">
+      <div className="hidden md:flex w-full px-6 py-8 justify-between items-center text-[12px] text-gray-500 border-t border-gray-100">
         <div className="text-gray-500 font-normal">
           © 2004 - 2026 River Light V, L.P.
         </div>

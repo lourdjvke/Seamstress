@@ -155,6 +155,10 @@ const RECENTLY_VIEWED_PRODUCTS: Product[] = [
       'https://picsum.photos/seed/clothing1/400/533',
       'https://picsum.photos/seed/clothing1_alt/400/533',
     ],
+    colors: [
+      { colorHex: '#000000', imgSrc: 'https://picsum.photos/seed/clothing1/400/533' },
+      { colorHex: '#e1d7c6', imgSrc: 'https://picsum.photos/seed/clothing1_alt/400/533' }
+    ]
   },
   {
     id: 'rv-2',
@@ -173,6 +177,10 @@ const RECENTLY_VIEWED_PRODUCTS: Product[] = [
       'https://picsum.photos/seed/clothing9_white/400/533',
       'https://picsum.photos/seed/clothing9_alt/400/533',
     ],
+    colors: [
+      { colorHex: '#ffffff', imgSrc: 'https://picsum.photos/seed/clothing9_white/400/533' },
+      { colorHex: '#c0a080', imgSrc: 'https://picsum.photos/seed/clothing9_alt/400/533' }
+    ]
   },
   {
     id: 'rv-4',
@@ -192,10 +200,20 @@ export default function ProductPage() {
   const heroSectionRef = useRef<HTMLDivElement>(null);
 
   // Exclusive Accordion state: only one open at a time
-  const [openAccordion, setOpenAccordion] = useState<'desc' | 'details' | 'shipping' | null>('desc');
+  const [openAccordion, setOpenAccordion] = useState<string[]>(['desc']);
 
   const toggleAccordion = (id: 'desc' | 'details' | 'shipping') => {
-    setOpenAccordion((prev) => (prev === id ? null : id));
+    if (openAccordion.includes(id)) {
+      setOpenAccordion((prev) => prev.filter((a) => a !== id));
+    } else {
+      setOpenAccordion((prev) => [...prev, id]);
+      const prevOpen = openAccordion.find((a) => a !== id);
+      if (prevOpen) {
+        setTimeout(() => {
+          setOpenAccordion((prev) => prev.filter((a) => a !== prevOpen));
+        }, 100);
+      }
+    }
   };
 
   // Recommendation Tab state
@@ -205,6 +223,7 @@ export default function ProductPage() {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [showSizeDropdown, setShowSizeDropdown] = useState<boolean>(false);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [readMoreDesc, setReadMoreDesc] = useState<boolean>(false);
 
   const handleProductPageAddToBag = () => {
     if (!selectedSize) {
@@ -411,10 +430,10 @@ export default function ProductPage() {
                 className="w-full flex justify-between items-center text-xs font-semibold tracking-wider uppercase text-gray-900 cursor-pointer"
               >
                 <span>DESCRIPTION</span>
-                {openAccordion === 'desc' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                {openAccordion.includes('desc') ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               </button>
 
-              {openAccordion === 'desc' && (
+              {openAccordion.includes('desc') && (
                 <div className="mt-3 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
                   Our silk-front wool top, reissued in an original scarf print. Crafted in a mix of printed silk twill and wool, it&apos;s a versatile piece that adds a touch of signature style.{' '}
                   <button className="text-gray-900 underline hover:no-underline cursor-pointer font-medium">
@@ -431,10 +450,10 @@ export default function ProductPage() {
                 className="w-full flex justify-between items-center text-xs font-semibold tracking-wider uppercase text-gray-900 cursor-pointer"
               >
                 <span>DETAILS</span>
-                {openAccordion === 'details' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                {openAccordion.includes('details') ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               </button>
 
-              {openAccordion === 'details' && (
+              {openAccordion.includes('details') && (
                 <div className="mt-3 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200 space-y-2">
                   <p>• Body: 70% Wool, 30% Silk twill front panel</p>
                   <p>• Dry clean only</p>
@@ -451,10 +470,10 @@ export default function ProductPage() {
                 className="w-full flex justify-between items-center text-xs font-semibold tracking-wider uppercase text-gray-900 cursor-pointer"
               >
                 <span>FREE SHIPPING & RETURNS</span>
-                {openAccordion === 'shipping' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                {openAccordion.includes('shipping') ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               </button>
 
-              {openAccordion === 'shipping' && (
+              {openAccordion.includes('shipping') && (
                 <div className="mt-3 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
                   Enjoy complimentary standard shipping on all orders. Free returns within 14 days of receipt.
                 </div>
@@ -477,17 +496,11 @@ export default function ProductPage() {
       </div>
 
       {/* DESKTOP HERO SECTION (50% Stacked Image Scroll + 50% Sticky Details Panel) */}
-      <div className="hidden md:block pt-20">
+      <div className="hidden md:block pt-[4em]">
         <div className="w-full grid grid-cols-12 gap-8 items-start">
           
           {/* Left Column: 50% Width Stacked Cover Images */}
           <div className="col-span-6 flex flex-col gap-0 w-full relative">
-            <div className="sticky top-0 z-30 w-full h-0 pointer-events-none">
-              <div className="absolute top-[calc(100vh-4rem)] left-6 font-semibold text-xs tracking-widest text-white bg-black/70 px-3 py-1.5 rounded-sm shadow-md">
-                {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
-              </div>
-            </div>
-            
             <div className="flex flex-col gap-0 w-full">
               {PRODUCT_IMAGES.map((imgSrc, idx) => (
                 <div 
@@ -507,7 +520,7 @@ export default function ProductPage() {
                   {idx === 0 && (
                     <button 
                       onClick={() => setIsFavorite(!isFavorite)}
-                      className="absolute top-6 right-6 z-10 text-gray-900 cursor-pointer hover:scale-110 transition-transform pointer-events-auto"
+                      className={`absolute top-6 right-6 z-10 bg-transparent border-none cursor-pointer opacity-0 hover:opacity-100 transition-opacity ${isFavorite ? 'opacity-100' : ''}`}
                       aria-label="Wishlist"
                     >
                       <Heart className={`w-5 h-5 ${isFavorite ? 'fill-black text-black' : 'text-gray-900'}`} />
@@ -516,12 +529,18 @@ export default function ProductPage() {
                 </div>
               ))}
             </div>
+
+            <div className="sticky bottom-10 z-30 w-full h-0 pointer-events-none">
+              <div className="absolute bottom-0 left-6 font-semibold text-xs tracking-widest text-black">
+                {activeImageIdx + 1} | {PRODUCT_IMAGES.length}
+              </div>
+            </div>
           </div>
 
           {/* Right Column: 50% Width Details Panel Centered */}
           <div className="col-span-6 sticky top-24 self-start py-4 px-6 flex justify-center">
-            {/* Inner Details Container: increased inner width to 400px and 1em top padding */}
-            <div className="w-full max-w-[400px] pt-[1em] space-y-3.5">
+            {/* Inner Details Container: increased inner width to 450px and margin shift */}
+            <div className="w-full max-w-[350px] 2xl:max-w-[450px] -ml-[4em] pt-[1em] space-y-3.5">
               <div>
                 <h1 className="text-base font-semibold tracking-wider uppercase text-gray-900 leading-tight mb-1">
                   SILK-FRONT WOOL TOP
@@ -532,9 +551,9 @@ export default function ProductPage() {
               </div>
 
               {/* Color Swatch */}
-              <div className="flex items-center justify-between border-t border-b border-gray-200 py-2.5 text-xs">
-                <span className="text-gray-900 font-medium">
-                  Color: <span className="font-normal text-gray-600 ml-1">New Ivory / Brown Floral</span>
+              <div className="flex items-center justify-between border-b border-gray-200 py-2.5 text-[14px]">
+                <span className="text-[#191919] font-medium">
+                  Color: <span className="font-normal text-[#191919] ml-1">New Ivory / Brown Floral</span>
                 </span>
                 <div className="relative w-7 h-7 rounded-full overflow-hidden border border-gray-300 ring-1 ring-black ring-offset-1 cursor-pointer hover:scale-105 transition-transform">
                   <Image 
@@ -552,7 +571,7 @@ export default function ProductPage() {
                 <div className="relative">
                   <button 
                     onClick={() => setShowSizeDropdown(!showSizeDropdown)}
-                    className="w-full flex justify-between items-center py-2.5 border-b border-gray-200 text-xs text-gray-900 cursor-pointer hover:border-black transition-colors"
+                    className="w-full flex justify-between items-center py-2.5 border-b border-gray-200 text-[14px] text-gray-900 cursor-pointer hover:border-black transition-colors"
                   >
                     <span>
                       Size <span className="text-gray-500 ml-2">{selectedSize || 'Select Size'}</span>
@@ -569,7 +588,7 @@ export default function ProductPage() {
                             setSelectedSize(s);
                             setShowSizeDropdown(false);
                           }}
-                          className="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 transition-colors text-gray-800 cursor-pointer"
+                          className="w-full text-left px-4 py-2 text-[14px] hover:bg-gray-50 transition-colors text-gray-800 cursor-pointer"
                         >
                           {s}
                         </button>
@@ -579,7 +598,7 @@ export default function ProductPage() {
                 </div>
 
                 <div>
-                  <button className="text-xs text-gray-500 hover:text-black transition-colors cursor-pointer">
+                  <button className="text-[14px] text-gray-500 hover:text-black transition-colors cursor-pointer">
                     Size Guide
                   </button>
                 </div>
@@ -588,68 +607,93 @@ export default function ProductPage() {
               {/* ADD TO BAG Button (Desktop) */}
               <button 
                 onClick={handleProductPageAddToBag}
-                className="w-full bg-[#2d3238] text-white py-3.5 text-xs font-semibold tracking-widest uppercase hover:bg-black transition-colors cursor-pointer shadow-sm my-2"
+                className="w-full bg-black text-white py-2.5 text-xs font-semibold tracking-widest uppercase hover:bg-[#2d3238] transition-colors cursor-pointer shadow-sm my-2"
               >
                 ADD TO BAG
               </button>
 
               {/* Accordion List (Exclusive single opening) */}
-              <div className="border-t border-gray-200 divide-y divide-gray-200 text-xs">
+              <div className="border-t border-gray-200 divide-y divide-gray-200 text-[14px] text-[#191919]">
                 {/* Description */}
                 <div className="py-3">
                   <button 
                     onClick={() => toggleAccordion('desc')}
-                    className="w-full flex justify-between items-center text-xs font-semibold tracking-widest uppercase text-gray-900 cursor-pointer hover:opacity-70 transition-opacity"
+                    className="w-full flex justify-between items-center text-[12px] tracking-[.75px] leading-[18px] uppercase text-[#191919] font-[800] cursor-pointer hover:opacity-70 transition-opacity"
                   >
                     <span>DESCRIPTION</span>
-                    {openAccordion === 'desc' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {openAccordion.includes('desc') ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </button>
 
-                  {openAccordion === 'desc' && (
-                    <div className="mt-2.5 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
-                      Our silk-front wool top, reissued in an original scarf print. Crafted in a mix of printed silk twill and wool, it&apos;s a versatile piece that adds a touch...{' '}
-                      <button className="text-gray-900 underline hover:no-underline cursor-pointer font-medium">
-                        Read more
-                      </button>
+                  <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openAccordion.includes('desc') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                    <div className="overflow-hidden">
+                      <div className="mt-2.5 leading-relaxed font-normal">
+                        Our silk-front wool top, reissued in an original scarf print. Crafted in a mix of printed silk twill and wool, it&apos;s a versatile piece that adds a touch of signature style.{' '}
+                        {readMoreDesc ? (
+                          <>
+                            This beautiful piece features a tailored fit that drapes perfectly, and a subtle sheen on the front panel. It can easily transition from day to evening wear. Pair it with structured pants or a flowing skirt for an effortlessly chic look.{' '}
+                            <button onClick={() => setReadMoreDesc(false)} className="underline hover:no-underline cursor-pointer font-medium">
+                              Read less
+                            </button>
+                          </>
+                        ) : (
+                          <button onClick={() => setReadMoreDesc(true)} className="underline hover:no-underline cursor-pointer font-medium">
+                            Read more
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
 
                 {/* Details */}
                 <div className="py-3">
                   <button 
                     onClick={() => toggleAccordion('details')}
-                    className="w-full flex justify-between items-center text-xs font-semibold tracking-widest uppercase text-gray-900 cursor-pointer hover:opacity-70 transition-opacity"
+                    className="w-full flex justify-between items-center text-[12px] tracking-[.75px] leading-[18px] uppercase text-[#191919] font-[800] cursor-pointer hover:opacity-70 transition-opacity"
                   >
                     <span>DETAILS</span>
-                    {openAccordion === 'details' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {openAccordion.includes('details') ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </button>
 
-                  {openAccordion === 'details' && (
-                    <div className="mt-2.5 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200 space-y-1.5">
-                      <p>• Body: 70% Wool, 30% Silk twill front panel</p>
-                      <p>• Dry clean only</p>
-                      <p>• Model is 5&apos;10&quot; (178 cm) and is wearing a US size S</p>
-                      <p>• Style Number 145892</p>
+                  <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openAccordion.includes('details') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                    <div className="overflow-hidden">
+                      <div className="mt-2.5 leading-relaxed font-normal space-y-1.5">
+                        <p>• Body: 70% Wool, 30% Silk twill front panel</p>
+                        <p>• Dry clean only</p>
+                        <p>• Model is 5&apos;10&quot; (178 cm) and is wearing a US size S</p>
+                        <p>• Style Number 145892</p>
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
 
                 {/* Free Shipping & Returns */}
                 <div className="py-3">
                   <button 
                     onClick={() => toggleAccordion('shipping')}
-                    className="w-full flex justify-between items-center text-xs font-semibold tracking-widest uppercase text-gray-900 cursor-pointer hover:opacity-70 transition-opacity"
+                    className="w-full flex justify-between items-center text-[12px] tracking-[.75px] leading-[18px] uppercase text-[#191919] font-[800] cursor-pointer hover:opacity-70 transition-opacity"
                   >
                     <span>FREE SHIPPING & RETURNS</span>
-                    {openAccordion === 'shipping' ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {openAccordion.includes('shipping') ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </button>
 
-                  {openAccordion === 'shipping' && (
-                    <div className="mt-2.5 text-gray-600 leading-relaxed font-normal animate-in fade-in duration-200">
-                      Enjoy complimentary standard shipping on all orders. Free returns within 14 days of receipt.
+                  <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openAccordion.includes('shipping') ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                    <div className="overflow-hidden">
+                      <div className="mt-2.5 leading-relaxed font-normal">
+                        <p className="mb-4">
+                          Great news: we offer free shipping, exchanges and returns. See Shipping Details.<br/>
+                          Plus, complimentary gift wrap available at checkout.
+                        </p>
+                        <Image 
+                          src="https://s7.toryburch.com/is/image/ToryBurch/SPR25_GiftWrap2_1000x560-1.dq-2180x1221.jpg"
+                          alt="Gift Wrap"
+                          width={400}
+                          height={224}
+                          className="w-full h-auto object-cover"
+                        />
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
 
@@ -681,7 +725,7 @@ export default function ProductPage() {
               onClick={() => setRecTab('youMayAlsoLike')}
               className={`text-xs md:text-sm tracking-widest uppercase transition-all cursor-pointer ${
                 recTab === 'youMayAlsoLike'
-                  ? 'font-bold text-gray-900 underline underline-offset-8 decoration-2'
+                  ? 'font-[700] text-gray-900 underline underline-offset-8 decoration-2'
                   : 'text-gray-500 hover:text-gray-900 font-normal'
               }`}
             >
@@ -691,7 +735,7 @@ export default function ProductPage() {
               onClick={() => setRecTab('styleWith')}
               className={`text-xs md:text-sm tracking-widest uppercase transition-all cursor-pointer ${
                 recTab === 'styleWith'
-                  ? 'font-bold text-gray-900 underline underline-offset-8 decoration-2'
+                  ? 'font-[700] text-gray-900 underline underline-offset-8 decoration-2'
                   : 'text-gray-500 hover:text-gray-900 font-normal'
               }`}
             >
@@ -715,7 +759,7 @@ export default function ProductPage() {
               {/* Carousel Container */}
               <div 
                 ref={carouselRef}
-                className="flex space-x-3 md:space-x-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
+                className="flex space-x-[2px] overflow-x-auto no-scrollbar scroll-smooth py-2"
               >
                 {YOU_MAY_ALSO_LIKE_PRODUCTS.map((prod) => (
                   <div key={prod.id} className="min-w-[200px] w-[220px] md:min-w-[280px] md:w-[300px] shrink-0">
@@ -747,7 +791,7 @@ export default function ProductPage() {
 
         {/* RECENTLY VIEWED SECTION */}
         <section className="mb-20 max-w-[1600px] mx-auto px-[0.8em] relative">
-          <h2 className="text-center text-xs md:text-sm font-semibold tracking-widest uppercase text-gray-900 mb-8">
+          <h2 className="text-center text-xs md:text-sm font-[700] tracking-widest uppercase text-gray-900 mb-8">
             RECENTLY VIEWED
           </h2>
           

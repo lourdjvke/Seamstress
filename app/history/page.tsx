@@ -223,7 +223,7 @@ export default function HistoryPage() {
             {/* Pause / Play Auto-Progress Toggle */}
             <button
               onClick={() => setIsPaused(!isPaused)}
-              className="absolute bottom-6 right-6 z-10 bg-white/85 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer shadow-sm transition-all"
+              className="absolute bottom-6 right-6 z-10 bg-white/85 hover:bg-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer shadow-sm transition-all"
               aria-label={isPaused ? 'Resume auto progress' : 'Pause auto progress'}
             >
               {isPaused ? (

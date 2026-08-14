@@ -46,17 +46,17 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
     <div className="relative group cursor-pointer h-10 flex items-start">
       {item.subLinks && (
         <div className={`
-          absolute -top-4 left-1/2 -translate-x-1/2 min-w-[240px] pt-4 pb-6 px-6 rounded-md
-          transition-all duration-300 pointer-events-none group-hover:pointer-events-auto
+          absolute -top-2 -left-3.5 -right-3.5 pt-7 pb-3 px-3.5 rounded-sm whitespace-nowrap
+          transition-all duration-200 pointer-events-none group-hover:pointer-events-auto
           opacity-0 group-hover:opacity-100 flex flex-col items-start text-left
           ${isScrolled 
-            ? 'bg-white border border-gray-200 shadow-lg text-black' 
-            : 'bg-white/20 backdrop-blur-md text-white'
+            ? 'bg-white border border-gray-200 shadow-md text-black' 
+            : 'bg-black/40 backdrop-blur-[2px] border border-white/10 text-white'
           }
         `}>
-           {/* Spacer to push dropdown items below title, matching title height + spacing */}
-           <div className="h-6 mb-4"></div> 
-           <div className="flex flex-col gap-3.5 w-full items-start text-left">
+           {/* Spacer to push dropdown items below title */}
+           <div className="h-4 mb-1.5"></div> 
+           <div className="flex flex-col gap-2.5 w-full items-start text-left">
              {item.subLinks.map(sub => (
                <Link key={sub.label} href={sub.href} className="text-[13px] font-medium tracking-normal normal-case hover:underline hover:text-current transition-all text-left block w-full">
                  {sub.label}
@@ -66,7 +66,7 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
         </div>
       )}
       
-      <Link href={item.href} className="relative z-10 flex items-center gap-1 group-hover:underline underline-offset-[6px]">
+      <Link href={item.href} className="relative z-10 flex items-center gap-1 hover:underline underline-offset-[6px]">
         {item.label}
         {item.subLinks && (
           <ChevronDown className="w-[14px] h-[14px] transition-transform duration-300 group-hover:rotate-180" />
@@ -85,7 +85,9 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const isWhiteNavbar = isScrolled || pathname === '/clothing' || pathname === '/product' || pathname === '/programmes' || pathname === '/resource' || pathname === '/history';
+  const isProductPage = pathname?.startsWith('/product');
+  const isWhiteNavbar = isScrolled || pathname === '/clothing' || isProductPage || pathname === '/programmes' || pathname === '/resource' || pathname === '/history';
+  const displayLinks = showLinks && !isProductPage;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -204,8 +206,8 @@ export default function Navbar() {
           </div>
         </div>
         <div
-          className={`hidden md:flex justify-center gap-[6em] lg:gap-[8em] text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 ${
-            showLinks ? 'h-10 opacity-100 pointer-events-auto' : 'h-0 opacity-0 pointer-events-none overflow-hidden'
+          className={`hidden md:flex justify-center gap-[6em] lg:gap-[8em] text-[11px] tracking-[0.2em] font-semibold uppercase transition-all duration-500 pt-[0.6em] ${
+            displayLinks ? 'h-11 opacity-100 pointer-events-auto' : 'h-0 opacity-0 pointer-events-none overflow-hidden'
           }`}
         >
           {NAV_ITEMS.map((item) => (

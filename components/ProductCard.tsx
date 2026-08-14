@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useShop } from '@/context/ShopContext';
@@ -28,7 +28,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [showingAlt, setShowingAlt] = useState<boolean>(false);
 
-  const [quickShopState, setQuickShopState] = useState<'initial' | 'selectSize'>('initial');
+  const [quickShopState, setQuickShopState] = useState<'initial' | 'loading' | 'selectSize'>('initial');
 
   const handleColorClick = (idx: number, imgSrc: string) => {
     setActiveColorIdx(idx);
@@ -42,10 +42,36 @@ export default function ProductCard({ product }: { product: Product }) {
     setShowingAlt(!showingAlt);
   };
 
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleQuickShopMouseEnter = () => {
+    if (quickShopState !== 'initial') return;
+    hoverTimeoutRef.current = setTimeout(() => {
+      setQuickShopState('loading');
+      setTimeout(() => {
+        setQuickShopState('selectSize');
+      }, 600);
+    }, 500);
+  };
+
+  const handleQuickShopMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+  };
+
   const handleQuickShopClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setQuickShopState('selectSize');
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setQuickShopState('loading');
+    setTimeout(() => {
+      setQuickShopState('selectSize');
+    }, 600);
   };
 
   const handleSelectSizeClick = (e: React.MouseEvent) => {
@@ -68,13 +94,17 @@ export default function ProductCard({ product }: { product: Product }) {
       onMouseLeave={() => {
         setIsHovered(false);
         setQuickShopState('initial');
+        if (hoverTimeoutRef.current) {
+          clearTimeout(hoverTimeoutRef.current);
+          hoverTimeoutRef.current = null;
+        }
       }}
     >
-      <div className="relative aspect-[3/4] bg-[#f6f6f6] overflow-hidden flex items-center justify-center">
+      <div className="relative aspect-[3/4] bg-[#f6f6f6] overflow-hidden flex items-center justify-center cursor-pointer">
         {/* Favorite Button */}
         <button 
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsFavorite(!isFavorite); }}
-          className="absolute top-3.5 right-3.5 z-10 bg-transparent border-none cursor-pointer text-gray-900 opacity-70 hover:opacity-100 transition-opacity"
+          className={`absolute top-3.5 right-3.5 z-10 bg-transparent border-none cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity ${isFavorite ? 'opacity-100' : ''}`}
           aria-label="Add to wishlist"
         >
           <Heart 
@@ -88,7 +118,7 @@ export default function ProductCard({ product }: { product: Product }) {
           className="absolute left-2.5 top-1/2 -translate-y-1/2 bg-transparent rounded-full w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity z-10 text-gray-800 hover:scale-110"
           aria-label="Previous image"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-7 h-7 stroke-[1.5]" />
         </button>
 
         {/* Primary Product Image */}
@@ -118,7 +148,7 @@ export default function ProductCard({ product }: { product: Product }) {
           className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-transparent rounded-full w-8 h-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity z-10 text-gray-800 hover:scale-110"
           aria-label="Next image"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-7 h-7 stroke-[1.5]" />
         </button>
 
         {/* Quick Shop or Select Size Panel */}
@@ -128,14 +158,26 @@ export default function ProductCard({ product }: { product: Product }) {
           {quickShopState === 'initial' ? (
             <button 
               onClick={handleQuickShopClick}
-              className="w-full bg-white/95 hover:bg-black hover:text-white text-gray-900 py-3 text-[11px] font-semibold uppercase tracking-wider text-center border border-black/10 cursor-pointer shadow-sm transition-colors"
+              onMouseEnter={handleQuickShopMouseEnter}
+              onMouseLeave={handleQuickShopMouseLeave}
+              className="w-full bg-white/95 text-gray-900 py-3 text-[11px] font-semibold uppercase tracking-wider text-center border border-black/10 cursor-pointer shadow-sm transition-colors flex justify-center items-center h-[42px]"
             >
               Quick Shop
+            </button>
+          ) : quickShopState === 'loading' ? (
+            <button 
+              className="w-full bg-white/95 text-gray-900 py-3 text-[11px] font-semibold uppercase tracking-wider text-center border border-black/10 cursor-default shadow-sm transition-colors flex justify-center items-center h-[42px]"
+            >
+              <div className="flex space-x-1">
+                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
+              </div>
             </button>
           ) : (
             <button 
               onClick={handleSelectSizeClick}
-              className="w-full bg-white hover:bg-black hover:text-white text-black py-3 text-[11px] font-semibold uppercase tracking-wider text-center border border-black/10 cursor-pointer shadow-sm transition-colors"
+              className="w-full bg-white/95 text-gray-900 py-3 text-[11px] font-semibold uppercase tracking-wider text-center border border-black/10 cursor-pointer shadow-sm transition-colors flex justify-center items-center h-[42px]"
             >
               Select Size
             </button>

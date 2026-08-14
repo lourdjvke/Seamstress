@@ -67,7 +67,7 @@ export default function ProgrammesPage() {
         {/* Pause / Play Video Controls Button */}
         <button
           onClick={() => setIsPlaying(!isPlaying)}
-          className="absolute bottom-6 right-6 z-10 bg-white/80 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer transition-all shadow-sm"
+          className="absolute bottom-6 right-6 z-10 bg-white/80 hover:bg-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer transition-all shadow-sm"
           aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
         >
           {isPlaying ? (
@@ -117,7 +117,7 @@ export default function ProgrammesPage() {
           <div className="flex flex-col text-center w-full bg-white">
             <div className="relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden bg-gray-100">
               <Image
-                src="https://images.unsplash.com/photo-1596783935261-2679dc8db7f3?auto=format&fit=crop&w=1200&q=80"
+                src="https://tb-foundation-wordpress-assets.storage.googleapis.com/wp-content/uploads/2025/01/10154646/RESOURCES-IMAGE.png"
                 alt="Hands weaving natural fibers with artisan technique"
                 fill
                 className="object-cover"

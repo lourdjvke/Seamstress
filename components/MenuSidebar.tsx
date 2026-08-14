@@ -223,7 +223,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
         }`}
       >
         {/* Main Header with Close Button */}
-        <div className="h-[60px] flex items-center justify-end px-6 border-b border-transparent shrink-0">
+        <div className="h-[60px] flex items-center justify-end px-6 md:pl-12 md:pr-6 border-b border-transparent shrink-0">
           <button
             onClick={handleCloseAll}
             className="p-2 -mr-2 text-gray-500 hover:text-black cursor-pointer transition-colors"
@@ -234,8 +234,8 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
         </div>
 
         {/* Main Navigation List */}
-        <div className="flex-1 overflow-y-auto px-6 py-4">
-          <ul className="space-y-4 md:space-y-5 text-[19px] font-bold tracking-widest uppercase mb-10">
+        <div className="flex-1 overflow-y-auto px-6 md:pl-12 md:pr-6 py-4">
+          <ul className="space-y-3 md:space-y-4 text-[19px] font-bold tracking-widest uppercase mb-10">
             {MAIN_NAV_ITEMS.map((item) => {
               const isActive = activeSubmenuId === item.id;
               const hasSubmenuActive = activeSubmenuId !== null;
@@ -244,16 +244,23 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <li key={item.id}>
                   <button
                     onClick={() => handleSubmenuToggle(item.id)}
-                    className={`w-full py-3 flex items-center justify-between group transition-colors cursor-pointer text-left ${
+                    title={hasSubmenuActive && !isActive ? item.label : undefined}
+                    className={`w-full py-2.5 flex items-center justify-between group transition-colors cursor-pointer text-left ${
                       hasSubmenuActive
                         ? isActive
                           ? 'text-black'
-                          : 'text-gray-400 hover:text-gray-600'
+                          : 'text-gray-400'
                         : 'text-black hover:text-gray-600'
                     }`}
                   >
                     <span>{item.label}</span>
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-black transition-colors" />
+                    <ChevronRight className={`w-4 h-4 transition-colors ${
+                      hasSubmenuActive
+                        ? isActive
+                          ? 'text-black'
+                          : 'text-gray-400'
+                        : 'text-gray-400 group-hover:text-black'
+                    }`} />
                   </button>
                 </li>
               );
@@ -332,13 +339,13 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
         {/* Submenu Scrollable Content */}
         {activeSubmenuData && (
-          <div className="flex-1 overflow-y-auto px-6 py-4 pt-6 md:pt-6">
+          <div className="flex-1 overflow-y-auto px-6 md:pl-12 md:pr-6 py-4 pt-6 md:pt-6">
             {activeSubmenuData.viewAllHref && (
               <>
                 <Link
                   href={activeSubmenuData.viewAllHref}
                   onClick={handleCloseAll}
-                  className="block text-[14px] text-black font-semibold mb-6 hover:text-gray-600"
+                  className="block text-[15px] font-normal text-black mb-6 hover:text-gray-600"
                 >
                   View All
                 </Link>
@@ -347,7 +354,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
             )}
 
             {/* Categories */}
-            <ul className="space-y-5 text-[14px] text-gray-800 mb-10">
+            <ul className="space-y-5 text-[15px] font-normal text-gray-800 mb-10">
               {activeSubmenuData.categories.map((cat, idx) => (
                 <li key={idx}>
                   <Link
@@ -368,7 +375,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <h3 className="text-[11px] font-bold text-gray-500 tracking-widest uppercase mb-6">
                   Collections
                 </h3>
-                <ul className="space-y-5 text-[14px] text-gray-800 pb-8">
+                <ul className="space-y-5 text-[15px] font-normal text-gray-800 pb-8">
                   {activeSubmenuData.collections.map((col, idx) => (
                     <li key={idx}>
                       <Link

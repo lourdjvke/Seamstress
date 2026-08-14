@@ -55,27 +55,27 @@ export default function SubscriptionSidebar() {
 
   return (
     <>
-      {/* Dark Backdrop Overlay */}
+      {/* Lightened Backdrop Overlay */}
       <div
         onClick={handleClose}
-        className={`fixed inset-0 bg-black/40 z-[80] transition-opacity duration-350 ease-out ${
+        className={`fixed inset-0 bg-black/25 z-[80] transition-opacity duration-350 ease-out ${
           isSubscriptionOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       />
 
-      {/* --- DESKTOP SIDEBAR (width increased by 30px to 410px) --- */}
+      {/* --- DESKTOP SIDEBAR (width reduced by 10px to 400px) --- */}
       <div
-        className={`hidden md:flex fixed top-0 right-0 h-full w-[410px] bg-white z-[90] shadow-2xl flex-col overflow-y-auto transition-transform duration-300 ease-in-out ${
+        className={`hidden md:flex fixed top-0 right-0 h-full w-[400px] bg-white z-[90] shadow-2xl flex-col overflow-y-auto transition-transform duration-300 ease-in-out ${
           isSubscriptionOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute top-3 right-3 z-20">
           <button
             onClick={handleClose}
-            className="w-8 h-8 flex items-center justify-center border border-dashed border-gray-400 bg-white/90 hover:bg-white text-gray-900 transition-colors cursor-pointer"
+            className="p-2 bg-transparent border-none text-gray-800 hover:text-black transition-colors cursor-pointer"
             aria-label="Close Subscription Drawer"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5 stroke-[1.5]" />
           </button>
         </div>
 
@@ -91,46 +91,93 @@ export default function SubscriptionSidebar() {
         </div>
 
         {/* Content placed directly below the image */}
-        <div className="p-6 md:px-8 flex-none flex flex-col justify-start text-center pt-6">
+        <div className="p-6 md:px-7 flex-none flex flex-col justify-start text-center pt-5">
           {submitted ? (
-            <div className="flex flex-col items-center justify-start pt-4">
+            <div className="flex flex-col items-center justify-start pt-3">
               <h2 className="text-[16px] font-semibold tracking-[1.8px] uppercase text-[#111] mb-3">
                 Confirmed - Thank You
               </h2>
-              <p className="text-[12px] text-[#333] leading-snug mb-6 max-w-[290px]">
+              <p className="text-[12px] text-[#333] leading-snug mb-5 max-w-[290px] font-medium">
                 You&apos;ve been added to our email list as<br />
-                <span className="font-normal text-[#111] block mt-1 break-all">{submittedEmail}</span>
+                <span className="font-semibold text-[#111] block mt-1 break-all">{submittedEmail}</span>
               </p>
               <button
                 onClick={handleClose}
-                className="w-full h-[48px] bg-[#1a1a1a] text-white text-[11px] font-semibold tracking-[2px] uppercase cursor-pointer hover:bg-black transition-colors"
+                className="w-full h-[42px] bg-[#1a1a1a] text-white text-[11px] font-semibold tracking-[2px] uppercase cursor-pointer hover:bg-black transition-colors"
               >
                 Continue Shopping
               </button>
             </div>
           ) : (
             <>
-              <h2 className="text-lg font-bold tracking-[0.08em] text-gray-900 uppercase mb-2.5 leading-tight">
+              <h2 className="text-[17px] font-bold tracking-[0.08em] text-gray-900 uppercase mb-2 leading-tight">
                 TAKE 10% OFF YOUR FIRST ORDER OF £200+
               </h2>
-              <p className="text-[13px] text-gray-600 leading-tight mb-5">
+              <p className="text-[13px] leading-[1.84] text-gray-700 font-medium mb-4">
                 Your first Tory Burch purchase of £200 or more, online or in boutiques, when you sign up for emails. Exclusions apply.
               </p>
 
-              <form onSubmit={handleSubmit} className="w-full space-y-4">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your Email"
-                  required
-                  className="w-full border border-gray-300 px-4 py-3.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-black font-normal"
-                />
+              <form onSubmit={handleSubmit} className="w-full">
+                <div className="relative mb-3 w-full">
+                  <input
+                    type="email"
+                    id="desktopEmailInput"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    placeholder="Your Email"
+                    required
+                    autoComplete="email"
+                    className="peer w-full h-[43px] border border-gray-400 rounded-none px-3.5 pt-3 pb-1 text-[14px] text-gray-900 font-medium bg-white outline-none focus:border-black transition-colors placeholder-transparent"
+                  />
+                  <label
+                    htmlFor="desktopEmailInput"
+                    className="absolute left-[14px] top-[12px] text-[13px] text-gray-500 font-medium pointer-events-none transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] bg-white px-1 origin-top-left
+                    peer-focus:-translate-y-[19px] peer-focus:scale-[0.82] peer-focus:text-gray-800 peer-focus:top-[12px]
+                    peer-not-placeholder-shown:-translate-y-[19px] peer-not-placeholder-shown:scale-[0.82] peer-not-placeholder-shown:text-gray-800 peer-not-placeholder-shown:top-[12px]"
+                  >
+                    Your Email
+                  </label>
+                </div>
+
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out text-left ${
+                    showExpanded ? 'max-h-[220px] opacity-100 mb-3' : 'max-h-0 opacity-0 mb-0'
+                  }`}
+                >
+                  <div className="relative w-full mb-3">
+                    <select className="w-full h-[39px] border border-gray-300 bg-white pl-3.5 pr-10 text-[13px] font-medium text-gray-900 outline-none appearance-none cursor-pointer rounded-none">
+                      <option value="Nigeria">Nigeria</option>
+                      <option value="United Kingdom">United Kingdom</option>
+                      <option value="United States">United States</option>
+                      <option value="France">France</option>
+                      <option value="Germany">Germany</option>
+                      <option value="Italy">Italy</option>
+                      <option value="Canada">Canada</option>
+                      <option value="Australia">Australia</option>
+                    </select>
+                    <svg viewBox="0 0 24 24" className="absolute right-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 stroke-gray-700 stroke-[1.8] fill-none pointer-events-none">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+
+                  <label className="flex items-start gap-2.5 mb-1 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-400 mt-0.5 cursor-pointer shrink-0 appearance-none bg-transparent relative checked:after:content-[''] checked:after:absolute checked:after:left-[4px] checked:after:top-[1.5px] checked:after:w-[4px] checked:after:h-[8px] checked:after:border-black checked:after:border-b-2 checked:after:border-r-2 checked:after:rotate-45"
+                    />
+                    <span className="text-[9px] leading-[18px] text-gray-600 font-normal">
+                      Yes, I would like to receive updates about collections, offers and exclusives by email. See our{' '}
+                      <a href="#" className="text-gray-900 underline">Privacy Policy</a> for further information.
+                    </span>
+                  </label>
+                </div>
 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-[#1a1a1a] hover:bg-black text-white py-3.5 text-xs font-bold uppercase tracking-[0.2em] transition-colors cursor-pointer flex justify-center items-center h-[48px]"
+                  className="w-full bg-[#1a1a1a] hover:bg-black text-white h-[42px] text-xs font-bold uppercase tracking-[0.2em] transition-colors cursor-pointer flex justify-center items-center disabled:cursor-default"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-1.5">

@@ -297,6 +297,25 @@ const FILTER_LENGTHS = ['Maxi', 'Midi', 'Mini'];
 
 export default function ClothingPage() {
   const [activeCategory, setActiveCategory] = useState<string>('View All');
+  const [showNavbarLinks, setShowNavbarLinks] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY <= 50) {
+        setShowNavbarLinks(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowNavbarLinks(false);
+      } else if (currentScrollY < lastScrollY - 5) {
+        setShowNavbarLinks(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(true);
   const [showCollectionDetails, setShowCollectionDetails] = useState<boolean>(false);
 
@@ -391,10 +410,11 @@ export default function ClothingPage() {
             </ul>
           </nav>
         </div>
+      </div>
 
-        {/* Filter and Sort Toolbar */}
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-4 flex justify-between items-center text-xs font-medium tracking-wider uppercase relative">
-          {/* Mobile Filter / Sort Buttons */}
+      {/* Filter and Sort Toolbar */}
+      <div className={`max-w-[1600px] mx-auto px-4 md:px-8 py-4 flex justify-between items-center text-xs font-medium tracking-wider uppercase bg-white/95 backdrop-blur-sm z-40 sticky transition-all duration-500 ${showNavbarLinks ? 'top-[64px] md:top-[108px]' : 'top-[64px]'}`}>
+        {/* Mobile Filter / Sort Buttons */}
           <div className="flex items-center space-x-3 cursor-pointer md:hidden">
             <button 
               onClick={() => setIsFilterOpen(true)}
@@ -422,35 +442,37 @@ export default function ClothingPage() {
               Filter
             </button>
             <span className="text-gray-300">|</span>
-            <button 
-              onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className="font-semibold uppercase tracking-wider cursor-pointer hover:opacity-75 transition-opacity"
-            >
-              Sort
-            </button>
+            <div className="relative flex items-center">
+              <button 
+                onClick={() => setShowSortDropdown(!showSortDropdown)}
+                className="font-semibold uppercase tracking-wider cursor-pointer hover:opacity-75 transition-opacity"
+              >
+                Sort
+              </button>
 
-            {/* Sort Popover Dropdown (Desktop) */}
-            {showSortDropdown && (
-              <div className="absolute top-8 right-0 w-56 bg-white border border-gray-200 shadow-xl z-40 p-4 space-y-3 normal-case tracking-normal text-xs animate-in fade-in zoom-in-95 duration-150">
-                {sortOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      setSortOption(opt);
-                      setShowSortDropdown(false);
-                    }}
-                    className="w-full text-left flex items-center gap-2 py-1 hover:text-black cursor-pointer transition-colors"
-                  >
-                    <div className="w-4 flex items-center justify-center">
-                      {sortOption === opt && <Check className="w-3.5 h-3.5 text-gray-900" />}
-                    </div>
-                    <span className={sortOption === opt ? 'font-medium text-gray-900' : 'text-gray-600'}>
-                      {opt}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
+              {/* Sort Popover Dropdown (Desktop) */}
+              {showSortDropdown && (
+                <div className="absolute top-8 right-0 w-56 bg-white border border-gray-200 shadow-xl z-40 p-4 space-y-3 normal-case tracking-normal text-xs animate-in fade-in zoom-in-95 duration-150">
+                  {sortOptions.map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => {
+                        setSortOption(opt);
+                        setShowSortDropdown(false);
+                      }}
+                      className="w-full text-left flex items-center gap-2 py-1 hover:text-black cursor-pointer transition-colors"
+                    >
+                      <div className="w-4 flex items-center justify-center">
+                        {sortOption === opt && <Check className="w-3.5 h-3.5 text-gray-900" />}
+                      </div>
+                      <span className={sortOption === opt ? 'font-medium text-gray-900' : 'text-gray-600'}>
+                        {opt}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Mobile Sort Dropdown Popover */}
@@ -487,7 +509,6 @@ export default function ClothingPage() {
             </button>
           </div>
         </div>
-      </div>
 
       {/* Main Content Area */}
       <main className="w-full mb-20 px-0">
