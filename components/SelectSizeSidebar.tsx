@@ -72,10 +72,10 @@ export default function SelectSizeSidebar() {
           </h2>
           <button
             onClick={closeSelectSize}
-            className="w-8 h-8 flex items-center justify-center border border-dashed border-gray-400 bg-white hover:border-black text-gray-900 transition-colors cursor-pointer"
+            className="p-1 text-gray-600 hover:text-black transition-colors cursor-pointer"
             aria-label="Close Size Selection"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 

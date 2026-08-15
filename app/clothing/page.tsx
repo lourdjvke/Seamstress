@@ -413,7 +413,7 @@ export default function ClothingPage() {
       </div>
 
       {/* Filter and Sort Toolbar */}
-      <div className={`max-w-[1600px] mx-auto px-4 md:px-8 py-4 flex justify-between items-center text-xs font-medium tracking-wider uppercase bg-white/95 backdrop-blur-sm z-40 sticky transition-all duration-500 ${showNavbarLinks ? 'top-[64px] md:top-[108px]' : 'top-[64px]'}`}>
+      <div className={`w-full max-w-full px-4 md:px-8 py-4 flex justify-between items-center text-xs font-medium tracking-wider uppercase bg-white z-40 sticky transition-all duration-500 ${showNavbarLinks ? 'top-[64px] md:top-[108px]' : 'top-[64px]'}`}>
         {/* Mobile Filter / Sort Buttons */}
           <div className="flex items-center space-x-3 cursor-pointer md:hidden">
             <button 

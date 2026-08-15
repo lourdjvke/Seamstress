@@ -49,9 +49,10 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
           absolute -top-2 -left-3.5 -right-3.5 pt-7 pb-3 px-3.5 rounded-sm whitespace-nowrap
           transition-all duration-200 pointer-events-none group-hover:pointer-events-auto
           opacity-0 group-hover:opacity-100 flex flex-col items-start text-left
+          border border-transparent
           ${isScrolled 
-            ? 'bg-white border border-gray-200 shadow-md text-black' 
-            : 'bg-black/40 backdrop-blur-[2px] border border-white/10 text-white'
+            ? 'bg-white text-black' 
+            : 'bg-[#d9d8d740] backdrop-blur-[2px] text-white'
           }
         `}>
            {/* Spacer to push dropdown items below title */}
@@ -66,7 +67,7 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
         </div>
       )}
       
-      <Link href={item.href} className="relative z-10 flex items-center gap-1 hover:underline underline-offset-[6px]">
+      <Link href={item.href} className="relative z-10 flex items-center gap-1 hover:underline underline-offset-[6px] tracking-[3px]">
         {item.label}
         {item.subLinks && (
           <ChevronDown className="w-[14px] h-[14px] transition-transform duration-300 group-hover:rotate-180" />
