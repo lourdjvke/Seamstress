@@ -345,7 +345,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <Link
                   href={activeSubmenuData.viewAllHref}
                   onClick={handleCloseAll}
-                  className="block text-[15px] font-normal text-black mb-6 hover:text-gray-600"
+                  className="block text-[16px] font-medium text-black mb-6 hover:text-gray-600"
                 >
                   View All
                 </Link>
@@ -354,7 +354,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
             )}
 
             {/* Categories */}
-            <ul className="space-y-5 text-[15px] font-normal text-gray-800 mb-10">
+            <ul className="space-y-5 text-[16px] font-medium text-gray-800 mb-10">
               {activeSubmenuData.categories.map((cat, idx) => (
                 <li key={idx}>
                   <Link
@@ -375,7 +375,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
                 <h3 className="text-[11px] font-bold text-gray-500 tracking-widest uppercase mb-6">
                   Collections
                 </h3>
-                <ul className="space-y-5 text-[15px] font-normal text-gray-800 pb-8">
+                <ul className="space-y-5 text-[16px] font-medium text-gray-800 pb-8">
                   {activeSubmenuData.collections.map((col, idx) => (
                     <li key={idx}>
                       <Link
