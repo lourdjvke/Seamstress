@@ -218,12 +218,12 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
       {/* Main Sidebar (Desktop width increased by 60px to 500px) */}
       <div
-        className={`fixed top-0 left-0 h-full w-full md:w-[500px] bg-white flex flex-col z-[70] border-r border-gray-200 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-full md:w-[500px] bg-white overflow-y-auto menu-sidebar-scrollbar z-[70] border-r border-gray-200 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Main Header with Close Button */}
-        <div className="h-[60px] flex items-center justify-end px-6 md:pl-12 md:pr-6 border-b border-transparent shrink-0">
+        {/* Main Header with Close Button (scrolls with menu content) */}
+        <div className="h-[60px] flex items-center justify-end px-6 md:pl-12 md:pr-6 border-b border-transparent">
           <button
             onClick={handleCloseAll}
             className="p-2 -mr-2 text-gray-500 hover:text-black cursor-pointer transition-colors"
@@ -234,7 +234,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
         </div>
 
         {/* Main Navigation List */}
-        <div className="flex-1 overflow-y-auto px-6 md:pl-12 md:pr-6 py-4">
+        <div className="px-6 md:pl-12 md:pr-6 py-4">
           <ul className="space-y-3 md:space-y-4 text-[19px] font-bold tracking-widest uppercase mb-10">
             {MAIN_NAV_ITEMS.map((item) => {
               const isActive = activeSubmenuId === item.id;
@@ -306,7 +306,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
             Placed adjacent at md:left-[500px] w-[500px] z-[65], slides out from behind the main sidebar
       */}
       <div
-        className={`fixed top-0 h-full bg-white flex flex-col transition-transform duration-300 ease-in-out
+        className={`fixed top-0 h-full bg-white overflow-y-auto menu-sidebar-scrollbar transition-transform duration-300 ease-in-out
           left-0 w-full z-[80] 
           md:left-[500px] md:w-[500px] md:z-[65] md:border-l md:border-gray-200
           ${
@@ -316,8 +316,8 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
           }
         `}
       >
-        {/* Mobile Header (Hidden on Desktop) */}
-        <div className="md:hidden h-[60px] flex items-center justify-between px-6 border-b border-gray-200 shrink-0">
+        {/* Mobile Header (Hidden on Desktop, scrolls with menu content on mobile) */}
+        <div className="md:hidden h-[60px] flex items-center justify-between px-6 border-b border-gray-200">
           <button
             onClick={handleBackToMain}
             className="p-2 -ml-2 text-gray-500 hover:text-black cursor-pointer"
@@ -339,7 +339,7 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
         {/* Submenu Scrollable Content */}
         {activeSubmenuData && (
-          <div className="flex-1 overflow-y-auto px-6 md:pl-12 md:pr-6 py-4 pt-6 md:pt-6">
+          <div className="px-6 md:pl-12 md:pr-6 py-4 pt-6 md:pt-14">
             {activeSubmenuData.viewAllHref && (
               <>
                 <Link
