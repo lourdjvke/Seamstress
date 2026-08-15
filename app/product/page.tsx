@@ -351,7 +351,7 @@ export default function ProductPage() {
         {/* Sliding White Details Panel Over Image */}
         <div className="relative z-10 bg-white pt-6 px-5 pb-12 rounded-t-xl shadow-[0_-10px_25px_rgba(0,0,0,0.05)] space-y-6">
           <div>
-            <h1 className="text-base font-semibold tracking-wider uppercase text-gray-900 mb-1">
+            <h1 className="text-[20px] leading-[1.2] font-semibold tracking-wider uppercase text-gray-900 mb-1">
               SILK-FRONT WOOL TOP
             </h1>
             <p className="text-sm text-gray-600 font-normal">
@@ -539,10 +539,10 @@ export default function ProductPage() {
 
           {/* Right Column: 50% Width Details Panel Centered */}
           <div className="col-span-6 sticky top-24 self-start py-4 px-6 flex justify-center">
-            {/* Inner Details Container: increased inner width to 450px and margin shift */}
-            <div className="w-full max-w-[350px] 2xl:max-w-[450px] -ml-[4em] pt-[1em] space-y-3.5">
+            {/* Inner Details Container: max-width 370px and margin-left 0 */}
+            <div className="w-full ml-0 max-w-[370px] 2xl:max-w-[450px] pt-[1em] space-y-3.5">
               <div>
-                <h1 className="text-base font-semibold tracking-wider uppercase text-gray-900 leading-tight mb-1">
+                <h1 className="text-[20px] leading-[1.2] font-semibold tracking-wider uppercase text-gray-900 mb-1">
                   SILK-FRONT WOOL TOP
                 </h1>
                 <p className="text-sm text-gray-600 font-normal leading-tight">
