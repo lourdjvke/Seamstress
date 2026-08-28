@@ -42,11 +42,6 @@ const NAV_ITEMS = [
   { 
     label: 'Programmes', 
     href: '/programmes',
-    subLinks: [
-      { label: 'Collection Development', href: '/programmes?tab=collection-development' },
-      { label: 'Product Development Partnership', href: '/programmes?tab=product-development-partnership' },
-      { label: 'Continuous Production', href: '/programmes?tab=continuous-production' },
-    ]
   },
   { 
     label: 'Resources', 
@@ -61,13 +56,6 @@ const NAV_ITEMS = [
   { 
     label: 'About', 
     href: '/about',
-    subLinks: [
-      { label: 'About SeamLadies', href: '/about?tab=about-seamladies' },
-      { label: 'Our Approach', href: '/about?tab=our-approach' },
-      { label: 'Manufacturing Network', href: '/about?tab=manufacturing-network' },
-      { label: 'Journal', href: '/about?tab=journal' },
-      { label: 'Contact', href: '/about?tab=contact' },
-    ]
   },
 ];
 
@@ -76,10 +64,10 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
     <div className="relative group cursor-pointer h-10 flex items-start">
       {item.subLinks && (
         <div className={`
-          absolute -top-2 -left-3.5 -right-3.5 pt-7 pb-3 px-3.5 rounded-sm whitespace-nowrap
+          absolute -top-2 -left-3.5 -right-3.5 pt-7 pb-3 px-3.5 rounded-sm
           transition-all duration-200 pointer-events-none group-hover:pointer-events-auto
           opacity-0 group-hover:opacity-100 flex flex-col items-start text-left
-          border border-transparent
+          border border-transparent max-w-[220px] overflow-hidden
           ${isScrolled 
             ? 'bg-white text-black' 
             : 'bg-[#d9d8d740] backdrop-blur-[2px] text-white'
@@ -87,9 +75,14 @@ function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: 
         `}>
            {/* Spacer to push dropdown items below title */}
            <div className="h-4 mb-1.5"></div> 
-           <div className="flex flex-col gap-2.5 w-full items-start text-left">
+           <div className="flex flex-col gap-2.5 w-full items-start text-left overflow-hidden">
              {item.subLinks.map(sub => (
-               <Link key={sub.label} href={sub.href} className="text-[13px] font-medium tracking-normal normal-case hover:underline hover:text-current transition-all text-left block w-full">
+               <Link 
+                 key={sub.label} 
+                 href={sub.href} 
+                 title={sub.label}
+                 className="text-[13px] font-medium tracking-normal normal-case hover:underline hover:text-current transition-all text-left block w-full truncate"
+               >
                  {sub.label}
                </Link>
              ))}

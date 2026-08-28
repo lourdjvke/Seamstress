@@ -489,9 +489,9 @@ function SpecialistCategoriesContent() {
     <div className="min-h-screen bg-white text-gray-900 text-sm font-sans pt-28 md:pt-36">
       {/* Category Sub-header Navigation */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-[1600px] mx-auto">
-          <nav className="overflow-x-auto no-scrollbar py-4 px-4 md:px-8">
-            <ul className="flex space-x-6 md:space-x-8 min-w-max text-[11px] tracking-wider uppercase text-gray-500 font-medium">
+        <div className="w-full overflow-x-auto no-scrollbar py-4 px-4 md:px-8">
+          <nav className="flex justify-center min-w-max mx-auto">
+            <ul className="flex space-x-6 md:space-x-8 items-center justify-center text-[11px] tracking-wider uppercase text-gray-500 font-medium">
               {SPECIALIST_CATEGORIES.map((cat) => {
                 const isActive = activeCategory === cat.slug;
                 return (
@@ -517,56 +517,8 @@ function SpecialistCategoriesContent() {
       {/* Filter and Sort Toolbar */}
       <div className={`w-full max-w-full px-4 md:px-8 py-4 flex justify-between items-center text-xs font-medium tracking-wider uppercase bg-white z-40 sticky transition-all duration-500 border-b border-gray-100 ${showNavbarLinks ? 'top-[64px] md:top-[108px]' : 'top-[64px]'}`}>
         
-        {/* Active Tag Filter Indicator Pill if selected */}
-        <div className="flex items-center space-x-3">
-          <button 
-            onClick={() => setIsFilterOpen(true)}
-            className="font-semibold uppercase tracking-wider cursor-pointer flex items-center hover:opacity-75 transition-opacity"
-          >
-            <span>Filter</span>
-            {totalActiveFilters > 0 && (
-              <span className="ml-1 w-4 h-4 rounded-full bg-black text-white text-[9px] flex items-center justify-center font-bold">
-                {totalActiveFilters}
-              </span>
-            )}
-          </button>
-          
-          <span className="text-gray-300">|</span>
-
-          {/* Desktop/Mobile Sort */}
-          <div className="relative flex items-center">
-            <button 
-              onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className="font-semibold uppercase tracking-wider cursor-pointer hover:opacity-75 transition-opacity"
-            >
-              Sort
-            </button>
-
-            {/* Sort Popover Dropdown */}
-            {showSortDropdown && (
-              <div className="absolute top-8 left-0 md:left-auto md:right-0 w-56 bg-white border border-gray-200 shadow-xl z-40 p-4 space-y-3 normal-case tracking-normal text-xs animate-in fade-in zoom-in-95 duration-150">
-                {sortOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      setShowSortDropdown(false);
-                      updateUrlParams({ sort: opt === 'View All' ? null : opt });
-                    }}
-                    className="w-full text-left flex items-center gap-2 py-1 hover:text-black cursor-pointer transition-colors"
-                  >
-                    <div className="w-4 flex items-center justify-center">
-                      {sortOption === opt && <Check className="w-3.5 h-3.5 text-gray-900" />}
-                    </div>
-                    <span className={sortOption === opt ? 'font-medium text-gray-900' : 'text-gray-600'}>
-                      {opt}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Active Tag Pill */}
+        {/* Left side: Active Tag Filter Indicator Pill if selected */}
+        <div>
           {selectedTag && (
             <div className="flex items-center gap-1 bg-gray-100 text-black px-2.5 py-0.5 rounded-full text-[10px] lowercase tracking-normal">
               <span>tag: {selectedTag}</span>
@@ -582,11 +534,56 @@ function SpecialistCategoriesContent() {
           )}
         </div>
 
-        {/* Right side: Product count and mobile layout toggles */}
-        <div className="flex items-center space-x-4">
-          <span className="hidden sm:inline text-[11px] text-gray-400 font-normal tracking-normal">
-            {filteredProducts.length} items
-          </span>
+        {/* Right side: Filter & Sort Controls + Mobile layout toggles */}
+        <div className="ml-auto flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
+            <button 
+              onClick={() => setIsFilterOpen(true)}
+              className="font-semibold uppercase tracking-wider cursor-pointer flex items-center hover:opacity-75 transition-opacity"
+            >
+              <span>Filter</span>
+              {totalActiveFilters > 0 && (
+                <span className="ml-1 w-4 h-4 rounded-full bg-black text-white text-[9px] flex items-center justify-center font-bold">
+                  {totalActiveFilters}
+                </span>
+              )}
+            </button>
+            
+            <span className="text-gray-300">|</span>
+
+            {/* Desktop/Mobile Sort */}
+            <div className="relative flex items-center">
+              <button 
+                onClick={() => setShowSortDropdown(!showSortDropdown)}
+                className="font-semibold uppercase tracking-wider cursor-pointer hover:opacity-75 transition-opacity"
+              >
+                Sort
+              </button>
+
+              {/* Sort Popover Dropdown */}
+              {showSortDropdown && (
+                <div className="absolute top-8 right-0 w-56 bg-white border border-gray-200 shadow-xl z-40 p-4 space-y-3 normal-case tracking-normal text-xs animate-in fade-in zoom-in-95 duration-150">
+                  {sortOptions.map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => {
+                        setShowSortDropdown(false);
+                        updateUrlParams({ sort: opt === 'View All' ? null : opt });
+                      }}
+                      className="w-full text-left flex items-center gap-2 py-1 hover:text-black cursor-pointer transition-colors"
+                    >
+                      <div className="w-4 flex items-center justify-center">
+                        {sortOption === opt && <Check className="w-3.5 h-3.5 text-gray-900" />}
+                      </div>
+                      <span className={sortOption === opt ? 'font-medium text-gray-900' : 'text-gray-600'}>
+                        {opt}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Mobile Grid Layout Toggle Icons */}
           <div className="flex space-x-2 md:hidden">

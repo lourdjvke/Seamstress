@@ -605,33 +605,10 @@ export default function WomenswearPage() {
       {/* ---------------------------------------------------- */}
       {/* 2. FILTER & SORT TOOLBAR                             */}
       {/* ---------------------------------------------------- */}
-      <div className={`w-full max-w-full px-4 md:px-8 py-4 flex justify-between items-center text-xs font-medium tracking-wider uppercase bg-white z-40 sticky transition-all duration-500 border-b border-gray-200 ${showNavbarLinks ? 'top-[64px] md:top-[108px]' : 'top-[64px]'}`}>
-        {/* Mobile Filter / Sort Buttons */}
-          <div className="flex items-center space-x-3 cursor-pointer md:hidden">
-            <button 
-              onClick={() => setIsFilterOpen(true)}
-              className="font-semibold uppercase tracking-wider cursor-pointer flex items-center"
-            >
-              Filter
-              {totalActiveFilters > 0 && (
-                <span className="ml-1 w-4 h-4 rounded-full bg-black text-white text-[9px] flex items-center justify-center font-bold">
-                  {totalActiveFilters}
-                </span>
-              )}
-            </button>
-            <span className="text-gray-300">|</span>
-            <button 
-              onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className="uppercase tracking-wider cursor-pointer"
-            >
-              Sort
-            </button>
-          </div>
-
-          <div className="hidden md:block flex-1" />
-
-          {/* Desktop Filter / Sort Controls */}
-          <div className="hidden md:flex items-center space-x-3 cursor-pointer relative">
+      <div className={`w-full max-w-full px-4 md:px-8 py-4 flex justify-end items-center text-xs font-medium tracking-wider uppercase bg-white z-40 sticky transition-all duration-500 border-b border-gray-200 ${showNavbarLinks ? 'top-[64px] md:top-[108px]' : 'top-[64px]'}`}>
+        {/* Right-aligned Filter, Sort & Mobile Grid Layout Toggles */}
+        <div className="ml-auto flex items-center space-x-4">
+          <div className="flex items-center space-x-3 cursor-pointer relative">
             <button 
               onClick={() => setIsFilterOpen(true)}
               className="font-semibold uppercase tracking-wider cursor-pointer hover:opacity-75 transition-opacity flex items-center"
@@ -652,7 +629,7 @@ export default function WomenswearPage() {
                 Sort
               </button>
 
-              {/* Sort Popover Dropdown (Desktop) */}
+              {/* Sort Popover Dropdown */}
               {showSortDropdown && (
                 <div className="absolute top-8 right-0 w-56 bg-white border border-gray-200 shadow-xl z-40 p-4 space-y-3 normal-case tracking-normal text-xs animate-in fade-in zoom-in-95 duration-150">
                   {sortOptions.map((opt) => (
@@ -677,29 +654,6 @@ export default function WomenswearPage() {
             </div>
           </div>
 
-          {/* Mobile Sort Dropdown Popover */}
-          {showSortDropdown && (
-            <div className="md:hidden absolute top-12 left-4 w-52 bg-white border border-gray-200 shadow-xl z-40 p-4 space-y-3 normal-case tracking-normal text-xs">
-              {sortOptions.map((opt) => (
-                <button
-                  key={opt}
-                  onClick={() => {
-                    setSortOption(opt);
-                    setShowSortDropdown(false);
-                  }}
-                  className="w-full text-left flex items-center gap-2 py-1 cursor-pointer"
-                >
-                  <div className="w-4 flex items-center justify-center">
-                    {sortOption === opt && <Check className="w-3.5 h-3.5 text-gray-900" />}
-                  </div>
-                  <span className={sortOption === opt ? 'font-medium text-gray-900' : 'text-gray-600'}>
-                    {opt}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-
           {/* Mobile Grid Layout Toggle Icons */}
           <div className="flex space-x-2 md:hidden">
             <button
@@ -719,6 +673,7 @@ export default function WomenswearPage() {
             </button>
           </div>
         </div>
+      </div>
 
       {/* ---------------------------------------------------- */}
       {/* 3. PRODUCT CATALOG GRID & EDITORIAL BREAKS          */}
