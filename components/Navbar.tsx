@@ -10,35 +10,65 @@ import SearchSidebar from '@/components/SearchSidebar';
 import { useShop } from '@/context/ShopContext';
 
 const NAV_ITEMS = [
-  { label: 'Womenswear', href: '/clothing' },
+  { 
+    label: 'Womenswear', 
+    href: '/womenswear',
+    subLinks: [
+      { label: 'Explore', href: '/womenswear/explore' },
+      { label: 'Categories', href: '/womenswear/categories' },
+      { label: 'Specialist Categories', href: '/womenswear/Specialist-categories' },
+    ]
+  },
   { 
     label: 'Fit & Development', 
-    href: '/resource',
+    href: '/fit-and-development',
     subLinks: [
-      { label: 'Articles and Videos', href: '/resource' },
-      { label: 'Business Plan Builder', href: '/resource' },
-      { label: 'Funding Finder', href: '/resource' },
+      { label: 'Female Fit', href: '/fit-and-development?tab=female-fit' },
+      { label: 'Sizing', href: '/fit-and-development?tab=sizing' },
+      { label: 'Technical Development', href: '/fit-and-development?tab=technical-development' },
+      { label: 'Sampling', href: '/fit-and-development?tab=sampling' },
     ]
   },
   { 
     label: 'Manufacturing', 
-    href: '/history',
+    href: '/manufacturing',
     subLinks: [
-      { label: 'Supplier Guidelines', href: '/programmes' },
-      { label: 'Quality Control', href: '/history' },
-      { label: 'Sustainability', href: '/programmes' },
+      { label: 'Production Routes', href: '/manufacturing?tab=production-routes' },
+      { label: 'Product Capabilities', href: '/manufacturing?tab=product-capabilities' },
+      { label: 'Production Network', href: '/manufacturing?tab=production-network' },
+      { label: 'Production Services', href: '/manufacturing?tab=production-services' },
     ]
   },
   { 
     label: 'Programmes', 
     href: '/programmes',
     subLinks: [
-      { label: 'Fellowship Programs', href: '/programmes' },
-      { label: 'Grants & Funding', href: '/programmes' },
-      { label: 'Mentorship', href: '/programmes' },
+      { label: 'Collection Development', href: '/programmes?tab=collection-development' },
+      { label: 'Product Development Partnership', href: '/programmes?tab=product-development-partnership' },
+      { label: 'Continuous Production', href: '/programmes?tab=continuous-production' },
     ]
   },
-  { label: 'About', href: '/resource' },
+  { 
+    label: 'Resources', 
+    href: '/resource',
+    subLinks: [
+      { label: 'Guides', href: '/resource?tab=guides' },
+      { label: 'Tools', href: '/resource?tab=tools' },
+      { label: 'Libraries', href: '/resource?tab=libraries' },
+      { label: 'Help', href: '/resource?tab=help' },
+    ]
+  },
+  { 
+    label: 'About', 
+    href: '/about',
+    subLinks: [
+      { label: 'About SeamLadies', href: '/about?tab=about-seamladies' },
+      { label: 'Our Approach', href: '/about?tab=our-approach' },
+      { label: 'Manufacturing Network', href: '/about?tab=manufacturing-network' },
+      { label: 'Journal', href: '/about?tab=journal' },
+      { label: 'Contact', href: '/about?tab=contact' },
+    ]
+  },
 ];
 
 function NavItem({ item, isScrolled }: { item: typeof NAV_ITEMS[0], isScrolled: boolean }) {
@@ -87,7 +117,9 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const isProductPage = pathname?.startsWith('/product');
-  const isWhiteNavbar = isScrolled || pathname === '/clothing' || isProductPage || pathname === '/programmes' || pathname === '/resource' || pathname === '/history';
+  const isWomenswearHero = pathname === '/womenswear';
+  const isHomeHero = pathname === '/';
+  const isWhiteNavbar = isScrolled || (!isHomeHero && !isWomenswearHero);
   const displayLinks = showLinks && !isProductPage;
 
   useEffect(() => {

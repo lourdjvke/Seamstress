@@ -67,7 +67,9 @@ export default function GoalsSection() {
   const handleTabClick = (index: number) => {
     const totalDuration = TABS.length * DURATION_PER_TAB;
     const targetElapsed = (index / TABS.length) * totalDuration;
-    startTimeRef.current = performance.now() - targetElapsed;
+    if (typeof window !== 'undefined' && window.performance) {
+      startTimeRef.current = window.performance.now() - targetElapsed;
+    }
     setActiveTab(index);
     // Setting progress immediately to avoid visual jump delay
     setProgress((index / TABS.length) * 100);

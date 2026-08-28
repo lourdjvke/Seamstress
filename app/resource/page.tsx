@@ -1,93 +1,474 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Pause, Play } from 'lucide-react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Pause, Play, ChevronDown, Download, FileText, CheckCircle2, Clock, HelpCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
-const SECONDARY_NAV_ITEMS = [
-  { label: 'Our Impact', href: '/resource', active: true },
-  { label: 'Our Philosophy', href: '/programmes' },
-  { label: 'Purpose', href: '/programmes' },
-  { label: 'Products', href: '/programmes' },
-  { label: 'Partners', href: '/programmes' },
-  { label: 'Our Impact Goals', href: '/programmes' },
-  { label: 'Tory Burch Foundation', href: '/programmes' },
-];
+interface ResourceItem {
+  title: string;
+  category?: string;
+  desc: string;
+  img: string;
+  tag?: string;
+  details?: string[];
+  tableData?: {
+    headers: string[];
+    rows: (string | number)[][];
+  };
+}
 
-export default function ResourcePage() {
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface TabData {
+  id: string;
+  label: string;
+  heroTitle: string;
+  intro: {
+    title: string;
+    text: string;
+  };
+  items?: ResourceItem[];
+  faqs?: FAQItem[];
+  glossary?: { term: string; def: string }[];
+  featured: {
+    img: string;
+    title: string;
+    text: string;
+    linkText: string;
+    linkHref: string;
+  };
+}
+
+const RESOURCE_DATA: Record<string, TabData> = {
+  guides: {
+    id: 'guides',
+    label: 'Guides',
+    heroTitle: 'TECHNICAL & PRODUCTION GUIDES',
+    intro: {
+      title: 'Authoritative Manufacturing Standards',
+      text: 'Our comprehensive technical guides provide fashion founders, creative directors, and garment technologists with definitive benchmarks for womenswear development, precision grading, tech pack architecture, and bulk manufacturing compliance.'
+    },
+    items: [
+      {
+        title: 'Womenswear Manufacturing Guide',
+        category: 'FOUNDATION',
+        desc: 'End-to-end roadmap covering factory qualification, critical path planning, yield calculations, and industrial production phases from tech pack handoff to final bulk sign-off.',
+        img: 'https://loremflickr.com/1200/1500/fashion,tailor?lock=401',
+        tag: 'Essential Reading',
+        details: ['Critical path milestones', 'Tier-1 mill selection', 'Seam margin requirements', 'Bulk delivery protocols']
+      },
+      {
+        title: 'Female Fit Guide',
+        category: 'FIT & ANATOMY',
+        desc: 'Biomechanical fit principles for womenswear, detailing apex placement, pitch balance, bust ease distribution, and posture compensation across standard and relaxed blocks.',
+        img: 'https://loremflickr.com/1200/1500/fashion,fitting?lock=402',
+        tag: 'Fit Block Standard',
+        details: ['Bust ease calculation', 'Shoulder slope angles', 'Cross-back balance', 'Crotch fork curve dynamics']
+      },
+      {
+        title: 'Sizing & Grading Guide',
+        category: 'GRADING',
+        desc: 'Proportional grading rules for UK, US, and EU standard size ranges with mathematical grade-point increments across circumference, length, and body depth.',
+        img: 'https://loremflickr.com/1200/1500/fashion,pattern?lock=403',
+        tag: 'Includes Spec Table',
+        details: ['UK 6 to UK 20 grade rules', 'Non-linear girth increments', 'Petite & tall adjustments', 'Tolerance boundaries (±0.5cm)'],
+        tableData: {
+          headers: ['Size (UK)', 'Bust (cm)', 'Waist (cm)', 'Hip (cm)', 'Grade Jump'],
+          rows: [
+            ['UK 6 / XS', '80.0', '62.0', '88.0', 'Base Size'],
+            ['UK 8 / S', '84.0', '66.0', '92.0', '+4.0 cm'],
+            ['UK 10 / M', '88.0', '70.0', '96.0', '+4.0 cm'],
+            ['UK 12 / L', '93.0', '75.0', '101.0', '+5.0 cm'],
+            ['UK 14 / XL', '98.0', '80.0', '106.0', '+5.0 cm'],
+            ['UK 16 / XXL', '104.0', '86.0', '112.0', '+6.0 cm']
+          ]
+        }
+      },
+      {
+        title: 'Product Development Guide',
+        category: 'DEVELOPMENT',
+        desc: 'A methodical approach to design translation, 2D/3D prototyping, textile shrinkage testing, and fitting sample sign-offs prior to committing tooling capital.',
+        img: 'https://loremflickr.com/1200/1500/fashion,sketch?lock=404',
+        tag: 'Design to Sample',
+        details: ['CAD line sheet generation', 'First toile fitting', 'Fabric shrinkage testing', 'Master block verification']
+      },
+      {
+        title: 'Sampling Guide',
+        category: 'SAMPLING',
+        desc: 'A complete overview of the sampling lifecycle: Proto (1st Fit), Sales Samples (SMS), Size Set Samples, Pre-Production (PP), and Gold Sealed Master Samples.',
+        img: 'https://loremflickr.com/1200/1500/fashion,workshop?lock=405',
+        tag: 'Sampling Protocol',
+        details: ['Proto 1: Design validation', 'Proto 2: Refined fit & trims', 'PP Sample: Bulk line readiness', 'TOP Sample: Production audit']
+      },
+      {
+        title: 'MOQ Guide',
+        category: 'COMMERCIAL',
+        desc: 'Navigating minimum order quantities across fabric mills, dye houses, and garment factories with strategies for fabric pooling and staged drop releases.',
+        img: 'https://loremflickr.com/1200/1500/fashion,textiles?lock=406',
+        tag: 'Commercial Strategy',
+        details: ['Greige pooling strategies', 'Surcharge threshold formulas', 'Boutique vs volume mills', 'Trim minimum mitigations']
+      },
+      {
+        title: 'Tech Pack Guide',
+        category: 'TECHNICAL',
+        desc: 'Building production-grade technical specification packs with Points of Measure (POM), vector callouts, stitch density (SPI), and construction tolerances.',
+        img: 'https://loremflickr.com/1200/1500/fashion,blueprint?lock=407',
+        tag: 'Factory Essential',
+        details: ['Standardized POM codes', 'Stitch types (ISO 4915)', 'Tension & SPI specifications', 'Exploded trim callouts']
+      },
+      {
+        title: 'BOM Guide',
+        category: 'COSTING',
+        desc: 'Structuring meticulous Bill of Materials (BOM) spreadsheets tracking thread counts, fused interfacings, zippers, corozo buttons, care tags, and polybags.',
+        img: 'https://loremflickr.com/1200/1500/fashion,accessories?lock=408',
+        tag: 'Open-Book BOM',
+        details: ['Primary fabric consumption', 'Interfacing & lining yardage', 'Hardware BOM unit costing', 'Packaging & label allocation']
+      },
+      {
+        title: 'Material Guide',
+        category: 'TEXTILES',
+        desc: 'In-depth textile manual detailing yarn counts, GSM weights, fiber blends, weave structures (twill, satin, poplin), and eco-certifications (GOTS, GRS, OEKO-TEX).',
+        img: 'https://loremflickr.com/1200/1500/fashion,fabric?lock=409',
+        tag: 'Material Sciences',
+        details: ['Warp & weft yarn counts', 'GSM fabric weight matrix', 'Pilling & abrasion scores', 'Sustainable fiber auditing']
+      },
+      {
+        title: 'Production Guide',
+        category: 'MANUFACTURING',
+        desc: 'In-line assembly protocols, industrial pressing, inline needle checks, AQL 2.5 quality control standards, and final carton packing for global delivery.',
+        img: 'https://loremflickr.com/1200/1500/fashion,factory?lock=410',
+        tag: 'Assembly & QC',
+        details: ['Automated CAD fabric cutting', 'In-line AQL inspections', 'Barcoding & carton marking', 'Freight forwarder logistics']
+      }
+    ],
+    featured: {
+      img: 'https://loremflickr.com/2000/1000/fashion,editorial?lock=411',
+      title: 'Standardizing Precision Across Every Collection',
+      text: 'Our technical guides are engineered to replace ambiguity with mathematical clarity. By implementing consistent POM measurements and standardized BOM architecture, brands minimize sampling loops and achieve near-zero factory defect rates.',
+      linkText: 'Request Full Technical Pack Library',
+      linkHref: '/contact'
+    }
+  },
+  tools: {
+    id: 'tools',
+    label: 'Tools',
+    heroTitle: 'PRODUCTION & DEVELOPMENT TOOLS',
+    intro: {
+      title: 'Operational Templates & Planning Calculators',
+      text: 'Download and utilize our industry-proven technical templates, measurement calculation sheets, size range matrices, and costing models configured for modern garment manufacturing.'
+    },
+    items: [
+      {
+        title: 'Measurement Sheet',
+        category: 'SPECIFICATION',
+        desc: 'Pre-formatted POM spreadsheet with automated tolerance calculations, grade jumps, and standardized vector callout diagrams across all product categories.',
+        img: 'https://loremflickr.com/1200/1500/fashion,measure?lock=421',
+        tag: 'Excel / CSV / Sheets',
+        details: ['Automated grade formulas', 'ISO standard POM codes', 'Allowance tolerance checks', 'Multi-size column view']
+      },
+      {
+        title: 'Sample Review Form',
+        category: 'QA / FITTING',
+        desc: 'Structured fitting audit sheet designed for live fitting sessions to record drag lines, seam balance, ease discrepancies, and annotated revision notes.',
+        img: 'https://loremflickr.com/1200/1500/fashion,fitting?lock=422',
+        tag: 'Printable / PDF',
+        details: ['Fit model baseline tracker', 'Visual defect checkmarks', 'Factory action directives', 'Revision sign-off ledger']
+      },
+      {
+        title: 'Product Brief Template',
+        category: 'DESIGN DIRECTION',
+        desc: 'Creative-to-technical transition document defining design intent, targeted retail price point, fabric composition priorities, and silhouette references.',
+        img: 'https://loremflickr.com/1200/1500/fashion,design?lock=423',
+        tag: 'Editable Brief',
+        details: ['Target BOM ceiling calculator', 'Inspiration swatch mounts', 'Key aesthetic priorities', 'Packaging requirements']
+      },
+      {
+        title: 'Size Range Planner',
+        category: 'MERCHANDISING',
+        desc: 'Ratio planning model calculating size breakdown curves (e.g. 1:2:2:1) based on target regional demographics to prevent dead stock and inventory drag.',
+        img: 'https://loremflickr.com/1200/1500/fashion,store?lock=424',
+        tag: 'Inventory Optimization',
+        details: ['Geographic sizing curves', 'Unit ratio multipliers', 'MOQ tier aggregations', 'Safety stock buffers']
+      },
+      {
+        title: 'Production Timeline',
+        category: 'CRITICAL PATH',
+        desc: 'Interactive Gantt and critical path schedule mapping lab dip approvals, yarn spinning, strike-offs, PP approvals, and bulk vessel departures.',
+        img: 'https://loremflickr.com/1200/1500/fashion,calendar?lock=425',
+        tag: 'Critical Path Gantt',
+        details: ['Lead time buffers', 'Holiday blackout alerts', 'Raw material stage dates', 'Air vs sea freight windows']
+      },
+      {
+        title: 'Costing Preparation Checklist',
+        category: 'FINANCIAL AUDIT',
+        desc: 'Open-book FOB cost breakdown checklist covering fabric consumption, cutting CM, CMT labor, freight forwarding, import tariffs, and target retail margins.',
+        img: 'https://loremflickr.com/1200/1500/fashion,finance?lock=426',
+        tag: 'Cost Calculator',
+        details: ['Fabric yield scrap multiplier', 'CMT stitch time calculator', 'Import duty harmonized codes', 'Landed cost vs wholesale margin']
+      }
+    ],
+    featured: {
+      img: 'https://loremflickr.com/2000/1000/fashion,workshop?lock=427',
+      title: 'Digital Tools for Streamlined Execution',
+      text: 'Accelerate your development cycle by implementing our field-tested tools. Designed by senior garment technologists, these templates ensure seamless communication between your design room and global factory floors.',
+      linkText: 'Inquire About Custom Software Integrations',
+      linkHref: '/contact'
+    }
+  },
+  libraries: {
+    id: 'libraries',
+    label: 'Libraries',
+    heroTitle: 'MATERIALS & SILHOUETTE LIBRARIES',
+    intro: {
+      title: 'Pre-Engineered Component & Fabric Archives',
+      text: 'Explore our curated material swatches, custom trim castings, vetted seam construction archives, and proven master fit blocks ready to accelerate your collection timelines.'
+    },
+    items: [
+      {
+        title: 'Materials Library',
+        category: 'FABRIC REPOSITORY',
+        desc: 'Over 850 certified luxury fabric references including Italian double-face wools, Portuguese organic loopback jerseys, mulberry silks, and Japanese selvedge denims.',
+        img: 'https://loremflickr.com/1200/1500/fashion,fabric?lock=431',
+        tag: '850+ Swatches',
+        details: ['GOTS & OEKO-TEX certified', 'Digital spectral lab dips', 'Stock vs custom mill minimums', 'Tensile test certificates']
+      },
+      {
+        title: 'Trims Library',
+        category: 'HARDWARE & ACCENTS',
+        desc: 'Exhaustive catalog of sustainable corozo buttons, engraved stainless hardware, Raccagni luxury zippers, woven damask labels, and recycled silicone heat-transfers.',
+        img: 'https://loremflickr.com/1200/1500/fashion,button?lock=432',
+        tag: 'Custom Tooling',
+        details: ['Nickel-free metal finishes', 'Custom laser etching', 'Recycled ocean plastic options', 'FSC certified hangtags']
+      },
+      {
+        title: 'Construction Library',
+        category: 'SEAMS & STITCHES',
+        desc: 'Visual technical atlas of French seams, bound seams, flatlock stitching, tailored floating canvassing, blind hems, and bonded ultrasonic seam options.',
+        img: 'https://loremflickr.com/1200/1500/fashion,sewing?lock=433',
+        tag: 'ISO Standards',
+        details: ['ISO 4915 stitch diagrams', 'Fabric-to-needle matching', 'High-stress seam reinforcers', 'Clean finish bound edges']
+      },
+      {
+        title: 'Fit Library',
+        category: 'MASTER BLOCKS',
+        desc: 'Proprietary collection of pre-fit tested master blocks across tailored jackets, trousers, bias dresses, outerwear, and jersey essentials for immediate adoption.',
+        img: 'https://loremflickr.com/1200/1500/fashion,tailoring?lock=434',
+        tag: 'Vetted Silhouettes',
+        details: ['Zero-toile development', 'Pre-graded CAD patterns', 'Balanced posture lines', 'Proven commercial sell-through']
+      },
+      {
+        title: 'Product Archive',
+        category: 'HISTORIC ARCHIVE',
+        desc: 'Digital repository of past bespoke developments, innovative fabric treatments, and archival stitch finishes available for creative remixing and seasonal inspiration.',
+        img: 'https://loremflickr.com/1200/1500/fashion,archive?lock=435',
+        tag: 'Design Heritage',
+        details: ['Garment wash archives', 'Complex pleating samples', 'Embroidery & embellishments', 'Heritage tailoring methods']
+      }
+    ],
+    featured: {
+      img: 'https://loremflickr.com/2000/1000/fashion,studio?lock=436',
+      title: 'Pre-Engineered Quality for Faster Launches',
+      text: 'By tapping into our extensive libraries, brands can skip months of preliminary fabric sourcing and block drafting, heading straight to refined sampling with guaranteed construction standards.',
+      linkText: 'Book a Physical Library Swatch Review',
+      linkHref: '/contact'
+    }
+  },
+  help: {
+    id: 'help',
+    label: 'Help',
+    heroTitle: 'HELP, FAQ & SPECIALIST SUPPORT',
+    intro: {
+      title: 'Frequently Asked Questions & Operations Help',
+      text: 'Find answers to common production inquiries, understand our minimum order thresholds, delivery lead times, and global shipping logistics, or connect directly with our garment specialists.'
+    },
+    faqs: [
+      {
+        question: 'What are your standard Minimum Order Quantities (MOQs)?',
+        answer: 'Our MOQs are structured by production route. For our Core Stock & Configured Stock programmes, MOQs start from 50–100 units per style. For custom ODM and full bespoke OEM development, standard factory production runs start from 200–300 units per style (shared across sizes). Flexible lower-volume capsule options are available through our UK and European boutique partner ateliers.'
+      },
+      {
+        question: 'How long does a full sampling and development cycle take?',
+        answer: 'Standard sampling cycles take approximately 3–4 weeks for initial Proto samples once tech packs and fabrics are secured. Second fit / SMS revisions take 2–3 weeks. Once the Gold Sealed Pre-Production (PP) sample is approved, bulk manufacturing typically requires 6–8 weeks for European production and 8–12 weeks for international volume runs.'
+      },
+      {
+        question: 'Can you work with our existing tech packs and fabric mills?',
+        answer: 'Yes. We frequently onboard existing tech packs and client-nominated fabric mills. Our technical team conducts an initial audit to ensure the pattern geometry, shrinkage allowances, and stitch specs match our factory machinery before cutting first toiles.'
+      },
+      {
+        question: 'How are quality inspections (QC) managed during production?',
+        answer: 'All production runs adhere strictly to international AQL 2.5 standards. We perform inline inspections during stitching, followed by 100% metal detector needle audits, seam pull tests, colorfastness verification, and final random sampling prior to carton sealing.'
+      },
+      {
+        question: 'What international shipping terms and logistics do you support?',
+        answer: 'We provide full Incoterms flexibility including FOB (Free on Board), CIF (Cost, Insurance and Freight), and complete DDP (Delivered Duty Paid) door-to-door delivery. We handle all export declarations, customs tariffs, duty clearance, and regional freight logistics directly to your fulfillment warehouse.'
+      },
+      {
+        question: 'What certifications do your manufacturing partners hold?',
+        answer: 'All Tier-1 manufacturing facilities in our network maintain active social and ethical compliance certifications, including SMETA 4-pillar audits, GOTS (Global Organic Textile Standard), OEKO-TEX Standard 100, and GRS (Global Recycled Standard).'
+      }
+    ],
+    glossary: [
+      { term: 'AQL 2.5', def: 'Acceptable Quality Limit—the standard statistical sampling method used worldwide to determine maximum permissible defects in textile manufacturing.' },
+      { term: 'BOM', def: 'Bill of Materials—the complete list of raw materials, fabrics, threads, trims, packaging, and hardware required to manufacture one garment.' },
+      { term: 'CMT', def: 'Cut, Make, and Trim—a production model where the factory is responsible strictly for garment cutting, assembly, and finishing, with fabrics supplied by the brand.' },
+      { term: 'FOB', def: 'Free On Board—pricing terms where the supplier covers all costs up until the cargo is loaded onto the export transport vessel at the departure port.' },
+      { term: 'PP Sample', def: 'Pre-Production Sample—the final golden sample crafted on the actual bulk production line with all bulk fabrics and trims, used as the definitive quality benchmark.' },
+      { term: 'POM', def: 'Point of Measure—precise anatomical locations on a garment used in tech packs to verify size tolerances and pattern accuracy.' }
+    ],
+    items: [
+      {
+        title: 'MOQ Information',
+        category: 'ORDER THRESHOLDS',
+        desc: 'Detailed breakdown of minimums across knitwear, tailoring, jersey, and denim with tier discounts and fabric pooling options.',
+        img: 'https://loremflickr.com/1200/1500/fashion,orders?lock=441',
+        tag: 'Tiered Pricing',
+        details: ['Stock Core: 50 pcs', 'Configured: 100 pcs', 'Bespoke OEM: 250 pcs', 'Fabric mill batch MOQs']
+      },
+      {
+        title: 'Lead Times',
+        category: 'SCHEDULES',
+        desc: 'Comprehensive seasonal calendar outlining development deadlines, fabric mill lead times, and factory holiday closure buffers.',
+        img: 'https://loremflickr.com/1200/1500/fashion,clock?lock=442',
+        tag: 'Calendar Roadmap',
+        details: ['Proto Sampling: 3–4 weeks', 'Bulk Production: 6–10 weeks', 'Air Freight: 5–7 days', 'Sea Freight: 25–35 days']
+      },
+      {
+        title: 'Shipping & Freight',
+        category: 'LOGISTICS',
+        desc: 'Global fulfillment solutions handling customs declarations, tariff codes, bonded warehouse consolidation, and final distribution.',
+        img: 'https://loremflickr.com/1200/1500/fashion,shipping?lock=443',
+        tag: 'DDP / FOB Shipping',
+        details: ['Full customs clearance', 'Harmonized tariff classification', 'Consolidated pallet shipping', 'Direct B2B/D2C dispatch']
+      },
+      {
+        title: 'Contact a Specialist',
+        category: 'CONSULTATION',
+        desc: 'Schedule a one-on-one technical consultation with our senior production team to evaluate tech packs and plan production schedules.',
+        img: 'https://loremflickr.com/1200/1500/fashion,consultant?lock=444',
+        tag: '1-on-1 Advisory',
+        details: ['Direct technical review', 'Cost feasibility modeling', 'Factory capacity reservation', 'Sampling timeline audit']
+      }
+    ],
+    featured: {
+      img: 'https://loremflickr.com/2000/1000/fashion,team?lock=445',
+      title: 'Direct Access to Manufacturing Specialists',
+      text: 'Have a specific question about pattern grading, fabric sourcing, or factory capacity? Our team of production directors and pattern masters is available to guide your next collection from sketch to retail delivery.',
+      linkText: 'Speak with a Garment Specialist',
+      linkHref: '/contact'
+    }
+  }
+};
+
+const TAB_KEYS = Object.keys(RESOURCE_DATA);
+
+function ResourceContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentTabId = searchParams.get('tab') || 'guides';
+  const activeData = RESOURCE_DATA[currentTabId as keyof typeof RESOURCE_DATA] || RESOURCE_DATA['guides'];
+
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [activeTab, setActiveTab] = useState('Our Impact');
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const setTab = (tabId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', tabId);
+    router.push(pathname + '?' + params.toString(), { scroll: false });
+  };
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans pt-20 md:pt-28">
-      {/* Secondary Navigation */}
-      <div className="bg-white border-b border-gray-100">
-        <nav className="flex overflow-x-auto whitespace-nowrap no-scrollbar py-4 px-6 gap-6 md:gap-10 justify-start md:justify-center items-center">
-          {SECONDARY_NAV_ITEMS.map((item) => {
-            const isActive = activeTab === item.label;
-            return (
-              <button
-                key={item.label}
-                onClick={() => setActiveTab(item.label)}
-                className={`uppercase text-xs tracking-[0.12em] font-medium transition-colors cursor-pointer ${
-                  isActive
-                    ? 'text-gray-900 font-semibold'
-                    : 'text-gray-400 hover:text-gray-900'
-                }`}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
+      {/* Secondary Navigation (Non-sticky, strictly aligned) */}
+      <div className="bg-white border-b border-gray-200">
+        <h2 className="block md:hidden text-center uppercase text-xs tracking-[0.15em] py-3 font-semibold text-gray-900 border-b border-gray-100">
+          Resources
+        </h2>
+        <div className="w-full overflow-x-auto no-scrollbar py-4 px-4 md:px-8">
+          <nav className="flex whitespace-nowrap gap-6 md:gap-8 items-center w-max mx-auto min-w-max">
+            {TAB_KEYS.map((key) => {
+              const item = RESOURCE_DATA[key];
+              const isActive = activeData.id === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setTab(item.id)}
+                  className={`uppercase text-xs tracking-[0.1em] font-medium transition-colors cursor-pointer inline-block whitespace-nowrap ${
+                    isActive
+                      ? 'text-gray-900 border-b border-gray-900 pb-0.5 font-semibold'
+                      : 'text-gray-500 hover:text-gray-900'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="relative w-full h-[calc(65vh+2em)] min-h-[calc(400px+2em)] md:h-[calc(60vh+2em)] md:min-h-[calc(450px+2em)] overflow-hidden flex items-center justify-center bg-gray-200">
-        {/* Background Image Container with gentle scale motion when playing */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          {/* Desktop Image */}
-          <div className="hidden md:block absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1580136608260-4eb11f4b24fe?auto=format&fit=crop&w=2500&q=80"
-              alt="Our Impact Pebbles and Beads"
-              fill
-              className={`object-cover brightness-90 transition-transform duration-[8000ms] ease-out ${
-                isPlaying ? 'scale-105' : 'scale-100'
-              }`}
-              priority
-              referrerPolicy="no-referrer"
-            />
-          </div>
+      {/* Hero Section with Video Background and Working Pause/Play */}
+      <section className="relative w-full h-[50vh] min-h-[420px] md:h-[60vh] md:min-h-[520px] overflow-hidden flex items-center justify-center bg-gray-900">
+        {/* Background Video */}
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        >
+          <source
+            src="https://tb-foundation-wordpress-assets.storage.googleapis.com/wp-content/uploads/2025/01/10202053/WebsiteVideo_3840_2160_v02_optimized.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <div className="absolute inset-0 bg-black/15" />
 
-          {/* Mobile Image */}
-          <div className="block md:hidden absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1497250681554-fc1c56e29ee4?auto=format&fit=crop&w=1200&q=80"
-              alt="Our Impact Nature Background"
-              fill
-              className={`object-cover brightness-90 transition-transform duration-[8000ms] ease-out ${
-                isPlaying ? 'scale-105' : 'scale-100'
-              }`}
-              priority
-              referrerPolicy="no-referrer"
-            />
-          </div>
+        {/* Hero Title with Fold Slot Animation */}
+        <div className="relative z-10 text-white text-center uppercase px-4 w-full max-w-[92vw] md:max-w-[85vw] lg:max-w-[80vw] mx-auto min-h-[160px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[260px] h-40 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center overflow-hidden">
+          <AnimatePresence initial={false} mode="wait">
+            <motion.h1
+              key={activeData.id}
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: '0%', opacity: 1 }}
+              exit={{ y: '-100%', opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
+              className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.12em] md:tracking-[0.18em] font-normal w-full text-center mx-auto leading-tight md:leading-snug px-4"
+            >
+              {activeData.heroTitle}
+            </motion.h1>
+          </AnimatePresence>
         </div>
 
-        {/* Hero Title */}
-        <div className="relative z-10 text-white text-center uppercase px-4 mt-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl tracking-[0.2em] font-normal">
-            Our Impact
-          </h1>
-        </div>
-
-        {/* Working Pause / Play Toggle Button */}
+        {/* Pause / Play Video Controls Button */}
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="absolute bottom-6 right-6 z-10 bg-white/90 hover:bg-white rounded-full w-9 h-9 flex items-center justify-center cursor-pointer transition-all shadow-md"
-          aria-label={isPlaying ? 'Pause background image' : 'Play background image'}
+          onClick={togglePlay}
+          className="absolute bottom-6 right-6 z-10 bg-white/80 hover:bg-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer transition-all shadow-sm"
+          aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
         >
           {isPlaying ? (
             <Pause className="w-3.5 h-3.5 text-gray-900 fill-gray-900" />
@@ -97,177 +478,256 @@ export default function ResourcePage() {
         </button>
       </section>
 
-      {/* Philosophy Statement Section */}
-      <section className="py-16 md:py-24 px-4 max-w-4xl mx-auto text-center">
-        <h2 className="text-lg md:text-xl tracking-[0.15em] uppercase mb-6 text-gray-900 font-medium">
-          Philosophy
+      {/* Section 1: Intro / Commitment Statement */}
+      <section className="py-16 md:py-24 px-6 max-w-4xl mx-auto text-center">
+        <h2 className="text-xl md:text-2xl tracking-[0.15em] uppercase mb-6 md:mb-8 text-gray-900 font-normal">
+          {activeData.intro.title}
         </h2>
-        <div className="text-[13px] md:text-sm text-gray-800 leading-relaxed max-w-2xl mx-auto space-y-6 font-normal">
-          <p>
-            As a global luxury lifestyle brand, our collections are designed to inspire women and the next generation. These values extend from our collections to the way we conduct business to the work of the Tory Burch Foundation.
-          </p>
-          <p>
-            Tory launched the Foundation in 2009 to increase women&apos;s economic power through entrepreneurship — and with an early conviction that this hybrid model of a purpose-led company represented the future of business. Since then, a portion of every purchase has benefited the Foundation.
-          </p>
-        </div>
-        <div className="mt-8 md:mt-10">
-          <Link
-            href="/programmes"
-            className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 inline-block hover:opacity-60 transition-opacity font-medium"
-          >
-            Read Our Impact Report
-          </Link>
-        </div>
+        <p className="text-sm md:text-base text-gray-700 leading-relaxed max-w-3xl mx-auto px-2 md:px-0 font-normal">
+          {activeData.intro.text}
+        </p>
       </section>
 
-      {/* 3 Column Flush Grid (Purpose, Products, Partners) */}
+      {/* SPECIAL HELP / FAQ SECTION: Touching page edges on mobile, 50/50 image and FAQ with zero space on desktop */}
+      {activeData.id === 'help' && activeData.faqs && (
+        <section className="w-full border-t border-b border-gray-200 bg-neutral-50 mb-12 md:mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
+            {/* Left 50% Image touching edge with 0 space */}
+            <div className="relative w-full aspect-[4/3] md:aspect-auto md:min-h-[600px] overflow-hidden bg-gray-100">
+              <Image
+                src="https://loremflickr.com/1600/1800/fashion,atelier?lock=499"
+                alt="Garment specialist consultation and FAQ support"
+                fill
+                className="object-cover"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-black/10" />
+              <div className="absolute bottom-8 left-8 right-8 text-white">
+                <span className="uppercase text-[11px] tracking-[0.2em] bg-black/40 backdrop-blur-sm px-3 py-1 inline-block mb-2">
+                  Operational FAQ
+                </span>
+                <h3 className="text-xl md:text-2xl font-light tracking-[0.15em] uppercase">
+                  Clarity in Every Phase
+                </h3>
+              </div>
+            </div>
+
+            {/* Right 50% FAQ Accordion touching right edge */}
+            <div className="flex flex-col justify-center px-6 md:px-12 lg:px-16 py-12 md:py-16 bg-white w-full">
+              <div className="mb-8">
+                <span className="uppercase text-xs tracking-[0.15em] text-gray-500 font-medium">
+                  General Production FAQ
+                </span>
+                <h3 className="text-2xl md:text-3xl tracking-[0.15em] uppercase text-gray-900 font-normal mt-1">
+                  Common Questions
+                </h3>
+              </div>
+
+              <div className="divide-y divide-gray-200 w-full">
+                {activeData.faqs.map((faq, index) => {
+                  const isOpen = openFaqIndex === index;
+                  return (
+                    <div key={index} className="py-5">
+                      <button
+                        onClick={() => toggleFaq(index)}
+                        className="w-full flex items-center justify-between text-left gap-4 group cursor-pointer"
+                        aria-expanded={isOpen}
+                      >
+                        <span className="text-sm md:text-base tracking-[0.05em] font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+                          {faq.question}
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-gray-500 transition-transform duration-300 flex-shrink-0 ${
+                            isOpen ? 'rotate-180 text-gray-900' : ''
+                          }`}
+                        />
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <p className="pt-3 text-xs md:text-sm text-gray-600 leading-relaxed font-normal">
+                              {faq.answer}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Main Grid Section (2-Column Flush Grid matching /programmes and /manufacturing) */}
+      {activeData.items && activeData.items.length > 0 && (
+        <section className="w-full max-w-[calc(100%+8em)] px-0 mx-auto pb-12 md:pb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
+            {activeData.items.map((item, index) => (
+              <div key={index} className="flex flex-col text-center w-full bg-white border-b border-gray-100">
+                {/* Image Section */}
+                <div className="relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden bg-gray-100">
+                  <Image
+                    src={item.img}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  {item.tag && (
+                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-gray-900 text-[10px] md:text-xs tracking-[0.15em] uppercase px-3 py-1 font-medium">
+                      {item.tag}
+                    </div>
+                  )}
+                </div>
+
+                {/* Content Section */}
+                <div className="px-6 md:px-12 py-8 md:py-10 flex flex-col items-center">
+                  {item.category && (
+                    <span className="text-[11px] tracking-[0.2em] uppercase text-gray-500 mb-2 font-medium">
+                      {item.category}
+                    </span>
+                  )}
+                  <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-3 text-gray-900 font-normal">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs md:text-sm text-gray-700 leading-relaxed font-normal max-w-xl mx-auto mb-6">
+                    {item.desc}
+                  </p>
+
+                  {/* Bulleted Key Takeaways / Feature Points */}
+                  {item.details && (
+                    <div className="w-full max-w-md bg-gray-50 p-4 mb-6 text-left border border-gray-100">
+                      <div className="text-[11px] tracking-[0.15em] uppercase text-gray-900 font-medium mb-2.5 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-gray-700" />
+                        Key Standards & Output
+                      </div>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-600">
+                        {item.details.map((detail, dIdx) => (
+                          <li key={dIdx} className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0" />
+                            <span>{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Optional Embedded Spec Table (e.g. Sizing & Grading Spec) */}
+                  {item.tableData && (
+                    <div className="w-full max-w-lg mb-6 overflow-x-auto border border-gray-200">
+                      <table className="w-full text-xs text-left border-collapse">
+                        <thead>
+                          <tr className="bg-gray-100 border-b border-gray-200">
+                            {item.tableData.headers.map((head, hIdx) => (
+                              <th key={hIdx} className="py-2.5 px-3 uppercase tracking-wider font-semibold text-gray-800 text-[10px] md:text-[11px]">
+                                {head}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                          {item.tableData.rows.map((row, rIdx) => (
+                            <tr key={rIdx} className="hover:bg-gray-50 transition-colors">
+                              {row.map((cell, cIdx) => (
+                                <td key={cIdx} className="py-2 px-3 text-gray-700 font-mono text-[11px]">
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* Action Link / Download Indicator */}
+                  <Link
+                    href="/contact"
+                    className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 mt-2 inline-flex items-center gap-1.5 hover:opacity-60 transition-opacity font-medium"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    Access Guide Documentation
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* GLOSSARY SECTION (For Help tab) */}
+      {activeData.id === 'help' && activeData.glossary && (
+        <section className="w-full py-12 md:py-20 px-6 max-w-5xl mx-auto">
+          <div className="text-center mb-10 md:mb-14">
+            <span className="uppercase text-xs tracking-[0.2em] text-gray-500 font-medium">
+              Industry Terminology
+            </span>
+            <h3 className="text-xl md:text-2xl tracking-[0.15em] uppercase text-gray-900 font-normal mt-1">
+              Manufacturing Glossary
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {activeData.glossary.map((termItem, tIdx) => (
+              <div key={tIdx} className="p-6 bg-gray-50 border border-gray-100">
+                <h4 className="text-sm font-semibold uppercase tracking-[0.12em] text-gray-900 mb-2">
+                  {termItem.term}
+                </h4>
+                <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
+                  {termItem.def}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Landscape Image Section & Highlight Statement */}
       <section className="w-full">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-          
-          {/* Column 1: Purpose */}
-          <div className="flex flex-col w-full bg-white">
-            <div className="w-full aspect-square relative bg-gray-100">
-              <Image
-                src="https://images.unsplash.com/photo-1509319117193-57bab727e09d?auto=format&fit=crop&w=1000&q=80"
-                alt="Women walking outdoors"
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="flex-1 flex flex-col items-center text-center px-6 md:px-10 py-12 md:py-16">
-              <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-4 text-gray-900 font-medium">
-                Purpose
-              </h3>
-              <p className="text-[13px] md:text-sm text-gray-800 leading-relaxed mb-6 font-normal">
-                We give voice to our values through the work of the Tory Burch Foundation, investment in our employees and support of values-aligned nonprofits
-              </p>
-              <Link
-                href="/programmes"
-                className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 mt-auto inline-block hover:opacity-60 transition-opacity font-medium"
-              >
-                Learn More
-              </Link>
-            </div>
-          </div>
-
-          {/* Column 2: Products */}
-          <div className="flex flex-col w-full bg-white">
-            <div className="w-full aspect-square relative bg-gray-100">
-              <Image
-                src="https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=1000&q=80"
-                alt="Crafted Leather Tote Bag"
-                fill
-                className="object-cover object-bottom"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="flex-1 flex flex-col items-center text-center px-6 md:px-10 py-12 md:py-16">
-              <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-4 text-gray-900 font-medium">
-                Products
-              </h3>
-              <p className="text-[13px] md:text-sm text-gray-800 leading-relaxed mb-6 font-normal">
-                Discover the materials and processes we use to drive innovation and impact while maintaining the highest level of design, quality, craftsmanship
-              </p>
-              <Link
-                href="/clothing"
-                className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 mt-auto inline-block hover:opacity-60 transition-opacity font-medium"
-              >
-                Learn More
-              </Link>
-            </div>
-          </div>
-
-          {/* Column 3: Partners */}
-          <div className="flex flex-col w-full bg-white">
-            <div className="w-full aspect-square relative bg-gray-100">
-              <Image
-                src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=1000&q=80"
-                alt="Women collaborating in creative workplace"
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="flex-1 flex flex-col items-center text-center px-6 md:px-10 py-12 md:py-16">
-              <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-4 text-gray-900 font-medium">
-                Partners
-              </h3>
-              <p className="text-[13px] md:text-sm text-gray-800 leading-relaxed mb-6 font-normal">
-                We work with suppliers who set and maintain best-in-class social and environmental standards, operate transparently, empower their workers and lower their impact
-              </p>
-              <Link
-                href="/programmes"
-                className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 mt-auto inline-block hover:opacity-60 transition-opacity font-medium"
-              >
-                Learn More
-              </Link>
-            </div>
-          </div>
-
+        <div className="relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden bg-gray-100">
+          <Image
+            src={activeData.featured.img}
+            alt={activeData.featured.title}
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+          />
         </div>
-      </section>
 
-      {/* 2 Column Flush Grid (Impact 2030 Goals, Tory Burch Foundation) */}
-      <section className="w-full bg-gray-50">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-          
-          {/* Column 1: Impact 2030 Goals */}
-          <div className="flex flex-col w-full bg-white">
-            <div className="w-full aspect-[4/3] md:aspect-[3/2] relative bg-gray-100">
-              <Image
-                src="https://images.unsplash.com/photo-1498623116890-37e912163d5d?auto=format&fit=crop&w=1400&q=80"
-                alt="Ocean view from cliffs"
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="flex-1 flex flex-col items-center text-center px-6 md:px-16 py-12 md:py-16">
-              <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-4 text-gray-900 font-medium">
-                Impact 2030 Goals
-              </h3>
-              <p className="text-[13px] md:text-sm text-gray-800 leading-relaxed mb-6 font-normal">
-                Explore the milestones that we are committed to meet in relation to our purpose, products and partners
-              </p>
-              <Link
-                href="/programmes"
-                className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 mt-auto inline-block hover:opacity-60 transition-opacity font-medium"
-              >
-                Learn More
-              </Link>
-            </div>
+        <div className="py-16 md:py-24 px-6 max-w-4xl mx-auto text-center">
+          <h2 className="text-xl md:text-2xl tracking-[0.15em] uppercase mb-6 md:mb-8 text-gray-900 font-normal">
+            {activeData.featured.title}
+          </h2>
+          <p className="text-sm md:text-base text-gray-700 leading-relaxed max-w-3xl mx-auto px-2 md:px-0 font-normal">
+            {activeData.featured.text}
+          </p>
+          <div className="mt-8 md:mt-10">
+            <Link
+              href={activeData.featured.linkHref}
+              className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 inline-block hover:opacity-60 transition-opacity font-medium"
+            >
+              {activeData.featured.linkText}
+            </Link>
           </div>
-
-          {/* Column 2: Tory Burch Foundation */}
-          <div className="flex flex-col w-full bg-white">
-            <div className="w-full aspect-[4/3] md:aspect-[3/2] relative bg-gray-100">
-              <Image
-                src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?auto=format&fit=crop&w=1400&q=80"
-                alt="Women speaking on a panel"
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="flex-1 flex flex-col items-center text-center px-6 md:px-16 py-12 md:py-16">
-              <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-4 text-gray-900 font-medium">
-                Tory Burch Foundation
-              </h3>
-              <p className="text-[13px] md:text-sm text-gray-800 leading-relaxed mb-6 font-normal">
-                Increases women&apos;s economic power by supporting entrepreneurs to build businesses that last
-              </p>
-              <Link
-                href="/programmes"
-                className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 mt-auto inline-block hover:opacity-60 transition-opacity font-medium"
-              >
-                Learn More
-              </Link>
-            </div>
-          </div>
-
         </div>
       </section>
     </div>
+  );
+}
+
+export default function ResourcePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <ResourceContent />
+    </Suspense>
   );
 }

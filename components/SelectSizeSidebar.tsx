@@ -10,13 +10,15 @@ const DEFAULT_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 export default function SelectSizeSidebar() {
   const { isSelectSizeOpen, closeSelectSize, selectedProductForSize, addToCart } = useShop();
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [prevProduct, setPrevProduct] = useState<ProductForSize | null>(null);
   const [cachedProduct, setCachedProduct] = useState<ProductForSize | null>(null);
 
-  useEffect(() => {
+  if (selectedProductForSize !== prevProduct) {
+    setPrevProduct(selectedProductForSize);
     if (selectedProductForSize) {
       setCachedProduct(selectedProductForSize);
     }
-  }, [selectedProductForSize]);
+  }
 
   // Lock body scroll when size sidebar is open
   useEffect(() => {

@@ -1,0 +1,290 @@
+'use client';
+
+import { useState, useRef, Suspense, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Pause, Play } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+
+const TABS_DATA = {
+  'female-fit': {
+    id: 'female-fit',
+    label: 'Female Fit',
+    philosophy: {
+      title: 'Female Fit Development',
+      paragraphs: [
+        "We are dedicated to developing garments that embrace the multifaceted female form. Fit is the foundation of comfort and confidence, and our development process is rigorous.",
+        "From body profile analysis to specific bust, waist, and hip shaping, our approach guarantees that every piece performs beautifully while looking effortless."
+      ]
+    },
+    items: [
+      { title: "Female Fit Development", desc: "Holistic approaches to ensuring all garments align with the natural contours of the female body.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=101" },
+      { title: "Body Profile Development", desc: "Mapping diverse body profiles to create an inclusive and accurate standard for our block library.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=102" },
+      { title: "Bust Shaping", desc: "Targeted contouring techniques that provide essential support, volume control, and flattering definition.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=103" },
+      { title: "Waist & Hip Shaping", desc: "Engineered pattern manipulation to ensure waistbands secure smoothly without pinching or gaping.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=104" },
+      { title: "Length & Proportion", desc: "Balancing vertical axes across different size profiles to ensure silhouettes remain true to original intent.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=105" },
+      { title: "Bra Compatibility", desc: "Strategic placement of straps, necklines, and armholes to seamlessly conceal standard undergarments.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=106" },
+      { title: "Modesty Requirements", desc: "Adaptable designs accommodating various levels of coverage and diverse cultural styling preferences.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=107" }
+    ]
+  },
+  'sizing': {
+    id: 'sizing',
+    label: 'Sizing',
+    philosophy: {
+      title: 'Inclusive Sizing',
+      paragraphs: [
+        "A singular size gradient cannot accommodate everyone. We build distinct blocks across multiple size ranges to guarantee precision and ease.",
+        "From tall and petite development to maternity and adaptive sizing, our strategy is rooted in thoughtful engineering and comprehensive inclusion."
+      ]
+    },
+    items: [
+      { title: "Size Range Strategy", desc: "Defining distinct sizing categories to optimally serve our diverse customer demographics.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=108" },
+      { title: "Block Development", desc: "Drafting core foundational blocks that serve as the blueprint for all seasonal silhouette variations.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=109" },
+      { title: "Sizing & Grading", desc: "Calculating precise grade rules ensuring uniform scale translation across the entire size spectrum.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=110" },
+      { title: "Extended Sizing", desc: "Re-engineering patterns for extended sizes to provide optimal proportions rather than blind scaling.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=111" },
+      { title: "Petite Development", desc: "Adjusting vertical measurements and proportions to flatter shorter body profiles.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=112" },
+      { title: "Tall Development", desc: "Elongating patterns correctly to accommodate longer torsos, arms, and leg inseams.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=113" },
+      { title: "Maternity Development", desc: "Creating adaptable fit solutions that evolve with the body during and after pregnancy.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=114" },
+      { title: "Adaptive Requirements", desc: "Integrating accessible closures, modified hemlines, and comfort seams for differing mobility needs.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=115" }
+    ]
+  },
+  'technical-development': {
+    id: 'technical-development',
+    label: 'Technical Development',
+    philosophy: {
+      title: 'Technical Development',
+      paragraphs: [
+        "Precision in design must translate flawlessly into production. Our technical development team bridges the gap between vision and reality.",
+        "From meticulous tech packs and detailed Bill of Materials to innovative pattern cutting, we engineer garments for longevity and quality."
+      ]
+    },
+    items: [
+      { title: "Product Development", desc: "Managing the lifecycle of a garment from initial conceptual design to finalized production-ready status.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=116" },
+      { title: "Pattern Cutting", desc: "Drafting precise 2D blueprints that translate 3D designs into meticulously assembled flat pieces.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=117" },
+      { title: "Technical Design", desc: "Translating aesthetic requirements into stringent specifications for factories to execute flawlessly.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=118" },
+      { title: "Tech Packs", desc: "Compiling comprehensive manuals detailing measurements, materials, and construction instructions.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=119" },
+      { title: "BOM Development", desc: "Listing every component, from raw fabrics to trims and threads, ensuring accurate costings.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=120" },
+      { title: "Construction Engineering", desc: "Determining the optimal stitching and seaming methods to maximize durability and aesthetic finish.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=121" },
+      { title: "Production Preparation", desc: "Finalizing all technical specs and addressing potential manufacturing risks before mass production.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=122" }
+    ]
+  },
+  'sampling': {
+    id: 'sampling',
+    label: 'Sampling',
+    philosophy: {
+      title: 'Sampling & Review',
+      paragraphs: [
+        "A design is only as good as its physical manifestation. We utilize a rigorous multi-stage sampling process.",
+        "From initial prototypes evaluating proportion to final pre-production samples, each stage is critically reviewed to ensure uncompromising quality."
+      ]
+    },
+    items: [
+      { title: "Prototype", desc: "The first physical realization of a concept, focusing primarily on proportion and overall aesthetic balance.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=123" },
+      { title: "Fit Sample", desc: "Samples created in actual fabrics to evaluate fit on live models and refine specific measurements.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=124" },
+      { title: "Size Set", desc: "Reviewing a garment across the entire size range to verify that grading rules translate effectively.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=125" },
+      { title: "Material Sample", desc: "Testing how various fabric compositions and washes affect the final drape, color, and hand-feel.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=126" },
+      { title: "Salesman Sample", desc: "High-fidelity samples provided to sales teams for showroom displays and wholesale buyer presentations.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=127" },
+      { title: "Pre-Production Sample", desc: "The final factory sample confirming all construction details before bulk manufacturing commences.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=128" },
+      { title: "Fit Review Service", desc: "Ongoing analysis of customer feedback and wear-testing to continuously optimize future fit runs.", img: "https://loremflickr.com/1000/1000/fashion,clothing?lock=129" }
+    ]
+  }
+};
+
+const TAB_KEYS = Object.keys(TABS_DATA);
+
+function FitAndDevelopmentContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentTabId = searchParams.get('tab') || 'female-fit';
+  const activeData = TABS_DATA[currentTabId as keyof typeof TABS_DATA] || TABS_DATA['female-fit'];
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const setTab = (tabId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', tabId);
+    router.push(pathname + '?' + params.toString(), { scroll: false });
+  };
+  
+  // Split items to preserve the original 3-col and 2-col structure
+  const grid1Items = activeData.items.slice(0, 3);
+  const grid2Items = activeData.items.slice(3);
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900 font-sans pt-20 md:pt-28">
+      {/* Secondary Navigation */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="w-full overflow-x-auto no-scrollbar py-4 px-4 md:px-8">
+          <nav className="flex whitespace-nowrap gap-6 md:gap-8 items-center w-max mx-auto min-w-max">
+            {TAB_KEYS.map((key) => {
+              const item = TABS_DATA[key as keyof typeof TABS_DATA];
+              const isActive = activeData.id === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setTab(item.id)}
+                  className={`uppercase text-xs tracking-[0.12em] font-medium transition-colors cursor-pointer inline-block whitespace-nowrap ${
+                    isActive
+                      ? 'text-gray-900 font-semibold border-b border-gray-900 pb-0.5'
+                      : 'text-gray-400 hover:text-gray-900'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <section className="relative w-full h-[calc(65vh+2em)] min-h-[calc(420px+2em)] md:h-[calc(60vh+2em)] md:min-h-[calc(480px+2em)] overflow-hidden flex items-center justify-center bg-gray-900">
+        {/* Background Video Container */}
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        >
+          <source
+            src="https://tb-foundation-wordpress-assets.storage.googleapis.com/wp-content/uploads/2025/01/10202053/WebsiteVideo_3840_2160_v02_optimized.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <div className="absolute inset-0 bg-black/10" />
+
+        {/* Hero Title */}
+        <div className="relative z-10 text-white text-center uppercase px-4 w-full max-w-[92vw] md:max-w-[85vw] lg:max-w-[80vw] mx-auto min-h-[160px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[260px] h-40 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center overflow-hidden">
+          <AnimatePresence initial={false}>
+            <motion.h1
+              key={activeData.id}
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: '0%', opacity: 1 }}
+              exit={{ y: '-100%', opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
+              className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.12em] md:tracking-[0.18em] font-normal w-full text-center mx-auto leading-tight md:leading-snug px-4"
+            >
+              {activeData.id === 'female-fit' ? 'FIT & DEVELOPMENT' : activeData.label.toUpperCase()}
+            </motion.h1>
+          </AnimatePresence>
+        </div>
+
+        {/* Working Pause / Play Toggle Button */}
+        <button
+          onClick={togglePlay}
+          className="absolute bottom-6 right-6 z-10 bg-white/90 hover:bg-white rounded-full w-9 h-9 flex items-center justify-center cursor-pointer transition-all shadow-md"
+          aria-label={isPlaying ? 'Pause background video' : 'Play background video'}
+        >
+          {isPlaying ? (
+            <Pause className="w-3.5 h-3.5 text-gray-900 fill-gray-900" />
+          ) : (
+            <Play className="w-3.5 h-3.5 text-gray-900 fill-gray-900 ml-0.5" />
+          )}
+        </button>
+      </section>
+
+      {/* Philosophy Statement Section */}
+      <section className="py-16 md:py-24 px-4 max-w-4xl mx-auto text-center">
+        <h2 className="text-lg md:text-xl tracking-[0.15em] uppercase mb-6 text-gray-900 font-medium">
+          {activeData.philosophy.title}
+        </h2>
+        <div className="text-[13px] md:text-sm text-gray-800 leading-relaxed max-w-2xl mx-auto space-y-6 font-normal">
+          {activeData.philosophy.paragraphs.map((p, idx) => (
+            <p key={idx}>{p}</p>
+          ))}
+        </div>
+        <div className="mt-8 md:mt-10">
+          <Link
+            href="/programmes"
+            className="uppercase text-xs tracking-[0.15em] text-gray-900 border-b border-gray-900 pb-1 inline-block hover:opacity-60 transition-opacity font-medium"
+          >
+            Learn More
+          </Link>
+        </div>
+      </section>
+
+      {/* 3 Column Flush Grid - First 3 items */}
+      {grid1Items.length > 0 && (
+        <section className="w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
+            {grid1Items.map((item, index) => (
+              <div key={index} className="flex flex-col w-full bg-white">
+                <div className="w-full aspect-square relative bg-gray-100">
+                  <Image
+                    src={item.img}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="flex-1 flex flex-col items-center text-center px-6 md:px-10 py-12 md:py-16">
+                  <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-4 text-gray-900 font-medium">
+                    {item.title}
+                  </h3>
+                  <p className="text-[13px] md:text-sm text-gray-800 leading-relaxed mb-6 font-normal">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 2 Column Flush Grid - Remaining items */}
+      {grid2Items.length > 0 && (
+        <section className="w-full bg-gray-50">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+            {grid2Items.map((item, index) => (
+              <div key={index} className="flex flex-col w-full bg-white">
+                <div className="w-full aspect-[4/3] md:aspect-[3/2] relative bg-gray-100">
+                  <Image
+                    src={item.img}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="flex-1 flex flex-col items-center text-center px-6 md:px-16 py-12 md:py-16">
+                  <h3 className="text-base md:text-lg tracking-[0.15em] uppercase mb-4 text-gray-900 font-medium">
+                    {item.title}
+                  </h3>
+                  <p className="text-[13px] md:text-sm text-gray-800 leading-relaxed mb-6 font-normal">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+export default function FitAndDevelopmentPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <FitAndDevelopmentContent />
+    </Suspense>
+  );
+}

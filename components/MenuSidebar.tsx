@@ -1,181 +1,133 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { X, ChevronRight, ChevronLeft, Globe } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+
+interface SubmenuData {
+  id: string;
+  title: string;
+  items: { label: string; href: string }[];
+}
+
+interface NavItem {
+  id: string;
+  label: string;
+  hasSubmenu: boolean;
+  href?: string;
+}
+
+// 1st block: Primary items
+const PRIMARY_NAV_ITEMS: NavItem[] = [
+  { id: 'womenswear', label: 'Womenswear', hasSubmenu: true },
+  { id: 'fit-development', label: 'Fit & Development', hasSubmenu: true },
+  { id: 'manufacturing', label: 'Manufacturing', hasSubmenu: true },
+  { id: 'programmes', label: 'Programmes', hasSubmenu: true },
+  { id: 'resources', label: 'Resources', hasSubmenu: true },
+  { id: 'about', label: 'About', hasSubmenu: true },
+];
+
+// 2nd block: Middle items
+const SECONDARY_NAV_ITEMS: NavItem[] = [
+  { id: 'start', label: 'Start', hasSubmenu: false, href: '/resource?tab=tools' },
+  { id: 'product-archive', label: 'Product Archive', hasSubmenu: false, href: '/about?tab=project-archive' },
+  { id: 'seamx-world', label: 'SeamX™ World', hasSubmenu: false, href: '/about?tab=about-seamladies' },
+];
+
+// 3rd block: Bottom items
+const TERTIARY_NAV_ITEMS: NavItem[] = [
+  { id: 'womens-blanks', label: 'Women’s Blanks', hasSubmenu: false, href: '/womenswear/categories' },
+  { id: 'samples', label: 'Samples', hasSubmenu: false, href: '/fit-and-development?tab=sampling' },
+  { id: 'journal', label: 'Journal', hasSubmenu: false, href: '/about?tab=journal' },
+  { id: 'portal', label: 'Portal', hasSubmenu: false, href: '/resource?tab=tools' },
+];
+
+const SUBMENU_DATA: Record<string, SubmenuData> = {
+  womenswear: {
+    id: 'womenswear',
+    title: 'Womenswear',
+    items: [
+      { label: 'Explore', href: '/womenswear/explore' },
+      { label: 'Categories', href: '/womenswear/categories' },
+      { label: 'Specialist Categories', href: '/womenswear/Specialist-categories' },
+      { label: 'Start omsx workflow', href: '/product' },
+    ],
+  },
+  'fit-development': {
+    id: 'fit-development',
+    title: 'Fit & Development',
+    items: [
+      { label: 'Female Fit', href: '/fit-and-development?tab=female-fit' },
+      { label: 'Sizing', href: '/fit-and-development?tab=sizing' },
+      { label: 'Technical Development', href: '/fit-and-development?tab=technical-development' },
+      { label: 'Sampling', href: '/fit-and-development?tab=sampling' },
+    ],
+  },
+  manufacturing: {
+    id: 'manufacturing',
+    title: 'Manufacturing',
+    items: [
+      { label: 'Production Routes', href: '/manufacturing?tab=production-routes' },
+      { label: 'Product Capabilities', href: '/manufacturing?tab=product-capabilities' },
+      { label: 'Production Network', href: '/manufacturing?tab=production-network' },
+      { label: 'Production Services', href: '/manufacturing?tab=production-services' },
+    ],
+  },
+  programmes: {
+    id: 'programmes',
+    title: 'Programmes',
+    items: [
+      { label: 'Collection Development', href: '/programmes?tab=collection-development' },
+      { label: 'Product Development Partnership', href: '/programmes?tab=product-development-partnership' },
+      { label: 'Continuous Production', href: '/programmes?tab=continuous-production' },
+    ],
+  },
+  resources: {
+    id: 'resources',
+    title: 'Resources',
+    items: [
+      { label: 'Guides', href: '/resource?tab=guides' },
+      { label: 'Tools', href: '/resource?tab=tools' },
+      { label: 'Libraries', href: '/resource?tab=libraries' },
+      { label: 'Help', href: '/resource?tab=help' },
+    ],
+  },
+  about: {
+    id: 'about',
+    title: 'About',
+    items: [
+      { label: 'About SeamLadies', href: '/about?tab=about-seamladies' },
+      { label: 'Our Approach', href: '/about?tab=our-approach' },
+      { label: 'Female Fit Philosophy', href: '/about?tab=female-fit-philosophy' },
+      { label: 'Design & Technical Team', href: '/about?tab=design-technical-team' },
+      { label: 'Manufacturing Network', href: '/about?tab=manufacturing-network' },
+      { label: 'Responsibility', href: '/about?tab=responsibility' },
+      { label: 'Women-Led Brands', href: '/about?tab=women-led-brands' },
+      { label: 'Project Archive', href: '/about?tab=project-archive' },
+      { label: 'Journal', href: '/about?tab=journal' },
+      { label: 'Careers', href: '/about?tab=careers' },
+      { label: 'Contact', href: '/about?tab=contact' },
+    ],
+  },
+};
 
 interface MenuSidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// Menu structure definition
-type SubmenuData = {
-  title: string;
-  viewAllHref?: string;
-  categories: { label: string; href: string }[];
-  collections?: { label: string; href: string }[];
-};
-
-const SUBMENU_DATA: Record<string, SubmenuData> = {
-  'new': {
-    title: 'New Arrivals',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'New This Week', href: '/clothing' },
-      { label: 'New Handbags', href: '/clothing' },
-      { label: 'New Shoes', href: '/clothing' },
-      { label: 'New Ready-To-Wear', href: '/clothing' },
-      { label: 'New Jewelry', href: '/clothing' },
-    ],
-    collections: [
-      { label: 'Spring Runway Collection', href: '/clothing' },
-      { label: 'T Monogram Denim', href: '/clothing' },
-      { label: 'The Pierced Shoe', href: '/clothing' },
-    ],
-  },
-  'handbags': {
-    title: 'Handbags',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'Totes', href: '/clothing' },
-      { label: 'Crossbody Bags', href: '/clothing' },
-      { label: 'Shoulder Bags', href: '/clothing' },
-      { label: 'Bucket Bags', href: '/clothing' },
-      { label: 'Mini Bags & Chain Wallets', href: '/clothing' },
-      { label: 'Satchels', href: '/clothing' },
-      { label: 'Nylon Bags & Backpacks', href: '/clothing' },
-    ],
-    collections: [
-      { label: 'Romy', href: '/product' },
-      { label: 'Charlie', href: '/product' },
-      { label: 'T Monogram', href: '/product' },
-      { label: 'Kira', href: '/product' },
-      { label: 'Lee Radziwill', href: '/product' },
-      { label: 'Ella', href: '/product' },
-      { label: 'Fleming', href: '/product' },
-      { label: 'Eleanor', href: '/product' },
-      { label: 'Perry', href: '/product' },
-    ],
-  },
-  'shoes': {
-    title: 'Shoes',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'Sandals', href: '/clothing' },
-      { label: 'Ballets & Flats', href: '/clothing' },
-      { label: 'Espadrilles', href: '/clothing' },
-      { label: 'Flip-Flops & Slides', href: '/clothing' },
-      { label: 'Mules & Loafers', href: '/clothing' },
-      { label: 'Sneakers', href: '/clothing' },
-      { label: 'Pumps & Heels', href: '/clothing' },
-      { label: 'Boots', href: '/clothing' },
-    ],
-    collections: [
-      { label: 'Romy', href: '/product' },
-      { label: 'Miller', href: '/product' },
-      { label: 'Reva', href: '/product' },
-      { label: 'Pierced Collection', href: '/product' },
-    ],
-  },
-  'jewelry': {
-    title: 'Jewelry & Watches',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'Earrings', href: '/clothing' },
-      { label: 'Necklaces', href: '/clothing' },
-      { label: 'Bracelets', href: '/clothing' },
-      { label: 'Rings', href: '/clothing' },
-      { label: 'Watches', href: '/clothing' },
-    ],
-    collections: [
-      { label: 'Kira Jewelry', href: '/product' },
-      { label: 'Roxanne', href: '/product' },
-      { label: 'Miller Jewelry', href: '/product' },
-    ],
-  },
-  'ready-to-wear': {
-    title: 'Ready-To-Wear',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'Dresses', href: '/clothing' },
-      { label: 'Tops & Shirts', href: '/clothing' },
-      { label: 'Sweaters & Cardigans', href: '/clothing' },
-      { label: 'Jackets & Coats', href: '/clothing' },
-      { label: 'Pants & Denim', href: '/clothing' },
-      { label: 'Skirts', href: '/clothing' },
-    ],
-  },
-  'swim': {
-    title: 'Swim',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'One-Piece Swimsuits', href: '/clothing' },
-      { label: 'Bikinis', href: '/clothing' },
-      { label: 'Cover-Ups & Tunics', href: '/clothing' },
-      { label: 'Beach Accessories', href: '/clothing' },
-    ],
-  },
-  'wallets': {
-    title: 'Wallets & Accessories',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'Card Cases', href: '/clothing' },
-      { label: 'Continental Wallets', href: '/clothing' },
-      { label: 'Pouches', href: '/clothing' },
-      { label: 'Belts', href: '/clothing' },
-      { label: 'Sunglasses', href: '/clothing' },
-      { label: 'Hats & Scarves', href: '/clothing' },
-    ],
-  },
-  'tory-sport': {
-    title: 'Tory Sport',
-    viewAllHref: '/clothing',
-    categories: [
-      { label: 'Tennis Apparel', href: '/clothing' },
-      { label: 'Golf Apparel', href: '/clothing' },
-      { label: 'Activewear & Leggings', href: '/clothing' },
-      { label: 'Tracksuits & Outerwear', href: '/clothing' },
-    ],
-  },
-  'about-us': {
-    title: 'About Us',
-    viewAllHref: '/resource',
-    categories: [
-      { label: 'Our Story & Brand Philosophy', href: '/resource' },
-      { label: 'Fit & Development', href: '/resource' },
-      { label: 'Business & Leadership', href: '/resource' },
-    ],
-  },
-  'our-impact': {
-    title: 'Our Impact',
-    viewAllHref: '/resource',
-    categories: [
-      { label: 'Overview & Philosophy', href: '/resource' },
-      { label: 'Supply Chain & Partners', href: '/programmes' },
-      { label: 'Materials & Sustainability', href: '/history' },
-      { label: 'Tory Burch Foundation', href: '/programmes' },
-    ],
-  },
-};
-
-const MAIN_NAV_ITEMS = [
-  { id: 'new', label: 'New' },
-  { id: 'handbags', label: 'Handbags' },
-  { id: 'shoes', label: 'Shoes' },
-  { id: 'jewelry', label: 'Jewelry & Watches' },
-  { id: 'ready-to-wear', label: 'Ready-To-Wear' },
-  { id: 'swim', label: 'Swim' },
-  { id: 'wallets', label: 'Wallets & Accessories' },
-  { id: 'tory-sport', label: 'Tory Sport' },
-  { id: 'about-us', label: 'About Us' },
-  { id: 'our-impact', label: 'Our Impact' },
-];
-
 export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
   const [activeSubmenuId, setActiveSubmenuId] = useState<string | null>(null);
+  const [prevIsOpen, setPrevIsOpen] = useState<boolean>(isOpen);
 
-  // Prevent main page scroll when menu sidebar is open
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    if (!isOpen) {
+      setActiveSubmenuId(null);
+    }
+  }
+
+  // Disable body scroll when sidebar is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -187,11 +139,6 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
     };
   }, [isOpen]);
 
-  const handleCloseAll = () => {
-    setActiveSubmenuId(null);
-    onClose();
-  };
-
   const handleSubmenuToggle = (id: string) => {
     if (activeSubmenuId === id) {
       setActiveSubmenuId(null);
@@ -202,6 +149,11 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
   const handleBackToMain = () => {
     setActiveSubmenuId(null);
+  };
+
+  const handleCloseAll = () => {
+    setActiveSubmenuId(null);
+    onClose();
   };
 
   const activeSubmenuData = activeSubmenuId ? SUBMENU_DATA[activeSubmenuId] : null;
@@ -216,13 +168,13 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
         }`}
       />
 
-      {/* Main Sidebar (Desktop width increased by 60px to 500px) */}
+      {/* Main Sidebar (Desktop width 500px) */}
       <div
         className={`fixed top-0 left-0 h-full w-full md:w-[500px] bg-white overflow-y-auto menu-sidebar-scrollbar z-[70] border-r border-gray-200 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Main Header with Close Button (scrolls with menu content) */}
+        {/* Main Header with Close Button (scrolls with content) */}
         <div className="h-[60px] flex items-center justify-end px-6 md:pl-12 md:pr-6 border-b border-transparent">
           <button
             onClick={handleCloseAll}
@@ -233,35 +185,55 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
           </button>
         </div>
 
-        {/* Main Navigation List */}
+        {/* Main Navigation Content */}
         <div className="px-6 md:pl-12 md:pr-6 py-4">
-          <ul className="space-y-3 md:space-y-4 text-[19px] font-bold tracking-widest uppercase mb-10">
-            {MAIN_NAV_ITEMS.map((item) => {
+          {/* Group 1: Primary items */}
+          <ul className="space-y-3 md:space-y-4 text-[19px] font-bold tracking-wider uppercase mb-8">
+            {PRIMARY_NAV_ITEMS.map((item) => {
               const isActive = activeSubmenuId === item.id;
               const hasSubmenuActive = activeSubmenuId !== null;
 
+              if (item.hasSubmenu) {
+                return (
+                  <li key={item.id}>
+                    <button
+                      onClick={() => handleSubmenuToggle(item.id)}
+                      className={`w-full py-2.5 flex items-center justify-between group transition-colors cursor-pointer text-left ${
+                        hasSubmenuActive
+                          ? isActive
+                            ? 'text-black'
+                            : 'text-gray-400'
+                          : 'text-black hover:text-gray-600'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronRight
+                        className={`w-4 h-4 transition-colors ${
+                          hasSubmenuActive
+                            ? isActive
+                              ? 'text-black'
+                              : 'text-gray-400'
+                            : 'text-gray-400 group-hover:text-black'
+                        }`}
+                      />
+                    </button>
+                  </li>
+                );
+              }
+
               return (
                 <li key={item.id}>
-                  <button
-                    onClick={() => handleSubmenuToggle(item.id)}
-                    title={hasSubmenuActive && !isActive ? item.label : undefined}
-                    className={`w-full py-2.5 flex items-center justify-between group transition-colors cursor-pointer text-left ${
+                  <Link
+                    href={item.href || '#'}
+                    onClick={handleCloseAll}
+                    className={`block py-2.5 transition-colors ${
                       hasSubmenuActive
-                        ? isActive
-                          ? 'text-black'
-                          : 'text-gray-400'
+                        ? 'text-gray-400 hover:text-black'
                         : 'text-black hover:text-gray-600'
                     }`}
                   >
-                    <span>{item.label}</span>
-                    <ChevronRight className={`w-4 h-4 transition-colors ${
-                      hasSubmenuActive
-                        ? isActive
-                          ? 'text-black'
-                          : 'text-gray-400'
-                        : 'text-gray-400 group-hover:text-black'
-                    }`} />
-                  </button>
+                    {item.label}
+                  </Link>
                 </li>
               );
             })}
@@ -269,41 +241,43 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
 
           <hr className="border-gray-200 mb-8" />
 
-          {/* Secondary Footer Links */}
-          <ul className="space-y-5 text-[17px] text-gray-800 font-medium">
-            <li>
-              <button className="flex items-center gap-2 hover:text-black py-2 cursor-pointer transition-colors">
-                <Globe className="w-4 h-4" />
-                <span>GB</span>
-              </button>
-            </li>
-            <li>
-              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black block py-2 transition-colors">
-                Sign In / Create An Account
-              </Link>
-            </li>
-            <li>
-              <Link href="/clothing" onClick={handleCloseAll} className="hover:text-black block py-2 transition-colors">
-                My Favorites
-              </Link>
-            </li>
-            <li>
-              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black block py-2 transition-colors">
-                Find A Store
-              </Link>
-            </li>
-            <li>
-              <Link href="/resource" onClick={handleCloseAll} className="hover:text-black pb-8 block py-2 transition-colors">
-                Gift Cards
-              </Link>
-            </li>
+          {/* Group 2: Secondary items (Start, Product Archive, SeamX™ World) */}
+          <ul className="space-y-3 md:space-y-4 text-[17px] font-medium text-gray-900 mb-8">
+            {SECONDARY_NAV_ITEMS.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={item.href || '#'}
+                  onClick={handleCloseAll}
+                  className="block py-1.5 hover:text-gray-500 transition-colors"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <hr className="border-gray-200 mb-8" />
+
+          {/* Group 3: Tertiary items (Women’s Blanks, Samples, Journal, Portal) */}
+          <ul className="space-y-3 md:space-y-4 text-[17px] font-medium text-gray-900 pb-10">
+            {TERTIARY_NAV_ITEMS.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={item.href || '#'}
+                  onClick={handleCloseAll}
+                  className="block py-1.5 hover:text-gray-500 transition-colors"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
       {/* Submenu Panel Container
-          On Desktop (md:):
-            Placed adjacent at md:left-[500px] w-[500px] z-[65], slides out from behind the main sidebar
+          On Desktop: Adjacent at md:left-[500px] w-[500px] z-[65], slides out
+          On Mobile: Fullscreen slide over at z-[80]
       */}
       <div
         className={`fixed top-0 h-full bg-white overflow-y-auto menu-sidebar-scrollbar transition-transform duration-300 ease-in-out
@@ -337,59 +311,26 @@ export default function MenuSidebar({ isOpen, onClose }: MenuSidebarProps) {
           </button>
         </div>
 
-        {/* Submenu Scrollable Content */}
+        {/* Submenu Content */}
         {activeSubmenuData && (
           <div className="px-6 md:pl-12 md:pr-6 py-4 pt-6 md:pt-14">
-            {activeSubmenuData.viewAllHref && (
-              <>
-                <Link
-                  href={activeSubmenuData.viewAllHref}
-                  onClick={handleCloseAll}
-                  className="block text-[16px] font-medium text-black mb-6 hover:text-gray-600"
-                >
-                  View All
-                </Link>
-                <hr className="border-gray-200 mb-6 border-dashed" />
-              </>
-            )}
+            <h2 className="hidden md:block text-[13px] font-bold text-gray-400 tracking-widest uppercase mb-8">
+              {activeSubmenuData.title}
+            </h2>
 
-            {/* Categories */}
-            <ul className="space-y-5 text-[16px] font-medium text-gray-800 mb-10">
-              {activeSubmenuData.categories.map((cat, idx) => (
+            <ul className="space-y-5 text-[16px] font-medium text-gray-900 pb-8">
+              {activeSubmenuData.items.map((item, idx) => (
                 <li key={idx}>
                   <Link
-                    href={cat.href}
+                    href={item.href}
                     onClick={handleCloseAll}
-                    className="hover:text-black transition-colors block py-0.5"
+                    className="hover:text-gray-500 transition-colors block py-0.5"
                   >
-                    {cat.label}
+                    {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
-
-            {/* Collections Section */}
-            {activeSubmenuData.collections && activeSubmenuData.collections.length > 0 && (
-              <>
-                <hr className="border-gray-200 mb-8" />
-                <h3 className="text-[11px] font-bold text-gray-500 tracking-widest uppercase mb-6">
-                  Collections
-                </h3>
-                <ul className="space-y-5 text-[16px] font-medium text-gray-800 pb-8">
-                  {activeSubmenuData.collections.map((col, idx) => (
-                    <li key={idx}>
-                      <Link
-                        href={col.href}
-                        onClick={handleCloseAll}
-                        className="hover:text-black transition-colors block py-0.5"
-                      >
-                        {col.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
           </div>
         )}
       </div>

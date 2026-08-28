@@ -143,7 +143,7 @@ export default function Footer() {
             <li><Link href="/resource" className="hover:text-black transition-colors">Our Impact</Link></li>
             <li><Link href="/resource" className="hover:text-black transition-colors">Careers</Link></li>
             <li><Link href="/programmes" className="hover:text-black transition-colors">Tory Burch Foundation</Link></li>
-            <li><Link href="/history" className="hover:text-black transition-colors">Tory Daily</Link></li>
+            <li><Link href="/about" className="hover:text-black transition-colors">Tory Daily</Link></li>
           </ul>
         </div>
         <div>
