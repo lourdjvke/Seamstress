@@ -7,6 +7,7 @@ import CartSidebar from '@/components/CartSidebar';
 import SubscriptionSidebar from '@/components/SubscriptionSidebar';
 import SelectSizeSidebar from '@/components/SelectSizeSidebar';
 import CookieBanner from '@/components/CookieBanner';
+import ScrollProgressBar from '@/components/ScrollProgressBar';
 
 export const metadata: Metadata = {
   title: 'SeamLadies',
@@ -17,6 +18,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
       <body className="font-sans antialiased" suppressHydrationWarning>
+        <ScrollProgressBar />
         <ShopProvider>
           <Navbar />
           {children}

@@ -577,15 +577,15 @@ export default function WomenswearPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         {/* Hero Headline & Subtitle */}
-        <div className="relative z-10 w-full px-4 md:px-8 pb-8 md:pb-12 flex items-end justify-between">
+        <div className="relative z-10 w-full px-4 md:px-[42px] pb-8 md:pb-12 flex items-end justify-between">
           <div className="max-w-2xl text-white">
             <h1 
-              className="font-bold uppercase drop-shadow-sm text-[15px] leading-[17px] tracking-[0.5px] md:text-4xl md:tracking-[0.15em] md:leading-normal"
+              className="font-bold uppercase drop-shadow-sm text-[15px] leading-[17px] tracking-[0.5px] md:text-[27px] md:leading-[30px] md:tracking-[1px] md:font-bold"
             >
               THE RUNWAY SHOP
             </h1>
             <p 
-              className="text-white/90 mt-1.5 md:mt-2 font-normal drop-shadow-sm max-w-xl text-[12px] leading-[14px] tracking-[0px] md:text-sm md:leading-relaxed md:tracking-wide"
+              className="text-white/90 mt-1.5 md:mt-2 font-normal drop-shadow-sm max-w-xl text-[12px] leading-[14px] tracking-[0px] md:text-[16px] md:leading-[21px] md:tracking-[0px] md:font-semibold"
             >
               A new interpretation of American sportswear with touches of romance, sentimentality and craft.
             </p>
@@ -699,10 +699,10 @@ export default function WomenswearPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="relative z-10">
-              <h3 className="text-sm md:text-base font-bold tracking-widest uppercase">
+              <h3 className="text-sm md:text-[20px] font-bold tracking-widest md:tracking-[1px] md:leading-[22px] uppercase">
                 RUNWAY EARRINGS
               </h3>
-              <p className="text-xs text-white/90 mt-1 font-light tracking-wide">
+              <p className="text-xs md:text-[16px] text-white/90 mt-1 font-light md:font-normal tracking-wide md:tracking-[0px] md:leading-[19px]">
                 Oversized yet lightweight in natural shell
               </p>
             </div>
@@ -717,7 +717,7 @@ export default function WomenswearPage() {
         {/* ---------------------------------------------------- */}
         {/* EDITORIAL STORY BANNER 1: "NEW ROMANCE"              */}
         {/* ---------------------------------------------------- */}
-        <section className="my-0 w-full relative">
+        <section className="my-0 mb-[0.8em] md:mb-[1.8em] w-full relative">
           <div className="grid grid-cols-2 gap-0 w-full">
             <div className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-gray-100">
               <Image
@@ -766,7 +766,7 @@ export default function WomenswearPage() {
         {/* ---------------------------------------------------- */}
         {/* EDITORIAL STORY BANNER 2: "BOTH SIDES NOW"           */}
         {/* ---------------------------------------------------- */}
-        <section className="my-0 w-full relative">
+        <section className="my-0 mb-[0.8em] md:mb-[1.8em] w-full relative">
           <div className="grid grid-cols-2 gap-0 w-full">
             <div className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-gray-100">
               <Image
@@ -815,7 +815,7 @@ export default function WomenswearPage() {
         {/* ---------------------------------------------------- */}
         {/* EDITORIAL STORY BANNER 3: "A FINE BALANCE"          */}
         {/* ---------------------------------------------------- */}
-        <section className="my-0 w-full relative">
+        <section className="my-0 mb-[0.8em] md:mb-[1.8em] w-full relative">
           <div className="grid grid-cols-2 gap-0 w-full">
             <div className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-gray-100">
               <Image
